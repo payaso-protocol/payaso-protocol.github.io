@@ -45,7 +45,7 @@
         <p>
           <span>{{ current }} LP tokens</span><span>{{ tokens }}</span>
         </p>
-        <a @click="toWithdraw">Withdraw {{ current }} LP tokens</a>
+        <a @click="toWithdraw"><img src="~/assets/img/loading.gif" v-if="withdrawLoading" />Withdraw {{ current }} LP tokens</a>
       </div>
     </div>
   </div>
@@ -70,6 +70,7 @@ export default {
       tokens: 0, // LPT余额
       loading: false,
       depositeLoading: false,
+      withdrawLoading: false,
     };
   },
   mounted() {
@@ -88,13 +89,25 @@ export default {
       this.showMyPaya();
     });
 
+
     this.$bus.$on("DEPOSITE_LOADING", (data) => {
-      if (data.type === this.current && data.status) {
+      let current = this.current.split('-').join('_');
+      if (data.type === current && data.status) {
         this.depositeLoading = true;
       } else {
         this.depositeLoading = false;
       }
     });
+
+    this.$bus.$on("WITHDRAW_LOADING", (data) => {
+      let current = this.current.split('-').join('_');
+      if (data.type === current && data.status) {
+        this.withdrawLoading = true;
+      } else {
+        this.withdrawLoading = false;
+      }
+    });
+    
   },
   watch: {
     current: {
@@ -348,6 +361,14 @@ export default {
           line-height: 40px;
           background: $main-color;
           border-radius: 5px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+          }
           &:hover {
             background: $main-hover;
           }

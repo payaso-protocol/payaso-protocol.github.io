@@ -73,7 +73,14 @@ export const toDeposite = async (type, data,callBack) => {
   });
   try {
     const Contract = await expERC20(adressLPT)
-    await oneKeyArrpove(Contract, type, amount,callBack);
+    await oneKeyArrpove(Contract, type, amount,(res) => {
+      if (res === 'failed') {
+        bus.$emit('DEPOSITE_LOADING', {
+          type: type,
+          status: false,
+        });
+      }
+    });
     const deposite = await Deposite(adress)
     result = deposite.methods
       .stake(amount)
@@ -88,6 +95,10 @@ export const toDeposite = async (type, data,callBack) => {
       })
       .on("confirmation", function (confirmationNumber, receipt) {
         if (confirmationNumber === 0) {
+          bus.$emit('DEPOSITE_LOADING', {
+            type: type,
+            status: false,
+          });
           if (window.statusDialog) {
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
@@ -97,10 +108,6 @@ export const toDeposite = async (type, data,callBack) => {
               conText: `<a href="https://${netObj[Number(window.chainID)]
                 }etherscan.io/tx/${receipt.transactionHash
                 }" target="_blank">View on Etherscan</a>`,
-            });
-            bus.$emit('DEPOSITE_LOADING', {
-              type: type,
-              status: false,
             });
           } else {
             Message({
@@ -143,9 +150,20 @@ export const toWithdraw = async (type, data,callBack) => {
     adressLPT = getContract(type+'_LPT', charID);
   }
   let result;
+  bus.$emit('WITHDRAW_LOADING', {
+    type: type,
+    status: true,
+  });
   try {
      const Contract = await expERC20(adressLPT)
-     await oneKeyArrpove(Contract, type, amount, callBack);
+     await oneKeyArrpove(Contract, type, amount, (res) => {
+       if (res === 'failed') {
+         bus.$emit('WITHDRAW_LOADING', {
+           type: type,
+           status: false,
+         });
+       }
+     });
      const deposite = await Deposite(adress)
     result = deposite.methods
       .withdraw(amount)
@@ -160,6 +178,10 @@ export const toWithdraw = async (type, data,callBack) => {
       })
       .on("confirmation", function (confirmationNumber, receipt) {
         if (confirmationNumber === 0) {
+          bus.$emit('WITHDRAW_LOADING', {
+            type: type,
+            status: false,
+          });
           if (window.statusDialog) {
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
@@ -183,6 +205,10 @@ export const toWithdraw = async (type, data,callBack) => {
       })
       .on("error", function (error, receipt) {
         bus.$emit("CLOSE_STATUS_DIALOG");
+        bus.$emit('WITHDRAW_LOADING', {
+          type: type,
+          status: false,
+        });
         if (error && error.message) {
           Message({
             message: error && error.message,
