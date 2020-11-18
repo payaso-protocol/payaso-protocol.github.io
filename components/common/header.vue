@@ -11,7 +11,7 @@
       <nuxt-link to="/sell">My Supply</nuxt-link>
       <nuxt-link to="/mining">LP Mining</nuxt-link>
       <a href="http://www.payaso.io/guides" target="_blank"
-        >PAYASO Guide Book</a
+        >Book</a
       >
     </div>
     <Assets v-if="userInfo.data.isLogin"></Assets>
