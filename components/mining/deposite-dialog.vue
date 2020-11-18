@@ -96,7 +96,7 @@ export default {
     getBalance() {
       let coin = this.current.replace("-", "_") + "_LPT";
       getBalance(coin).then((res) => {
-        this.lptBalance = fixD(res, 4);
+        this.lptBalance = fixD(res, 20);
       });
     },
     currentWatch(newValue) {
