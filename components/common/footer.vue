@@ -3,7 +3,7 @@
     <ul>
       <li>
         <!-- <a href="/Download"> -->
-        <a href="/security">
+        <a href="/security" target="_blank">
           <img src="~/assets/img/footer/Security@2x.png" />
           <p>Security</p>
         </a>

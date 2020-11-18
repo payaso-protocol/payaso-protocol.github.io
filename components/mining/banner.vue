@@ -4,6 +4,7 @@
     <p>
       <!-- Deposite ETH-USDT LP Token to mint PAYA -->
       <!-- <a>Read more about PAYA mining </a> -->
+      payaso smart contract has been audited by KNOWNSEC. Check Audit Report <a href="/security" target="_blank">Here</a>。
     </p>
   </div>
 </template>
@@ -41,7 +42,9 @@ export default {};
       a {
         font-size: 14px;
         font-weight: 400;
-        color: #be3a3b;
+        /* color: #be3a3b; */
+        color: $text-g;
+        text-decoration: underline;
       }
     }
   }

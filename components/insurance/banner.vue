@@ -67,12 +67,13 @@ export default {
     height: 180px;
     /* line-height: 180px; */
     margin: 0 auto;
-    background: url("../../assets/img/banner.png") right 36px no-repeat;
-    background-size: auto 80%;
+    background: url("../../assets/img/Banner3@2x.png") right 36px no-repeat;
+    background-size: auto 100%;
     /* font-size: 40px; */
     font-size: 16px;
     color: $text-m;
-    padding-right: 250px;
+    /* padding-right: 250px; */
+    padding: 0px 30px;
   }
 }
 @media screen and (max-width: 750px) {
