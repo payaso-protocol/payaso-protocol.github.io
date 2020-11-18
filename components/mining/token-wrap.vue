@@ -69,6 +69,7 @@ export default {
       addCommom: addCommom,
       tokens: 0, // LPT余额
       loading: false,
+      depositeLoading: false,
     };
   },
   mounted() {
@@ -85,6 +86,10 @@ export default {
     }, 1000);
     this.$bus.$on("REFRESH_DATA", () => {
       this.showMyPaya();
+    });
+
+    this.$bus.$on("DEPOSITE_LOADING", (data) => {
+
     });
   },
   watch: {

@@ -67,6 +67,10 @@ export const toDeposite = async (type, data,callBack) => {
     adressLPT = getContract(type+'_LPT', charID);
   }
   let result;
+  bus.$emit('DEPOSITE_LOADING', {
+    type: type,
+    status: true
+  });
   try {
     const Contract = await expERC20(adressLPT)
     await oneKeyArrpove(Contract, type, amount,callBack);
@@ -94,6 +98,10 @@ export const toDeposite = async (type, data,callBack) => {
                 }etherscan.io/tx/${receipt.transactionHash
                 }" target="_blank">View on Etherscan</a>`,
             });
+            bus.$emit('DEPOSITE_LOADING', {
+              type: type,
+              status: false,
+            });
           } else {
             Message({
               message: "Hat activated successfully",
@@ -107,6 +115,10 @@ export const toDeposite = async (type, data,callBack) => {
       })
       .on("error", function (error, receipt) {
         bus.$emit("CLOSE_STATUS_DIALOG");
+        bus.$emit('DEPOSITE_LOADING', {
+          type: type,
+          status: false,
+        });
         if (error && error.message) {
           Message({
             message: error && error.message,
