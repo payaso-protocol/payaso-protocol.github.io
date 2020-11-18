@@ -95,7 +95,7 @@ export default {
         {
           url: "http://www.payaso.io/guides",
           link: true,
-          text: "Book",
+          text: "Guide Book",
         },
       ];
     },
