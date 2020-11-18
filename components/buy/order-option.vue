@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      buyStatus: ["All", "Inactivation", "Exercised", "Closed"],
+      buyStatus: ["All", "Nonactivated", "Activated", "Closed"],
       advStatus: ["All", "Unborrowed", "Be borrowed", "Dated"],
       orderStatus: ["All", "Unactivated", "Activated", "Dated"],
       dataList: [

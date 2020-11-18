@@ -69,7 +69,7 @@
             <!-- Due Date -->
             <td>
               {{
-                item.status === "Inactivation"
+                item.status === "Nonactivated"
                   ? formatExpiry(item._expiry)
                   : moment(parseInt(item._expiry)).format(
                       "MMMM Do YYYY, HH:mm:ss"
@@ -79,7 +79,7 @@
             <!-- status -->
             <td>{{ item.status }}</td>
             <!-- options -->
-            <td v-if="item.status === 'Inactivation'">
+            <td v-if="item.status === 'Nonactivated'">
               <button
                 @click="toActive(item)"
                 :disabled="pendingObj[item.bidID]"
@@ -147,7 +147,7 @@
             <span>Due Date</span>
             <span>
               {{
-                item.status === "Inactivation"
+                item.status === "Nonactivated"
                   ? formatExpiry(item._expiry)
                   : moment(parseInt(item._expiry)).format(
                       "MMMM Do YYYY, HH:mm:ss"
@@ -156,7 +156,7 @@
             </span>
           </p>
         </div>
-        <div class="tabs-item-box-btn" v-if="item.status === 'Inactivation'">
+        <div class="tabs-item-box-btn" v-if="item.status === 'Nonactivated'">
           <button
             @click="toActive(item)"
             :disabled="pendingObj[item.bidID]"
@@ -284,7 +284,7 @@ export default {
   methods: {
     statusFilter(status) {
       switch (status) {
-        case "Inactivation":
+        case "Nonactivated":
           return true;
           break;
         default:
@@ -372,7 +372,7 @@ export default {
           resultItem["status"] = "Closed"; // Dated 已过期
           resultItem["sort"] = 1;
         } else {
-          resultItem["status"] = "Inactivation";
+          resultItem["status"] = "Nonactivated";
           resultItem["sort"] = 3;
         }
         let res = await getExercise(resultItem.buyer);
@@ -380,7 +380,7 @@ export default {
           return bitem.returnValues.bidID;
         });
         if (bidIDArr.includes(resultItem.bidID)) {
-          resultItem["status"] = "Exercised";
+          resultItem["status"] = "Activated";
           resultItem["sort"] = 2;
         }
         let waiveRes = await getWaive(resultItem.buyer);

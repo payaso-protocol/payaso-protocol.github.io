@@ -35,7 +35,7 @@
         <p>
           <span>PAYA Minted</span><span>{{ addCommom(myPaya, 4) }}</span>
         </p>
-        <a @click="toDeposite">Deposite {{ current }} LP tokens</a>
+        <a @click="toDeposite"> <img src="~/assets/img/loading.gif" v-if="depositeLoading" /> Deposite {{ current }} LP tokens</a>
         <a @click="toClaim" :class="loading ? 'claim loading' : 'claim'"
           ><img src="~/assets/img/loading.gif" v-if="loading" />Claim</a
         >
@@ -89,7 +89,11 @@ export default {
     });
 
     this.$bus.$on("DEPOSITE_LOADING", (data) => {
-
+      if (data.type === this.current && data.status) {
+        this.depositeLoading = true;
+      } else {
+        this.depositeLoading = false;
+      }
     });
   },
   watch: {
