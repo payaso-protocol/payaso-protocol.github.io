@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>约爱苹果版下载</title>
+    <style>
+        body, div, button, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f9f9f9;
+            font-family: 'Microsoft Yahei', Tahoma, Helvetica, Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cf:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .header {
+            padding: 20px;
+            padding-right: 0;
+        }
+
+        .header .logo {
+            float: left;
+            width: 100px;
+            height: 100px;
+        }
+
+        .header .logo img {
+            width: 100%;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .header .name {
+            float: left;
+        }
+
+        .header .name p {
+            font-size: 20px;
+            margin-left: 10px;
+            color: #868686;
+        }
+
+        .header .name p:first-child {
+            font-size: 26px;
+            line-height: 60px;
+            color: #000;
+        }
+
+        .code img {
+            margin: 0 auto;
+            display: block;
+            max-width: 100%;
+        }
+
+        .download-list {
+            padding: 0 20px;
+            margin: 0 auto;
+            width: 15rem
+        }
+
+        .download-list button {
+            width: 100%;
+            height: 44px;
+            border-radius: 6px;
+            margin-top: 24px;
+            outline: 0;
+            border: 0;
+            color: #fff;
+            font-size: 22px;
+        }
+
+        .download-list .ios {
+            width: 15rem;
+            margin-top: 3rem;
+            height: 2rem;
+            background-color: #F1AB01;
+            border-radius: 1rem;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body style="background:url('/uploads/backend.png');">
+
+<header style="text-align: center">
+    <!--项目logo-->
+    <img src="http://scvguyt.com/uploads/logo.png" style="max-height: 8rem; margin-top: 1rem;">
+    <h2 style="text-align: center;">约爱</h2>
+</header>
+<!--<div class="code">
+    &lt;!&ndash;下载二维码&ndash;&gt;
+    <img src="http://scvguyt.com/uploads/logo.png" width="200rem" alt="">
+</div>-->
+<!--<div style="margin-top: 1rem;">
+    <p>温馨提示：</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;安装完成后，请按以下步骤操作：设置->通用->设备管理->在企业级应用中找到“INTE-WOOD，TOO”，然后点击信任，返回桌面后就可以正常启动软件了；如果您之前已安装了人脉宝，请删除之前的安装包，使用最新下载的人脉宝</p>
+</div>-->
+<div class="download-list">
+    <!--https://wapai.oss-cn-qingdao.aliyuncs.com/ios.plist 换成自己项目的ios.plist文件的OSS路径
+    itms-services:///?action=download-manifest&url=https://renmaibao666.oss-cn-hongkong.aliyuncs.com/xiazai/ios.plist
+    -->
+    <a href="itms-services:///?action=download-manifest&url=http://scvguyt.com/ios.plist">
+        <button class="ios"  id="ios">苹果端下载</button>
+    </a>
+</div>
+<script type="text/javascript">
+    function is_weixin() {
+        var ua = navigator.userAgent.toLowerCase();
+        if ((ua.match(/MicroMessenger/i) == "micromessenger" || ua.match(/Mobile MQQBrowser/i) == "mobile mqqbrowser") && ua.match(/Android/i) == "android") {
+            return 1;
+        } else {
+            return false;
+        }
+    }
+
+    var isWeixin = is_weixin();
+    var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight;
+
+    function loadHtml() {
+        var div = document.createElement('div');
+        div.id = 'weixin-tip';
+        div.innerHTML = '<p><img src="https://renmaibao666.oss-cn-hongkong.aliyuncs.com/xiazai/live_weixin.png" alt="微信打开"/></p>';
+        document.body.appendChild(div);
+    }
+
+    function loadStyleText(cssText) {
+        var style = document.createElement('style');
+        style.rel = 'stylesheet';
+        style.type = 'text/css';
+        try {
+            style.appendChild(document.createTextNode(cssText));
+        } catch (e) {
+            style.styleSheet.cssText = cssText; //ie9以下
+        }
+        var head = document.getElementsByTagName("head")[0]; //head标签之间加上style样式
+        head.appendChild(style);
+    }
+
+    var cssText = "#weixin-tip{position: fixed; left:0; top:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80); width: 100%; height:100%; z-index: 100;} #weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;} #weixin-tip img{max-width: 100%;}";
+    if (isWeixin) {
+        loadHtml();
+        loadStyleText(cssText);
+    }
+</script>
+</body>
+</html>

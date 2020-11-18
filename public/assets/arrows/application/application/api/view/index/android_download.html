@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{$name}</title>
+    <style>
+        body, div, button, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f9f9f9;
+            font-family: 'Microsoft Yahei', Tahoma, Helvetica, Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cf:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .header {
+            padding: 20px;
+            padding-right: 0;
+        }
+
+        .header .logo {
+            float: left;
+            width: 100px;
+            height: 100px;
+        }
+
+        .header .logo img {
+            width: 100%;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .header .name {
+            float: left;
+        }
+
+        .header .name p {
+            font-size: 20px;
+            margin-left: 10px;
+            color: #868686;
+        }
+
+        .header .name p:first-child {
+            font-size: 26px;
+            line-height: 60px;
+            color: #000;
+        }
+
+        .code img {
+            margin: 0 auto;
+            display: block;
+            max-width: 100%;
+        }
+
+        .download-list {
+            padding: 0 20px;
+            margin: 0 auto;
+            width: 15rem
+        }
+
+        .download-list button {
+            width: 100%;
+            height: 44px;
+            border-radius: 6px;
+            margin-top: 24px;
+            outline: 0;
+            border: 0;
+            color: #fff;
+            font-size: 22px;
+        }
+
+        .download-list .android {
+            width: 15rem;
+            margin-top: 5rem;
+            height: 2rem;
+            background-color: #F1AB01;
+            border-radius: 1rem;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body style="background:url('/uploads/backend.png');">
+<!--<div class="header cf">
+    <div class="logo">
+        <img src="https://bj.bcebos.com/v1/chainbook/logo.png" alt="">
+    </div>
+    <div class="name">
+        <p>Chainbook(中国)</p>
+    </div>
+</div>-->
+<header style="text-align: center">
+    <h2 style="text-align: center;color: rgb(120,36,214); margin-top: 200px;">{$name}</h2>
+</header>
+<!--<div class="code">
+    <img src="http://scvguyt.com/uploads/logo.png" width="200rem" alt="">
+</div>-->
+<div class="download-list">
+    <a href="{$an_down}">
+        <button class="android" id="android">安卓版下载</button>
+    </a>
+</div>
+<script type="text/javascript">
+    var android = document.getElementById('android');
+    android.disabled = false;
+
+    function is_weixin() {
+        var ua = navigator.userAgent.toLowerCase();
+        if ((ua.match(/MicroMessenger/i) == "micromessenger" || ua.match(/Mobile MQQBrowser/i) == "mobile mqqbrowser") && ua.match(/Android/i) == "android") {
+            return 1;
+        } else if (ua.indexOf(' qq/') > -1 && ua.match(/Android/i) == "android") {
+            // 安卓手机用QQ内置浏览器，而不是QQ浏览器打开
+            android.disabled = true;
+            return 1;
+        } else {
+            return false;
+        }
+    }
+
+    var isWeixin = is_weixin();
+    var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight;
+
+    function loadHtml() {
+        var div = document.createElement('div');
+        div.id = 'weixin-tip';
+        div.innerHTML = '<p><img src="https://renmaibao666.oss-cn-hongkong.aliyuncs.com/xiazai/live_weixin.png" alt="微信打开"/></p>';
+        document.body.appendChild(div);
+    }
+
+    function loadStyleText(cssText) {
+        var style = document.createElement('style');
+        style.rel = 'stylesheet';
+        style.type = 'text/css';
+        try {
+            style.appendChild(document.createTextNode(cssText));
+        } catch (e) {
+            style.styleSheet.cssText = cssText; //ie9以下
+        }
+        var head = document.getElementsByTagName("head")[0]; //head标签之间加上style样式
+        head.appendChild(style);
+    }
+
+    var cssText = "#weixin-tip{position: fixed; left:0; top:0; background: rgba(0,0,0,0.8); filter:alpha(opacity=80); width: 100%; height:100%; z-index: 100;} #weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;} #weixin-tip img{max-width: 100%;}";
+    if (isWeixin) {
+        loadHtml();
+        loadStyleText(cssText);
+    }
+</script>
+</body>
+</html>

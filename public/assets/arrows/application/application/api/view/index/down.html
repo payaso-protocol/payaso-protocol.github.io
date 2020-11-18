@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>{$name}</title>
+</head>
+<body>
+<div style="text-align: center;margin-top: 30px">
+    <a href="javascript:void(0)" onclick="downApp()"></a>
+</div>
+</body>
+
+<script type="text/javascript">
+
+
+
+    function downApp() {
+        var an = '{$an}';
+        var ios = '{$ios}';
+        var other = '{$other}';
+        var u = navigator.userAgent,
+            isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1,
+            isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+            urls = {
+                'android': an, // 微下载链接
+                'ios': ios,
+                'other': other
+            };
+
+        //简化
+        if (isAndroid) {
+            window.location.href = urls.android;
+        } else if (isiOS) {
+            window.location.href = urls.ios;
+        } else {
+            window.location.href = urls.other;
+        }
+    }
+    downApp();
+</script>
+</html>
