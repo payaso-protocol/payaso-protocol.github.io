@@ -207,7 +207,6 @@ export default {
       } else {
         this.private = false;
       }
-      console.log(this.private);
     },
     async undAndcolWatch(newValue) {
       if (newValue.col && newValue.und) {
@@ -239,7 +238,6 @@ export default {
         address: this.address,
         _yield: 0,
       };
-
       onIssue(data, (status) => {
         // console.log('onIssue####status#####', status);
         // if (status === 'pending') {

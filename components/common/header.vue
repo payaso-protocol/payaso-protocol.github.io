@@ -4,15 +4,15 @@
       <img src="~/assets/img/logo_1.png" />
     </a>
     <div class="nav-list">
-      <nuxt-link to="/" :class="routeObj.name === 'product-id' ? 'active' : ''"
-        >Market</nuxt-link
+      <nuxt-link
+        to="/"
+        :class="routeObj.name === 'product-id' ? 'active' : ''"
+        >{{ $t('header.Market') }}</nuxt-link
       >
       <nuxt-link to="/buy">My Safety Helmet</nuxt-link>
       <nuxt-link to="/sell">My Supply</nuxt-link>
       <nuxt-link to="/mining">LP Mining</nuxt-link>
-      <a href="http://www.payaso.io/guides" target="_blank"
-        >Guide Book</a
-      >
+      <a href="http://www.payaso.io/guides" target="_blank">Guide Book</a>
     </div>
     <Assets v-if="userInfo.data.isLogin"></Assets>
     <!-- 分割线 -->
@@ -74,6 +74,9 @@ export default {
     routeObj() {
       return this.$route;
     },
+  },
+  mounted() {
+    console.log(this.$t('header.Market'));
   },
   watch: {
     userInfo: {
@@ -232,6 +235,4 @@ export default {
     }
   }
 }
-
-
 </style>

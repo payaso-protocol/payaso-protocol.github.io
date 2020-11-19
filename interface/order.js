@@ -68,13 +68,12 @@ export const onIssue = async (data_, callBack) => {
       .sell(
         data.private,
         data.currency, // 抵押物 DAI
-        data.category, // 保险品类 WETH
+        data.category ? data.category : data.address, // 保险品类 WETH
         data.price, // 触发保险金额 抵押物单位   // 1/200
         data.expire,
         data.volume, // 200
         data.currency, // 支付货币
-        data.premium, // 单价
-        data.address // 单价
+        data.premium // 单价
       )
       .send({ from: window.WEB3.currentProvider.selectedAddress })
       .on("transactionHash", function(hash) {
@@ -144,7 +143,6 @@ export const onIssue = async (data_, callBack) => {
     //   //onReceiptChange(receipt);
     // });
   } catch (error) {
-    console.log(data);
     console.log("onIssue", error);
   }
 };

@@ -152,7 +152,9 @@ export default {
       }
     },
     dataListWatch(newValue) {
-      this.dataList = newValue;
+      if (newValue) {
+        this.dataList = newValue;
+      }
     },
     async toClaim() {
       this.loading = true;
@@ -165,13 +167,17 @@ export default {
       let type = current.replace('-', '_');
       let typeLPT = type + '_LPT';
       let DOUBLEPOOL = await totalSupply(type);
-      let ETH_DAI = await totalSupply(typeLPT);
-      this.dataList.lpt = addCommom(ETH_DAI, 2);
+      let ETH_COIN = await totalSupply(typeLPT);
+      this.dataList.lpt = addCommom(ETH_COIN, 2);
       // ETH_DAI_LPT 包含的WETH
       const charID = window.chainID;
       let Adress = getContract(typeLPT, charID);
-      let WETHDAI = await balanceOf('WETH', Adress);
-      this.dataList.protected = addCommom((WETHDAI * DOUBLEPOOL) / ETH_DAI, 2);
+      let WETHCOIN = await balanceOf('WETH', Adress);
+      this.dataList.protected = addCommom(
+        (WETHCOIN * DOUBLEPOOL) / ETH_COIN,
+        2
+      );
+      console.log(1, DOUBLEPOOL, ETH_COIN, WETHCOIN);
     },
     toDeposite() {
       this.$bus.$emit('OPEN_DEPOSITE', (data) => {

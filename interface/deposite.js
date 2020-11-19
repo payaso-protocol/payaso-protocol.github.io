@@ -43,9 +43,9 @@ export const balanceOf = async (type, currcy) => {
   if (type.indexOf("0x") === -1) {
     adress = getAddress(type, charID);
   }
-  if (!adress) {
-    return 0;
-  }
+  // if (!adress) {
+  //   return 0;
+  // }
   const contract = await expERC20(adress);
   return contract.methods
     .balanceOf(currcy)
