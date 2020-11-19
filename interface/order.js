@@ -488,7 +488,7 @@ export const TotalMined = async (address1, address2) => {
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };
-export const claimable = async (address1) => {
+export const claimable = async (address1, address2) => {
   const charID = window.chainID;
   let adress1 = address1;
   if (address1.indexOf("0x") === -1) {
@@ -496,7 +496,7 @@ export const claimable = async (address1) => {
   }
   const order = await Order(adress1);
   return order.methods
-    .claimable(window.WEB3.currentProvider.selectedAddress)
+    .claimable(address2 || window.WEB3.currentProvider.selectedAddress)
     .call()
     .then((res) => {
       let tocurrcy = address1;

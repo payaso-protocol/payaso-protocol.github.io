@@ -38,7 +38,13 @@
             <p>
               <span>Circulation</span
               ><span>{{
-                addCommom(precision.minus(totalPaya, mined), 2)
+                addCommom(
+                  precision.plus(
+                    precision.minus(totalPaya, mined),
+                    claimAblePaya
+                  ),
+                  2
+                )
               }}</span>
             </p>
             <p>
@@ -53,10 +59,10 @@
 </template>
 
 <script>
-import { claim } from "~/interface/order.js";
-import { getPAYA } from "~/interface/deposite.js";
-import precision from "~/assets/js/precision.js";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
+import { claim } from '~/interface/order.js';
+import { getPAYA } from '~/interface/deposite.js';
+import precision from '~/assets/js/precision.js';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 
 export default {
   data() {
@@ -82,6 +88,9 @@ export default {
     payaSettle() {
       return this.$store.state.assets.payaSettle;
     },
+    claimAblePaya() {
+      return this.$store.state.assets.claimAblePaya;
+    },
     assets() {
       return this.$store.state.assets;
     },
@@ -94,13 +103,13 @@ export default {
   },
   mounted() {
     this.getAssets();
-    this.$bus.$on("REFRESH_ASSETS", (data) => {
+    this.$bus.$on('REFRESH_ASSETS', (data) => {
       this.getAssets();
     });
   },
   watch: {
     assets: {
-      handler: "assetsWatch",
+      handler: 'assetsWatch',
       immediate: true,
     },
   },
@@ -112,11 +121,12 @@ export default {
     },
     async getAssets() {
       setTimeout(() => {
-        this.$store.dispatch("getValidBorrowing");
-        this.$store.dispatch("getTotalPaya");
-        this.$store.dispatch("getTotalMined");
-        this.$store.dispatch("getMyPayaso");
-        this.$store.dispatch("getPayaSettle");
+        this.$store.dispatch('getValidBorrowing');
+        this.$store.dispatch('getTotalPaya');
+        this.$store.dispatch('getTotalMined');
+        this.$store.dispatch('getMyPayaso');
+        this.$store.dispatch('getPayaSettle');
+        this.$store.dispatch('getClaimAblePaya');
         // this.$store.dispatch("getmyUNI");
         // this.$store.dispatch("getmyPAYA");
       }, 1000);
@@ -134,7 +144,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (max-width: 750px) {
   .my-assets {
     display: none;
