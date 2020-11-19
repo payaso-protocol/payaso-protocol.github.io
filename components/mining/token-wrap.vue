@@ -35,7 +35,7 @@
         <p>
           <span>PAYA Minted</span><span>{{ addCommom(myPaya, 4) }}</span>
         </p>
-        <a @click="toDeposite">
+        <a @click="toDeposite" :class="loading ? 'loading' : ''">
           <img src="~/assets/img/loading.gif" v-if="depositeLoading" /> Deposite
           {{ current }} LP tokens</a
         >
@@ -48,7 +48,7 @@
         <p>
           <span>{{ current }} LP tokens</span><span>{{ tokens }}</span>
         </p>
-        <a @click="toWithdraw"
+        <a @click="toWithdraw" :class="loading ? 'loading' : ''"
           ><img src="~/assets/img/loading.gif" v-if="withdrawLoading" />Withdraw
           {{ current }} LP tokens</a
         >

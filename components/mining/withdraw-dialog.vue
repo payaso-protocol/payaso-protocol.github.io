@@ -1,5 +1,10 @@
 <template>
-  <PDialog title="Withdraw" @close="closeWithdraw" :noCancel="true" @confirm='submitWithdraw'>
+  <PDialog
+    title="Withdraw"
+    @close="closeWithdraw"
+    :noCancel="true"
+    @confirm="submitWithdraw"
+  >
     <div class="withdrawInput">
       <PInput
         type="number"
@@ -34,7 +39,7 @@
         v-else
         @click="withdrawCheck"
       />
-      <p>Global.infinite Approval</p>
+      <p>infinite Approval</p>
     </div>
   </PDialog>
 </template>
@@ -42,8 +47,8 @@
 <script>
 import PDialog from '~/components/common/p-dialog.vue';
 import PInput from '~/components/common/p-input.vue';
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
-import { toWithdraw,WithdrawAvailable} from "~/interface/deposite";
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import { toWithdraw, WithdrawAvailable } from '~/interface/deposite';
 export default {
   props: ['current'],
   components: {
@@ -55,42 +60,40 @@ export default {
       checked: false,
       WithdrawNum: '',
       perList: [25, 50, 75, 100],
-      curPer: 100,
-      available:0
+      curPer: 0,
+      available: 0,
     };
   },
   mounted() {
-    this.abailable()
+    this.abailable();
   },
   methods: {
-    all(){
-      this.WithdrawNum = this.available
+    all() {
+      this.WithdrawNum = this.available;
     },
-    async abailable(){
-      let type = this.current.replace('-','_')
-      let res = await WithdrawAvailable(type)
-      this.available = addCommom(res,20) 
+    async abailable() {
+      let type = this.current.replace('-', '_');
+      let res = await WithdrawAvailable(type);
+      this.available = addCommom(res, 20);
     },
     handleClickPer(item) {
       this.curPer = item;
-      if(this.available){
-        this.WithdrawNum = this.available*item/100
+      if (this.available) {
+        this.WithdrawNum = (this.available * item) / 100;
       }
     },
     withdrawCheck() {
       this.checked = !this.checked;
-      if(this.checked){
-        window.localStorage.setItem('globalWithdraw',true)
+      if (this.checked) {
+        window.localStorage.setItem('globalWithdraw', true);
       }
     },
     closeWithdraw() {
       this.$emit('close');
     },
     submitWithdraw() {
-      let type = this.current.replace('-','_')
-      toWithdraw(type,{amount:this.WithdrawNum},(status)=>{
-        
-      })
+      let type = this.current.replace('-', '_');
+      toWithdraw(type, { amount: this.WithdrawNum }, (status) => {});
     },
   },
 };
