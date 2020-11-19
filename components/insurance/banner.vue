@@ -4,45 +4,48 @@
       <li>
         <!-- 已经成交的保险品种的种类 -->
         <label>Helmet Varieties</label>
-        <p>{{helmetVarieties}}</p>
+        <p>{{ helmetVarieties }}</p>
       </li>
       <li>
         <!-- 保险交易过的资金量 -->
         <label>Total Helmets Borrowed Volume</label>
-        <p>{{fixD(totalHelmetsBorrowedVolume, 0)}}</p>
+        <p>{{ fixD(totalHelmetsBorrowedVolume, 0) }}</p>
       </li>
       <li>
         <!-- 24小时Long token 铸造量 -->
         <label>24h Long Token Created Volume</label>
-        <p>{{fixD(longTokenCreatedVolume, 0)}}</p>
+        <p>{{ fixD(longTokenCreatedVolume, 0) }}</p>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import {fixD} from '~/assets/js/util.js';
+import { fixD } from '~/assets/js/util.js';
 export default {
-  name: "insurance-banner",
+  name: 'insurance-banner',
   data() {
     return {
-      fixD: fixD
+      fixD: fixD,
     };
   },
   computed: {
-    helmetVarieties() { // 已经成交的保险品种的种类
+    helmetVarieties() {
+      // 已经成交的保险品种的种类
       return this.$store.state.helmetVarieties;
     },
-    totalHelmetsBorrowedVolume() { // 保险交易过的资金量
+    totalHelmetsBorrowedVolume() {
+      // 保险交易过的资金量
       return this.$store.state.totalHelmetsBorrowedVolume;
     },
-    longTokenCreatedVolume() { // 24小时Long token 铸造量
+    longTokenCreatedVolume() {
+      // 24小时Long token 铸造量
       return this.$store.state.longTokenCreatedVolume;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 .insurance-banner {
   ul {
     display: flex;
@@ -67,7 +70,7 @@ export default {
     height: 180px;
     /* line-height: 180px; */
     margin: 0 auto;
-    background: url("../../assets/img/Banner3@2x.png") right 36px no-repeat;
+    background: url('../../assets/img/Banner3@2x.png') right 36px no-repeat;
     background-size: auto 100%;
     /* font-size: 40px; */
     font-size: 16px;
@@ -84,7 +87,7 @@ export default {
     width: 100%;
     height: 180px;
     margin: 0 auto;
-    background: url("../../assets/img/banner_h5.png") right no-repeat;
+    background: url('../../assets/img/banner_h5.png') right no-repeat;
     background-size: auto 100%;
     /* font-size: 30px; */
     font-size: 12px;

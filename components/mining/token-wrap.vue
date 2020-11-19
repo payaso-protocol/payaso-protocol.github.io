@@ -157,66 +157,20 @@ export default {
     },
     async getAllData() {
       let current = window.localStorage.getItem('current') || this.current;
-      let DOUBLEPOOL1 = await totalSupply('ETH_DAI');
-      let DOUBLEPOOL2 = await totalSupply('ETH_USDT');
-      let DOUBLEPOOL3 = await totalSupply('ETH_USDC');
-      let DOUBLEPOOL4 = await totalSupply('ETH_WBTC');
-      if (current == 'ETH-DAI') {
-        //LPT 总量
-        //ETH-DAI质押总量
-        let ETH_DAI = await totalSupply('ETH_DAI');
-        this.dataList.lpt = addCommom(ETH_DAI, 2);
-        // ETH_DAI_LPT 包含的WETH
-        let DAIAdress = getContract('ETH_DAI_LPT');
-        if (DAIAdress) {
-          let WETHDAI = await balanceOf('WETH', DAIAdress);
-          this.dataList.protected = addCommom(
-            (WETHDAI * DOUBLEPOOL1) / ETH_DAI,
-            2
-          );
-        }
-      }
-      if (current == 'ETH-USDT') {
-        //ETH_USDT质押总量
-        let ETH_USDT = await totalSupply('ETH_USDT');
-        this.dataList.lpt = addCommom(ETH_USDT, 2);
-        // ETH_DAI_LPT 包含的WETH
-        let USDTAdress = getContract('ETH_USDT_LPT');
-        if (USDTAdress) {
-          let WETHUSDT = await balanceOf('WETH', USDTAdress);
-          this.dataList.protected = addCommom(
-            (WETHUSDT * DOUBLEPOOL2) / ETH_USDT,
-            2
-          );
-        }
-      }
-      if (current == 'ETH-USDC') {
-        //ETH_USDC质押总量
-        let ETH_USDC = await totalSupply('ETH_USDC');
-        this.dataList.lpt = addCommom(ETH_USDC, 2);
-        // ETH_USDC_LPT 包含的WETH
-        let USDCAdress = getContract('ETH_USDC_LPT');
-        if (USDCAdress) {
-          let WETHUSDC = await balanceOf('WETH', USDCAdress);
-          this.dataList.protected = addCommom(
-            (WETHUSDC * DOUBLEPOOL3) / ETH_USDC,
-            2
-          );
-        }
-      }
-      if (current == 'ETH-WBTC') {
-        //ETH-DAI质押总量
-        let ETH_WBTC = await totalSupply('ETH_WBTC');
-        this.dataList.lpt = addCommom(ETH_WBTC, 2);
-        // ETH_WBTC_LPT 包含的WETH
-        let WBTCAdress = getContract('ETH_WBTC_LPT');
-        if (WBTCAdress) {
-          let WETHWBTC = await balanceOf('WETH', WBTCAdress);
-          this.dataList.protected = addCommom(
-            (WETHWBTC * DOUBLEPOOL4) / ETH_WBTC,
-            2
-          );
-        }
+      let type = current.replace('-', '_');
+      let typeLPT = type + '_LPT';
+      let DOUBLEPOOL = await totalSupply(type);
+      let ETH_DAI = await totalSupply(typeLPT);
+      this.dataList.lpt = addCommom(ETH_DAI, 2);
+      // ETH_DAI_LPT 包含的WETH
+      let DAIAdress = getContract(typeLPT);
+      if (DAIAdress) {
+        let WETHDAI = await balanceOf('WETH', DAIAdress);
+        console.log(WETHDAI);
+        this.dataList.protected = addCommom(
+          (WETHDAI * DOUBLEPOOL) / ETH_DAI,
+          2
+        );
       }
     },
     toDeposite() {

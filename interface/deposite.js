@@ -26,7 +26,7 @@ export const totalSupply = async (address) => {
     adress = getContract(address, charID);
   }
   if (!adress) {
-    return 0
+    return 0;
   }
   const Contract = await expERC20(adress);
   return Contract.methods
@@ -44,58 +44,60 @@ export const balanceOf = async (type, currcy) => {
     adress = getAddress(type, charID);
   }
   if (!adress) {
-    return 0
+    return 0;
   }
-  const contract = await expERC20(adress);
+  console.log(adress, currcy, "$$$$$$$$$$$$$");
+  const contract = await expERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2");
   return contract.methods
-    .balanceOf(currcy)
+    .balanceOf("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11")
     .call()
     .then((res) => {
       let tocurrcy = currcy || type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };
-export const toDeposite = async (type, data,callBack) => {
-  const charID = window.chainID
+export const toDeposite = async (type, data, callBack) => {
+  const charID = window.chainID;
   const address = window.CURRENTADDRESS;
-  let amount = data.amount
+  let amount = data.amount;
   amount = toWei(amount);
-  let adress = type
-  let adressLPT = type
+  let adress = type;
+  let adressLPT = type;
   if (type.indexOf("0x") === -1) {
     adress = getContract(type, charID);
-    adressLPT = getContract(type+'_LPT', charID);
+    adressLPT = getContract(type + "_LPT", charID);
   }
   let result;
-  bus.$emit('DEPOSITE_LOADING', {
+  bus.$emit("DEPOSITE_LOADING", {
     type: type,
-    status: true
+    status: true,
   });
   try {
-    const Contract = await expERC20(adressLPT)
-    await oneKeyArrpove(Contract, type, amount,(res) => {
-      if (res === 'failed') {
-        bus.$emit('DEPOSITE_LOADING', {
+    const Contract = await expERC20(adressLPT);
+    await oneKeyArrpove(Contract, type, amount, (res) => {
+      if (res === "failed") {
+        bus.$emit("DEPOSITE_LOADING", {
           type: type,
           status: false,
         });
       }
     });
-    const deposite = await Deposite(adress)
+    const deposite = await Deposite(adress);
     result = deposite.methods
       .stake(amount)
       .send({ from: address })
-      .on("transactionHash", function (hash) {
+      .on("transactionHash", function(hash) {
         bus.$emit("CLOSE_STATUS_DIALOG");
         bus.$emit("OPEN_STATUS_DIALOG", {
           type: "submit",
-          conText: `<a href="https://${netObj[Number(window.chainID)]
-            }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
+          conText: `<a href="https://${
+            netObj[Number(window.chainID)]
+          }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
         });
       })
-      .on("confirmation", function (confirmationNumber, receipt) {
+      .on("confirmation", function(confirmationNumber, receipt) {
         if (confirmationNumber === 0) {
-          bus.$emit('DEPOSITE_LOADING', {
+          bus.$emit("DEPOSITE_LOADING", {
             type: type,
             status: false,
           });
@@ -105,9 +107,11 @@ export const toDeposite = async (type, data,callBack) => {
               type: "success",
               title: "Successfully rented",
               conTit: "<div>Hat activated successfully</div>",
-              conText: `<a href="https://${netObj[Number(window.chainID)]
-                }etherscan.io/tx/${receipt.transactionHash
-                }" target="_blank">View on Etherscan</a>`,
+              conText: `<a href="https://${
+                netObj[Number(window.chainID)]
+              }etherscan.io/tx/${
+                receipt.transactionHash
+              }" target="_blank">View on Etherscan</a>`,
             });
           } else {
             Message({
@@ -120,9 +124,9 @@ export const toDeposite = async (type, data,callBack) => {
           }, 1000);
         }
       })
-      .on("error", function (error, receipt) {
+      .on("error", function(error, receipt) {
         bus.$emit("CLOSE_STATUS_DIALOG");
-        bus.$emit('DEPOSITE_LOADING', {
+        bus.$emit("DEPOSITE_LOADING", {
           type: type,
           status: false,
         });
@@ -137,48 +141,49 @@ export const toDeposite = async (type, data,callBack) => {
     console.log(error);
   }
   return result;
-}
-export const toWithdraw = async (type, data,callBack) => {
-  const charID = window.chainID
+};
+export const toWithdraw = async (type, data, callBack) => {
+  const charID = window.chainID;
   const address = window.CURRENTADDRESS;
-  let amount = data.amount
+  let amount = data.amount;
   amount = toWei(amount);
-  let adress = type
-  let adressLPT = type
+  let adress = type;
+  let adressLPT = type;
   if (type.indexOf("0x") === -1) {
     adress = getContract(type, charID);
-    adressLPT = getContract(type+'_LPT', charID);
+    adressLPT = getContract(type + "_LPT", charID);
   }
   let result;
-  bus.$emit('WITHDRAW_LOADING', {
+  bus.$emit("WITHDRAW_LOADING", {
     type: type,
     status: true,
   });
   try {
-     const Contract = await expERC20(adressLPT)
-     await oneKeyArrpove(Contract, type, amount, (res) => {
-       if (res === 'failed') {
-         bus.$emit('WITHDRAW_LOADING', {
-           type: type,
-           status: false,
-         });
-       }
-     });
-     const deposite = await Deposite(adress)
+    const Contract = await expERC20(adressLPT);
+    await oneKeyArrpove(Contract, type, amount, (res) => {
+      if (res === "failed") {
+        bus.$emit("WITHDRAW_LOADING", {
+          type: type,
+          status: false,
+        });
+      }
+    });
+    const deposite = await Deposite(adress);
     result = deposite.methods
       .withdraw(amount)
       .send({ from: address })
-      .on("transactionHash", function (hash) {
+      .on("transactionHash", function(hash) {
         bus.$emit("CLOSE_STATUS_DIALOG");
         bus.$emit("OPEN_STATUS_DIALOG", {
           type: "submit",
-          conText: `<a href="https://${netObj[Number(window.chainID)]
-            }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
+          conText: `<a href="https://${
+            netObj[Number(window.chainID)]
+          }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
         });
       })
-      .on("confirmation", function (confirmationNumber, receipt) {
+      .on("confirmation", function(confirmationNumber, receipt) {
         if (confirmationNumber === 0) {
-          bus.$emit('WITHDRAW_LOADING', {
+          bus.$emit("WITHDRAW_LOADING", {
             type: type,
             status: false,
           });
@@ -188,9 +193,11 @@ export const toWithdraw = async (type, data,callBack) => {
               type: "success",
               title: "Successfully rented",
               conTit: "<div>Hat activated successfully</div>",
-              conText: `<a href="https://${netObj[Number(window.chainID)]
-                }etherscan.io/tx/${receipt.transactionHash
-                }" target="_blank">View on Etherscan</a>`,
+              conText: `<a href="https://${
+                netObj[Number(window.chainID)]
+              }etherscan.io/tx/${
+                receipt.transactionHash
+              }" target="_blank">View on Etherscan</a>`,
             });
           } else {
             Message({
@@ -203,9 +210,9 @@ export const toWithdraw = async (type, data,callBack) => {
           }, 1000);
         }
       })
-      .on("error", function (error, receipt) {
+      .on("error", function(error, receipt) {
         bus.$emit("CLOSE_STATUS_DIALOG");
-        bus.$emit('WITHDRAW_LOADING', {
+        bus.$emit("WITHDRAW_LOADING", {
           type: type,
           status: false,
         });
@@ -220,7 +227,7 @@ export const toWithdraw = async (type, data,callBack) => {
     console.log(error);
   }
   return result;
-}
+};
 export const WithdrawAvailable = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -235,7 +242,7 @@ export const WithdrawAvailable = async (type) => {
       let tocurrcy = type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
-}
+};
 export const CangetPAYA = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -250,7 +257,7 @@ export const CangetPAYA = async (type) => {
       let tocurrcy = type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
-}
+};
 export const CangetUNI = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -265,7 +272,7 @@ export const CangetUNI = async (type) => {
       let tocurrcy = type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
-}
+};
 export const getPAYA = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -278,27 +285,30 @@ export const getPAYA = async (type) => {
     deposite.methods
       .getReward()
       .send({ from: window.WEB3.currentProvider.selectedAddress })
-      .on("transactionHash", function (hash) {
+      .on("transactionHash", function(hash) {
         bus.$emit("CLOSE_STATUS_DIALOG");
         bus.$emit("OPEN_STATUS_DIALOG", {
           type: "submit",
-          conText: `<a href="https://${netObj[Number(window.chainID)]
-            }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
+          conText: `<a href="https://${
+            netObj[Number(window.chainID)]
+          }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
         });
       })
-      .on("confirmation", function (confirmationNumber, receipt) {
-        bus.$emit('CLOSE_LOADING')
+      .on("confirmation", function(confirmationNumber, receipt) {
+        bus.$emit("CLOSE_LOADING");
         if (confirmationNumber === 0) {
           if (window.statusDialog) {
-            ``
+            ``;
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
               type: "success",
               title: "Successfully rented",
               conTit: "<div>Hat activated successfully</div>",
-              conText: `<a href="https://${netObj[Number(window.chainID)]
-                }etherscan.io/tx/${receipt.transactionHash
-                }" target="_blank">View on Etherscan</a>`,
+              conText: `<a href="https://${
+                netObj[Number(window.chainID)]
+              }etherscan.io/tx/${
+                receipt.transactionHash
+              }" target="_blank">View on Etherscan</a>`,
             });
           } else {
             Message({
@@ -312,8 +322,8 @@ export const getPAYA = async (type) => {
           }, 1000);
         }
       })
-      .on("error", function (error, receipt) {
-        bus.$emit('CLOSE_LOADING')
+      .on("error", function(error, receipt) {
+        bus.$emit("CLOSE_LOADING");
         bus.$emit("CLOSE_STATUS_DIALOG");
         if (error && error.message) {
           Message({
@@ -326,7 +336,7 @@ export const getPAYA = async (type) => {
     console.log(error);
   }
   return result;
-}
+};
 export const getUNI = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -341,7 +351,7 @@ export const getUNI = async (type) => {
       let tocurrcy = type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
-}
+};
 export const getLPTOKEN = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -356,7 +366,7 @@ export const getLPTOKEN = async (type) => {
       let tocurrcy = type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
-}
+};
 export const getMined = async (type) => {
   const charID = window.chainID;
   let adress = type;
@@ -364,12 +374,13 @@ export const getMined = async (type) => {
     adress = getContract(type, charID);
   }
   const deposite = await Deposite(adress);
-  const list = await deposite.getPastEvents('RewardPaid', {
-    address: '0x0000000000000000000000000603cd787f45d1b830ced5acaeecdab661b267ca'
-  })
-  console.log(list, '############################')
-  return list
-}
+  const list = await deposite.getPastEvents("RewardPaid", {
+    address:
+      "0x0000000000000000000000000603cd787f45d1b830ced5acaeecdab661b267ca",
+  });
+  console.log(list, "############################");
+  return list;
+};
 const allowance = async (token_exp, contract_str) => {
   // const WEB3 = await web3();
   const charID = await getID();
