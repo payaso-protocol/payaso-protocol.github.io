@@ -36,20 +36,20 @@
 </template>
 
 <script>
-import { totalSupply, balanceOf } from "~/interface/deposite";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
-import { getAddress, getContract } from "~/assets/utils/address-pool.js";
+import { totalSupply, balanceOf } from '~/interface/deposite';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import { getAddress, getContract } from '~/assets/utils/address-pool.js';
 export default {
-  name: "mining-list",
+  name: 'mining-list',
   data() {
     return {
       miningList: [
-        { name: "ETH-DAI", lpt: 0, protected: 0 },
-        { name: "ETH-USDT", lpt: 0, protected: 0 },
-        { name: "ETH-USDC", lpt: 0, protected: 0 },
-        { name: "ETH-WBTC", lpt: 0, protected: 0 },
+        { name: 'ETH-DAI', lpt: 0, protected: 0 },
+        { name: 'ETH-USDT', lpt: 0, protected: 0 },
+        { name: 'ETH-USDC', lpt: 0, protected: 0 },
+        { name: 'ETH-WBTC', lpt: 0, protected: 0 },
       ],
-      allLPT: "",
+      allLPT: '',
       TotalValueLocked: 0,
     };
   },
@@ -60,47 +60,50 @@ export default {
   },
   methods: {
     async getAllData() {
+      const charID = window.chainID;
+
       //LPT 总量
-      let DOUBLEPOOL1 = await totalSupply("ETH_DAI");
-      let DOUBLEPOOL2 = await totalSupply("ETH_USDT");
-      let DOUBLEPOOL3 = await totalSupply("ETH_USDC");
-      let DOUBLEPOOL4 = await totalSupply("ETH_WBTC");
+      let DOUBLEPOOL1 = await totalSupply('ETH_DAI');
+      let DOUBLEPOOL2 = await totalSupply('ETH_USDT');
+      let DOUBLEPOOL3 = await totalSupply('ETH_USDC');
+      let DOUBLEPOOL4 = await totalSupply('ETH_WBTC');
+      console.log(DOUBLEPOOL1, DOUBLEPOOL2);
       //ETH-DAI质押总量
-      let ETH_DAI = await totalSupply("ETH_DAI_LPT");
+      let ETH_DAI = await totalSupply('ETH_DAI_LPT');
       this.miningList[0].lpt = addCommom(ETH_DAI, 2);
       // ETH_DAI_LPT 包含的WETH
-      let DAIAdress = getContract("ETH_DAI_LPT");
-      let WETHDAI = await balanceOf("WETH", DAIAdress);
+      let DAIAdress = getContract('ETH_DAI_LPT', charID);
+      let WETHDAI = await balanceOf('WETH', DAIAdress);
       this.miningList[0].protected = addCommom(
         (WETHDAI * DOUBLEPOOL1) / ETH_DAI,
         2
       );
-       //ETH_USDT质押总量
-      let ETH_USDT = await totalSupply("ETH_USDT_LPT");
+      //ETH_USDT质押总量
+      let ETH_USDT = await totalSupply('ETH_USDT_LPT');
       this.miningList[1].lpt = addCommom(ETH_USDT, 2);
       // ETH_DAI_LPT 包含的WETH
-      let USDTAdress = getContract("ETH_USDT_LPT");
-      let WETHUSDT = await balanceOf("WETH", USDTAdress);
+      let USDTAdress = getContract('ETH_USDT_LPT', charID);
+      let WETHUSDT = await balanceOf('WETH', USDTAdress);
       this.miningList[1].protected = addCommom(
         (WETHUSDT * DOUBLEPOOL2) / ETH_USDT,
         2
       );
-       //ETH_USDC质押总量
-      let ETH_USDC = await totalSupply("ETH_USDC_LPT");
+      //ETH_USDC质押总量
+      let ETH_USDC = await totalSupply('ETH_USDC_LPT');
       this.miningList[2].lpt = addCommom(ETH_USDC, 2);
       // ETH_USDC_LPT 包含的WETH
-      let USDCAdress = getContract("ETH_USDC_LPT");
-      let WETHUSDC = await balanceOf("WETH", USDCAdress);
+      let USDCAdress = getContract('ETH_USDC_LPT', charID);
+      let WETHUSDC = await balanceOf('WETH', USDCAdress);
       this.miningList[2].protected = addCommom(
         (WETHUSDC * DOUBLEPOOL3) / ETH_USDC,
         2
       );
-       //ETH-DAI质押总量
-      let ETH_WBTC = await totalSupply("ETH_WBTC_LPT");
+      //ETH-DAI质押总量
+      let ETH_WBTC = await totalSupply('ETH_WBTC_LPT');
       this.miningList[3].lpt = addCommom(ETH_WBTC, 2);
       // ETH_WBTC_LPT 包含的WETH
-      let WBTCAdress = getContract("ETH_WBTC_LPT");
-      let WETHWBTC = await balanceOf("WETH", WBTCAdress);
+      let WBTCAdress = getContract('ETH_WBTC_LPT', charID);
+      let WETHWBTC = await balanceOf('WETH', WBTCAdress);
       this.miningList[3].protected = addCommom(
         (WETHWBTC * DOUBLEPOOL4) / ETH_WBTC,
         2
@@ -111,7 +114,7 @@ export default {
 </script>
 
 <style lang='scss' soped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 
 @media screen and (min-width: 750px) {
   .mining-list {
@@ -134,7 +137,7 @@ export default {
           margin-right: 8px;
         }
         span {
-          margin-top:20px;
+          margin-top: 20px;
           color: $text-t;
         }
       }

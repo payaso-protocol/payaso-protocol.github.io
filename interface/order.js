@@ -436,6 +436,7 @@ export const bids = async (bidID, type = "default", token = "default") => {
 export const getMySellLog = async (callback) => {};
 
 export const getBalance = async (type, currcy) => {
+  console.log(currcy, "$$$$$$$$$$$$$$$$$$$$$");
   // const WEB3 = await web3();
   // const charID = await getID();
   const charID = window.chainID;

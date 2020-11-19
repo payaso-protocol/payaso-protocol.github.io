@@ -46,13 +46,12 @@ export const balanceOf = async (type, currcy) => {
   if (!adress) {
     return 0;
   }
-  console.log(adress, currcy, "$$$$$$$$$$$$$");
-  const contract = await expERC20("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2");
+  const contract = await expERC20(adress);
   return contract.methods
-    .balanceOf("0xa478c2975ab1ea89e8196811f51a7b7ade33eb11")
+    .balanceOf(currcy)
     .call()
     .then((res) => {
-      let tocurrcy = currcy || type;
+      let tocurrcy = type || currcy;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };

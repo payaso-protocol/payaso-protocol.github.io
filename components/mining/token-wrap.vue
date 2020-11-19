@@ -8,7 +8,7 @@
       </p>
     </div>
     <Protect :styleClass="'mining-token'" :current="current"
-      >{{ dataList.protected || 0 }} ETH be protected</Protect
+      >{{ dataList.protected }} ETH be protected</Protect
     >
     <div class="wrap-text">
       <p>
@@ -88,13 +88,12 @@ export default {
     }
     setTimeout(() => {
       this.getLP_TOKEN();
-      this.getAllData();
       this.showMyPaya();
+      this.getAllData();
     }, 1000);
     this.$bus.$on('REFRESH_DATA', () => {
       this.showMyPaya();
     });
-
     this.$bus.$on('DEPOSITE_LOADING', (data) => {
       let current = this.current.split('-').join('_');
       if (data.type === current && data.status) {
@@ -103,7 +102,6 @@ export default {
         this.depositeLoading = false;
       }
     });
-
     this.$bus.$on('WITHDRAW_LOADING', (data) => {
       let current = this.current.split('-').join('_');
       if (data.type === current && data.status) {
@@ -116,6 +114,10 @@ export default {
   watch: {
     current: {
       handler: 'currentWatch',
+      immediate: true,
+    },
+    dataList: {
+      handler: 'dataListWatch',
       immediate: true,
     },
   },
@@ -149,6 +151,9 @@ export default {
         this.getBalance(newValue);
       }
     },
+    dataListWatch(newValue) {
+      this.dataList = newValue;
+    },
     async toClaim() {
       this.loading = true;
       let type = this.current.replace('-', '_');
@@ -163,15 +168,10 @@ export default {
       let ETH_DAI = await totalSupply(typeLPT);
       this.dataList.lpt = addCommom(ETH_DAI, 2);
       // ETH_DAI_LPT 包含的WETH
-      let DAIAdress = getContract(typeLPT);
-      if (DAIAdress) {
-        let WETHDAI = await balanceOf('WETH', DAIAdress);
-        console.log(WETHDAI);
-        this.dataList.protected = addCommom(
-          (WETHDAI * DOUBLEPOOL) / ETH_DAI,
-          2
-        );
-      }
+      const charID = window.chainID;
+      let Adress = getContract(typeLPT, charID);
+      let WETHDAI = await balanceOf('WETH', Adress);
+      this.dataList.protected = addCommom((WETHDAI * DOUBLEPOOL) / ETH_DAI, 2);
     },
     toDeposite() {
       this.$bus.$emit('OPEN_DEPOSITE', (data) => {
