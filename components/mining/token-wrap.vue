@@ -35,7 +35,10 @@
         <p>
           <span>PAYA Minted</span><span>{{ addCommom(myPaya, 4) }}</span>
         </p>
-        <a @click="toDeposite"> <img src="~/assets/img/loading.gif" v-if="depositeLoading" /> Deposite {{ current }} LP tokens</a>
+        <a @click="toDeposite">
+          <img src="~/assets/img/loading.gif" v-if="depositeLoading" /> Deposite
+          {{ current }} LP tokens</a
+        >
         <a @click="toClaim" :class="loading ? 'claim loading' : 'claim'"
           ><img src="~/assets/img/loading.gif" v-if="loading" />Claim</a
         >
@@ -45,22 +48,25 @@
         <p>
           <span>{{ current }} LP tokens</span><span>{{ tokens }}</span>
         </p>
-        <a @click="toWithdraw"><img src="~/assets/img/loading.gif" v-if="withdrawLoading" />Withdraw {{ current }} LP tokens</a>
+        <a @click="toWithdraw"
+          ><img src="~/assets/img/loading.gif" v-if="withdrawLoading" />Withdraw
+          {{ current }} LP tokens</a
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getLPTOKEN, getMined } from "~/interface/deposite";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
-import Protect from "./protect.vue";
-import { getPAYA } from "~/interface/deposite.js";
-import Tooltip from "~/components/common/tooltip.vue";
-import { totalSupply, balanceOf, getBalance } from "~/interface/deposite";
-import { getAddress, getContract } from "~/assets/utils/address-pool.js";
+import { getLPTOKEN, getMined } from '~/interface/deposite';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import Protect from './protect.vue';
+import { getPAYA } from '~/interface/deposite.js';
+import Tooltip from '~/components/common/tooltip.vue';
+import { totalSupply, balanceOf, getBalance } from '~/interface/deposite';
+import { getAddress, getContract } from '~/assets/utils/address-pool.js';
 export default {
-  props: ["current"],
+  props: ['current'],
   components: { Protect, Tooltip },
   data() {
     return {
@@ -74,23 +80,22 @@ export default {
     };
   },
   mounted() {
-    this.$bus.$on("CLOSE_LOADING", () => {
+    this.$bus.$on('CLOSE_LOADING', () => {
       this.loading = false;
     });
     if (this.current) {
-      window.localStorage.setItem("current", this.current);
+      window.localStorage.setItem('current', this.current);
     }
     setTimeout(() => {
       this.getLP_TOKEN();
       this.getAllData();
       this.showMyPaya();
     }, 1000);
-    this.$bus.$on("REFRESH_DATA", () => {
+    this.$bus.$on('REFRESH_DATA', () => {
       this.showMyPaya();
     });
 
-
-    this.$bus.$on("DEPOSITE_LOADING", (data) => {
+    this.$bus.$on('DEPOSITE_LOADING', (data) => {
       let current = this.current.split('-').join('_');
       if (data.type === current && data.status) {
         this.depositeLoading = true;
@@ -99,7 +104,7 @@ export default {
       }
     });
 
-    this.$bus.$on("WITHDRAW_LOADING", (data) => {
+    this.$bus.$on('WITHDRAW_LOADING', (data) => {
       let current = this.current.split('-').join('_');
       if (data.type === current && data.status) {
         this.withdrawLoading = true;
@@ -107,11 +112,10 @@ export default {
         this.withdrawLoading = false;
       }
     });
-    
   },
   watch: {
     current: {
-      handler: "currentWatch",
+      handler: 'currentWatch',
       immediate: true,
     },
   },
@@ -125,17 +129,17 @@ export default {
   },
   methods: {
     showMyPaya() {
-      let coin = this.current.replace("-", "_");
-      this.$store.dispatch("getmyPAYA", coin);
+      let coin = this.current.replace('-', '_');
+      this.$store.dispatch('getmyPAYA', coin);
     },
     async getLP_TOKEN() {
-      let type = this.current.replace("-", "_");
+      let type = this.current.replace('-', '_');
       let res = await getLPTOKEN(type);
       this.tokens = addCommom(res, 8);
     },
     // 获取余额
     getBalance() {
-      let coin = this.current.replace("-", "_") + "_LPT";
+      let coin = this.current.replace('-', '_') + '_LPT';
       getBalance(coin).then((res) => {
         this.lptBalance = fixD(res, 4);
       });
@@ -147,67 +151,67 @@ export default {
     },
     async toClaim() {
       this.loading = true;
-      let type = this.current.replace("-", "_");
+      let type = this.current.replace('-', '_');
       console.log(type);
       let res = await getPAYA(type);
     },
     async getAllData() {
-      let current = window.localStorage.getItem("current") || this.current;
-      let DOUBLEPOOL1 = await totalSupply("ETH_DAI");
-      let DOUBLEPOOL2 = await totalSupply("ETH_USDT");
-      let DOUBLEPOOL3 = await totalSupply("ETH_USDC");
-      let DOUBLEPOOL4 = await totalSupply("ETH_WBTC");
-      if (current == "ETH-DAI") {
+      let current = window.localStorage.getItem('current') || this.current;
+      let DOUBLEPOOL1 = await totalSupply('ETH_DAI');
+      let DOUBLEPOOL2 = await totalSupply('ETH_USDT');
+      let DOUBLEPOOL3 = await totalSupply('ETH_USDC');
+      let DOUBLEPOOL4 = await totalSupply('ETH_WBTC');
+      if (current == 'ETH-DAI') {
         //LPT 总量
         //ETH-DAI质押总量
-        let ETH_DAI = await totalSupply("ETH_DAI_LPT");
+        let ETH_DAI = await totalSupply('ETH_DAI');
         this.dataList.lpt = addCommom(ETH_DAI, 2);
         // ETH_DAI_LPT 包含的WETH
-        let DAIAdress = getContract("ETH_DAI_LPT");
+        let DAIAdress = getContract('ETH_DAI_LPT');
         if (DAIAdress) {
-          let WETHDAI = await balanceOf("WETH", DAIAdress);
+          let WETHDAI = await balanceOf('WETH', DAIAdress);
           this.dataList.protected = addCommom(
             (WETHDAI * DOUBLEPOOL1) / ETH_DAI,
             2
           );
         }
       }
-      if (current == "ETH-USDT") {
+      if (current == 'ETH-USDT') {
         //ETH_USDT质押总量
-        let ETH_USDT = await totalSupply("ETH_USDT_LPT");
+        let ETH_USDT = await totalSupply('ETH_USDT');
         this.dataList.lpt = addCommom(ETH_USDT, 2);
         // ETH_DAI_LPT 包含的WETH
-        let USDTAdress = getContract("ETH_USDT_LPT");
+        let USDTAdress = getContract('ETH_USDT_LPT');
         if (USDTAdress) {
-          let WETHUSDT = await balanceOf("WETH", USDTAdress);
+          let WETHUSDT = await balanceOf('WETH', USDTAdress);
           this.dataList.protected = addCommom(
             (WETHUSDT * DOUBLEPOOL2) / ETH_USDT,
             2
           );
         }
       }
-      if (current == "ETH-USDC") {
+      if (current == 'ETH-USDC') {
         //ETH_USDC质押总量
-        let ETH_USDC = await totalSupply("ETH_USDC_LPT");
+        let ETH_USDC = await totalSupply('ETH_USDC');
         this.dataList.lpt = addCommom(ETH_USDC, 2);
         // ETH_USDC_LPT 包含的WETH
-        let USDCAdress = getContract("ETH_USDC_LPT");
+        let USDCAdress = getContract('ETH_USDC_LPT');
         if (USDCAdress) {
-          let WETHUSDC = await balanceOf("WETH", USDCAdress);
+          let WETHUSDC = await balanceOf('WETH', USDCAdress);
           this.dataList.protected = addCommom(
             (WETHUSDC * DOUBLEPOOL3) / ETH_USDC,
             2
           );
         }
       }
-      if (current == "ETH-WBTC") {
+      if (current == 'ETH-WBTC') {
         //ETH-DAI质押总量
-        let ETH_WBTC = await totalSupply("ETH_WBTC_LPT");
+        let ETH_WBTC = await totalSupply('ETH_WBTC');
         this.dataList.lpt = addCommom(ETH_WBTC, 2);
         // ETH_WBTC_LPT 包含的WETH
-        let WBTCAdress = getContract("ETH_WBTC_LPT");
+        let WBTCAdress = getContract('ETH_WBTC_LPT');
         if (WBTCAdress) {
-          let WETHWBTC = await balanceOf("WETH", WBTCAdress);
+          let WETHWBTC = await balanceOf('WETH', WBTCAdress);
           this.dataList.protected = addCommom(
             (WETHWBTC * DOUBLEPOOL4) / ETH_WBTC,
             2
@@ -216,12 +220,12 @@ export default {
       }
     },
     toDeposite() {
-      this.$bus.$emit("OPEN_DEPOSITE", (data) => {
+      this.$bus.$emit('OPEN_DEPOSITE', (data) => {
         this.showDeposite = true;
       });
     },
     toWithdraw() {
-      this.$bus.$emit("OPEN_WITHDRAW", (data) => {
+      this.$bus.$emit('OPEN_WITHDRAW', (data) => {
         this.showWithdraw = true;
       });
     },
@@ -230,7 +234,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .claim {
     margin-top: 10px !important;

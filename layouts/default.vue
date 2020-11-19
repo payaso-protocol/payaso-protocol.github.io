@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <PHeader></PHeader>
-    <p >PAYA mining will start at 2020/19/11 00:00 GMT+8</p>
+    <p>PAYA mining has started at 2020/19/11 00:00 GMT+8</p>
     <div class="main-container">
       <nuxt />
     </div>
@@ -135,7 +135,6 @@ export default {
     this.$bus.$on('REFRESH_ALL_DATA', (data) => {
       this.refreshAllData();
     });
-
   },
   methods: {
     getStatusTitle(type) {
@@ -228,7 +227,7 @@ export default {
 .layout-container {
   min-height: 100vh;
   position: relative;
-  >p {
+  > p {
     color: #FFC819;
     text-align: center;
     margin-top: 8px;
@@ -236,7 +235,7 @@ export default {
 }
 @media screen and (min-width: 750px) {
   .layout-container {
-    >p{
+    > p {
       text-align: center;
       line-height: 30px;
     }

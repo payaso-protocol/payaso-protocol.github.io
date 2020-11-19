@@ -7,7 +7,7 @@ import {
   getWei,
   getID,
   getStrikePriceFix,
-  getWeiWithFix
+  getWeiWithFix,
 } from "~/assets/utils/address-pool.js";
 import { toWei, fromWei } from "~/assets/utils/web3-fun.js";
 import precision from "~/assets/js/precision.js";
@@ -52,7 +52,7 @@ export const onIssue = async (data_, callBack) => {
   price = window.WEB3.utils.toWei(String(price), priceUnit);
   // window.WEB3.utils.toWei(String(number), unit);
   data.price = price;
-  
+
   bus.$emit("OPEN_STATUS_DIALOG", {
     type: "pending",
     // 租用 0.5 个WETH 帽子，执行价格为300 USDT
@@ -73,7 +73,8 @@ export const onIssue = async (data_, callBack) => {
         data.expire,
         data.volume, // 200
         data.currency, // 支付货币
-        data.premium // 单价
+        data.premium, // 单价
+        data.address // 单价
       )
       .send({ from: window.WEB3.currentProvider.selectedAddress })
       .on("transactionHash", function(hash) {
@@ -315,10 +316,10 @@ export const getExercise = async (buyer) => {
 export const getMint = async (callback) => {
   Factory().then((contract) => {
     contract.getPastEvents(
-      'Mint',
+      "Mint",
       {
         fromBlock: 0,
-        toBlock: 'latest',
+        toBlock: "latest",
       },
       (error, events) => {
         callback(error, events);
@@ -367,7 +368,8 @@ export const claim = async () => {
       })
       .on("confirmation", function(confirmationNumber, receipt) {
         if (confirmationNumber === 0) {
-          if (window.statusDialog) {``
+          if (window.statusDialog) {
+            ``;
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
               type: "success",
@@ -654,7 +656,7 @@ const approve = async (token_exp, contract_str, callback = (status) => {}) => {
 // 一键授权
 const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   // 校验参数
-  console.log(token_exp, contract_str, num)
+  console.log(token_exp, contract_str, num);
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
   const awc = await allowance(token_exp, contract_str);
