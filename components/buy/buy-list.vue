@@ -53,12 +53,23 @@
             </td>
             <!-- Amount -->
             <td>
-              {{ toRounding(precision.times(item.vol, item._strikePrice), 2) }}
+              {{ toRounding(precision.times(item.vol, item._strikePrice), 8) }}
             </td>
             <!-- Rent -->
             <td>
               {{
-                item._collateral === 'USDT' || item._collateral === 'USDC'? addCommom(precision.divide(precision.divide(item.price, 1000000000000), item._strikePrice), 4) : addCommom(precision.divide(item.price, item._strikePrice), 4)
+                item._collateral === 'USDT' || item._collateral === 'USDC'
+                  ? addCommom(
+                      precision.divide(
+                        precision.divide(item.price, 1000000000000),
+                        item._strikePrice
+                      ),
+                      4
+                    )
+                  : addCommom(
+                      precision.divide(item.price, item._strikePrice),
+                      4
+                    )
               }}
             </td>
             <!-- Total Rents -->
@@ -69,10 +80,10 @@
             <!-- Due Date -->
             <td>
               {{
-                item.status === "Nonactivated"
+                item.status === 'Nonactivated'
                   ? formatExpiry(item._expiry)
                   : moment(parseInt(item._expiry)).format(
-                      "MMMM Do YYYY, HH:mm:ss"
+                      'MMMM Do YYYY, HH:mm:ss'
                     )
               }}
             </td>
@@ -130,7 +141,7 @@
           <p>
             <span>Amount</span>
             <span>
-              {{ toRounding(precision.times(item.vol, item._strikePrice), 2) }}
+              {{ toRounding(precision.times(item.vol, item._strikePrice), 8) }}
             </span>
           </p>
         </div>
@@ -147,10 +158,10 @@
             <span>Due Date</span>
             <span>
               {{
-                item.status === "Nonactivated"
+                item.status === 'Nonactivated'
                   ? formatExpiry(item._expiry)
                   : moment(parseInt(item._expiry)).format(
-                      "MMMM Do YYYY, HH:mm:ss"
+                      'MMMM Do YYYY, HH:mm:ss'
                     )
               }}
             </span>
@@ -221,24 +232,24 @@
   </div>
 </template>
 <script>
-import OrderOption from "~/components/buy/order-option.vue";
-import Tooltip from "~/components/common/tooltip.vue";
-import NoData from "~/components/common/no-data";
-import { toWei, fromWei } from "~/assets/utils/web3-fun.js";
-import PDialog from "~/components/common/p-dialog.vue";
+import OrderOption from '~/components/buy/order-option.vue';
+import Tooltip from '~/components/common/tooltip.vue';
+import NoData from '~/components/common/no-data';
+import { toWei, fromWei } from '~/assets/utils/web3-fun.js';
+import PDialog from '~/components/common/p-dialog.vue';
 import {
   getID,
   newGetSymbol,
   getAddress,
-} from "~/assets/utils/address-pool.js";
-import { getExercise, onWaive, getWaive } from "~/interface/order.js";
-import precision from "~/assets/js/precision.js";
-import moment from "moment";
-import Active from "./active.vue";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
+} from '~/assets/utils/address-pool.js';
+import { getExercise, onWaive, getWaive } from '~/interface/order.js';
+import precision from '~/assets/js/precision.js';
+import moment from 'moment';
+import Active from './active.vue';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 
 export default {
-  name: "buy-list",
+  name: 'buy-list',
   components: {
     OrderOption,
     Tooltip,
@@ -277,14 +288,14 @@ export default {
   },
   watch: {
     myAboutInfoBuy: {
-      handler: "myAboutInfoBuyWatch",
+      handler: 'myAboutInfoBuyWatch',
       immediate: true,
     },
   },
   methods: {
     statusFilter(status) {
       switch (status) {
-        case "Nonactivated":
+        case 'Nonactivated':
           return true;
           break;
         default:
@@ -369,29 +380,31 @@ export default {
           count: item.sellInfo.longInfo.count,
         };
         if (parseInt(resultItem._expiry) < current) {
-          resultItem["status"] = "Closed"; // Dated 已过期
-          resultItem["sort"] = 1;
+          resultItem['status'] = 'Closed'; // Dated 已过期
+          resultItem['sort'] = 1;
         } else {
-          resultItem["status"] = "Nonactivated";
-          resultItem["sort"] = 3;
+          resultItem['status'] = 'Nonactivated';
+          resultItem['sort'] = 3;
         }
         let res = await getExercise(resultItem.buyer);
         bidIDArr = res.map((bitem) => {
           return bitem.returnValues.bidID;
         });
         if (bidIDArr.includes(resultItem.bidID)) {
-          resultItem["status"] = "Activated";
-          resultItem["sort"] = 2;
+          resultItem['status'] = 'Activated';
+          resultItem['sort'] = 2;
         }
         let waiveRes = await getWaive(resultItem.buyer);
         waiveBidIDArr = waiveRes.map((witem) => {
           return witem.returnValues.bidID;
         });
         if (waiveBidIDArr.includes(resultItem.bidID)) {
-          resultItem["status"] = "Waived";
-          resultItem["sort"] = 0;
+          resultItem['status'] = 'Waived';
+          resultItem['sort'] = 0;
         }
-        result.push(resultItem);
+        if (precision.times(resultItem.vol, resultItem._strikePrice) != 0) {
+          result.push(resultItem);
+        }
       }
 
       const sortResult = result.sort((a1, a2) => {
@@ -417,9 +430,9 @@ export default {
         // 时间筛选
         if (
           (data.period === 0 || parseInt(item._expiry) - now <= data.period) &&
-          (data.type === "All" || item._underlying === data.type) &&
-          (data.coin === "All" || item._collateral === data.coin) &&
-          (data.status === "All" || item.status === data.status)
+          (data.type === 'All' || item._underlying === data.type) &&
+          (data.coin === 'All' || item._collateral === data.coin) &&
+          (data.status === 'All' || item.status === data.status)
         ) {
           result.push(item);
         }
@@ -433,7 +446,7 @@ export default {
       let hour = parseInt((total_minute / 60) % 24);
       let day = parseInt(total_minute / 60 / 24);
       if (minute === 0 && hour === 0 && day === 0) {
-        return "Order about to expire";
+        return 'Order about to expire';
       }
       // return t("t90", { day, hour, minute });
       return `${day}day ${hour}hour ${minute}minute`;
@@ -452,13 +465,13 @@ export default {
     },
   },
   mounted() {
-    this.$bus.$on("ONEXERCISE_PENDING", (bidID) => {
+    this.$bus.$on('ONEXERCISE_PENDING', (bidID) => {
       if (!this.pendingObj[bidID]) {
         this.pendingObj[bidID] = 1;
       }
     });
 
-    this.$bus.$on("ONEXERCISE_END", (bidID) => {
+    this.$bus.$on('ONEXERCISE_END', (bidID) => {
       if (this.pendingObj[bidID]) {
         let obj = this.pendingObj;
         delete obj[bidID];
@@ -466,13 +479,13 @@ export default {
       }
     });
 
-    this.$bus.$on("ONWAIVE_PENDING", (bidID) => {
+    this.$bus.$on('ONWAIVE_PENDING', (bidID) => {
       if (!this.destroyPendingObj[bidID]) {
         this.destroyPendingObj[bidID] = 1;
       }
     });
 
-    this.$bus.$on("ONWAIVE_END", (bidID) => {
+    this.$bus.$on('ONWAIVE_END', (bidID) => {
       if (this.destroyPendingObj[bidID]) {
         let obj = this.destroyPendingObj;
         delete obj[bidID];
@@ -483,7 +496,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (max-width: 750px) {
   .buy-list-container {
     .expiration-reminder {

@@ -4,15 +4,13 @@
       <img src="~/assets/img/logo_1.png" />
     </a>
     <div class="nav-list">
-      <nuxt-link
-        to="/"
-        :class="routeObj.name === 'product-id' ? 'active' : ''"
-        >{{ $t('header.Market') }}</nuxt-link
+      <nuxt-link to="/" :class="routeObj.name === 'product-id' ? 'active' : ''"
+        >Market</nuxt-link
       >
-      <nuxt-link to="/buy">My Safety Helmet</nuxt-link>
+      <nuxt-link to="/buy">My Helmet</nuxt-link>
       <nuxt-link to="/sell">My Supply</nuxt-link>
       <nuxt-link to="/mining">LP Mining</nuxt-link>
-      <a href="http://www.payaso.io/guides" target="_blank">Guide Book</a>
+      <a href="http://www.payaso.io/guides" target="_blank">Guidebook</a>
     </div>
     <Assets v-if="userInfo.data.isLogin"></Assets>
     <!-- 分割线 -->
@@ -119,7 +117,6 @@ export default {
 @import '~/assets/css/base.scss';
 .header-container {
   width: 100%;
-  min-width: 1200px;
   height: 60px;
   display: flex;
   align-items: center;
@@ -128,6 +125,7 @@ export default {
 }
 @media screen and (min-width: 750px) {
   .header-container {
+    min-width: 1200px;
     padding: 0px 30px;
     .logo {
       img {
