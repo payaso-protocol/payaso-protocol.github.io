@@ -402,9 +402,9 @@ export default {
           resultItem['status'] = 'Waived';
           resultItem['sort'] = 0;
         }
-        // if (precision.times(resultItem.vol, resultItem._strikePrice) != 0) {
-        result.push(resultItem);
-        // }
+        if (precision.times(resultItem.vol, resultItem._strikePrice) != 0) {
+          result.push(resultItem);
+        }
       }
 
       const sortResult = result.sort((a1, a2) => {
