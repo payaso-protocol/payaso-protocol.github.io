@@ -31,17 +31,17 @@ async function start() {
     if (!ctx.req.locale) {
       let acceptLanguage = ctx.req && ctx.req.headers["accept-language"];
       if (acceptLanguage) {
-        if (~acceptLanguage.indexOf("zh") > -1) {
-          acceptLanguage = "zh";
+        if (~acceptLanguage.indexOf("zh_CN") > -1) {
+          acceptLanguage = "zh_CN";
         }
-        if (~acceptLanguage.indexOf("en")) {
-          acceptLanguage = "en";
+        if (~acceptLanguage.indexOf("en_US")) {
+          acceptLanguage = "en_US";
         }
         // if (~acceptLanguage.indexOf('CN')) {
         //   acceptLanguage = 'zh-cn'
         // }
 
-        if (~["en", "zh"].indexOf(acceptLanguage)) {
+        if (~["en_US", "zh_CN"].indexOf(acceptLanguage)) {
           ctx.cookies.set("lang", acceptLanguage, {
             domain: ApiConfig.domain,
             maxAge: 3600 * 24 * 10,
@@ -51,11 +51,11 @@ async function start() {
         }
       }
     } else {
-      if (~ctx.req.locale.indexOf("en")) {
-        ctx.req.locale = "en";
+      if (~ctx.req.locale.indexOf("en_US")) {
+        ctx.req.locale = "en_US";
       }
     }
-    // ctx.req.locale = "en";
+    // ctx.req.locale = "en_US";
     await next();
   });
 

@@ -1,36 +1,35 @@
 <template>
-    <div class="no-data">
-        <div class="img-box">
-            <img src="~/assets/img/queshen.png"/>
-        </div>
-        <p>{{text}}</p>
+  <div class="no-data">
+    <div class="img-box">
+      <img src="~/assets/img/queshen.png" />
     </div>
+    <p>{{ text || $t('Content.NoData') }}</p>
+  </div>
 </template>
 <script>
 export default {
-    name: 'no-data',
-    props: {
-        text: {
-            type: String,
-            default: 'no data'
-        }
-    }
-}
+  name: 'no-data',
+  props: {
+    text: {
+      type: String,
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 .no-data {
-    text-align: center;
-    padding: 30px 0px;
-    .img-box {
-        img {
-            width: 180px;
-        }
+  text-align: center;
+  padding: 30px 0px;
+  .img-box {
+    img {
+      width: 180px;
     }
-    >p {
-        color: $text-d;
-        font-size: 14px;
-        /* padding-top: 10px; */
-    }
+  }
+  > p {
+    color: $text-d;
+    font-size: 14px;
+    /* padding-top: 10px; */
+  }
 }
 </style>

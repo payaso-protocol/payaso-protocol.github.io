@@ -7,31 +7,31 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Type</th>
+            <th>{{ $t('Table.Type') }}</th>
             <th>
               <Tooltip
-                name="Executive Price"
+                :name="$t('Dialog.ExecutivePrice')"
                 width="300px"
-                hint="This is after the helmet activation action, pay 1 ETH per activation to get an activation reward of 500 USDT."
+                :hint="$t('Tips.HoverTip2')"
               ></Tooltip>
             </th>
-            <th>Amount</th>
+            <th>{{ $t('Table.Amount') }}</th>
             <th>
               <Tooltip
-                name="Rent"
+                :name="$t('Dialog.Rent')"
                 width="200px"
-                hint="Borrowing a Safety Helmet requires an immediate payment."
+                :hint="$t('Tips.HoverTip3')"
               ></Tooltip>
             </th>
             <!-- <th>Total Rents</th> -->
             <th>
               <Tooltip
-                name="Due Date"
+                :name="$t('Dialog.DueDate')"
                 width="200px"
-                hint="Until the time you can pledge the underlying of the Safety Helmet for price protection."
+                :hint="$t('Tips.HoverTip4')"
               ></Tooltip>
             </th>
-            <th>Status</th>
+            <th>{{ $t('Table.Status') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -132,14 +132,14 @@
         </div>
         <div class="tabs-item-box-text">
           <p>
-            <span>Executive Price</span>
+            <span>{{ $t('Dialog.ExecutivePrice') }}</span>
             <span
               >{{ autoRounding(precision.divide(1, item._strikePrice)) }}
               {{ item._collateral }}
             </span>
           </p>
           <p>
-            <span>Amount</span>
+            <span>{{ $t('Table.Amount') }}</span>
             <span>
               {{ toRounding(precision.times(item.vol, item._strikePrice), 8) }}
             </span>
@@ -147,7 +147,7 @@
         </div>
         <div class="tabs-item-box-text">
           <p>
-            <span>Rent</span>
+            <span>{{ $t('Dialog.Rent') }}</span>
             <span>
               {{
                 addCommom(precision.divide(item.price, item._strikePrice), 4)
@@ -155,7 +155,7 @@
             </span>
           </p>
           <p>
-            <span>Due Date</span>
+            <span>{{ $t('Dialog.DueDate') }}</span>
             <span>
               {{
                 item.status === 'Nonactivated'
@@ -213,20 +213,17 @@
       ></div>
     </div>
     <div class="expiration-reminder">
-      You currently hold a Safety Helmet that is about to expire, please
-      activate or return it in a timely manner. The smart contract will return
-      it automatically when it expires!
+      {{ $t('Tips.BuyTip') }}
     </div>
     <Active v-if="showActive" :data="currentItem" @close="closeActive"></Active>
     <PDialog
       v-if="showDestroyDialog"
-      title="Destroy the helmet"
+      :title="$t('Dialog.DestroyHelmet')"
       @close="closeDestroyDialog"
       @confirm="toDestroy"
     >
       <p class="cancel-dialog">
-        You will not be able to reactivate helmet after it’s destroyed, are you
-        sure you want to destroy it?
+        {{ $t('Dialog.DestoryHelmetText') }}
       </p>
     </PDialog>
   </div>
@@ -295,7 +292,7 @@ export default {
   methods: {
     statusFilter(status) {
       switch (status) {
-        case 'Nonactivated':
+        case 'Activated':
           return true;
           break;
         default:

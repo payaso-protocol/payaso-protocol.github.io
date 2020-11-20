@@ -5,14 +5,27 @@
       <img class="hat-img" src="~/assets/img/WETH@2x.png" />
       <div>
         <i>=</i>
-        <span>{{ autoRounding(precision.divide(1, data._strikePrice))}} {{ data._collateral }}</span>
+        <span
+          >{{ autoRounding(precision.divide(1, data._strikePrice)) }}
+          {{ data._collateral }}</span
+        >
       </div>
     </div>
     <ul class="info-list">
       <li class="rent">
-        <label>Rent:</label>
+        <label>{{ $t('Dialog.Rent') }}:</label>
         <span>
-          {{ data.settleToken === 'USDT' || data.settleToken === 'USDC' ? toRounding(precision.divide(precision.divide(data.price, 1000000000000), data._strikePrice), 4) : toRounding(precision.divide(data.price, data._strikePrice), 4) }}
+          {{
+            data.settleToken === 'USDT' || data.settleToken === 'USDC'
+              ? toRounding(
+                  precision.divide(
+                    precision.divide(data.price, 1000000000000),
+                    data._strikePrice
+                  ),
+                  4
+                )
+              : toRounding(precision.divide(data.price, data._strikePrice), 4)
+          }}
           <!-- {{ toRounding(precision.divide(data.price, data._strikePrice), 4) }} -->
           {{ data.settleToken }}
         </span>
@@ -20,29 +33,32 @@
       <li class="supply">
         <label>#Helmet Supply: </label>
         <span
-          >{{ toRounding(precision.times(data.remain, data._strikePrice), 2) }} /
+          >{{ toRounding(precision.times(data.remain, data._strikePrice), 2) }}
+          /
           {{
             toRounding(precision.times(data.volume, data._strikePrice), 2)
           }}</span
         >
       </li>
       <li>
-        <label>Due Date:</label>
+        <label>{{ $t('Dialog.DueDate') }}:</label>
         <!-- <span>{{data._expiry}}</span> -->
-        <span>{{ moment(parseInt(data._expiry)).format("MMM Do HH:mm") }}</span>
+        <span>{{ moment(parseInt(data._expiry)).format('MMM Do HH:mm') }}</span>
       </li>
     </ul>
-    <button class="borrow-btn" @click="toRent(data)">Borrow</button>
+    <button class="borrow-btn" @click="toRent(data)">
+      {{ $t('Content.Borrow') }}
+    </button>
   </li>
 </template>
 <script>
-import moment from "moment";
-import { fixD, addCommom, autoRounding, toRounding} from "~/assets/js/util.js";
-import precision from "~/assets/js/precision.js";
+import moment from 'moment';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import precision from '~/assets/js/precision.js';
 
 export default {
-  name: "hat-item",
-  props: ["data"],
+  name: 'hat-item',
+  props: ['data'],
   data() {
     return {
       precision: precision,
@@ -50,7 +66,7 @@ export default {
       addCommom: addCommom,
       moment: moment,
       autoRounding: autoRounding,
-      toRounding: toRounding
+      toRounding: toRounding,
     };
   },
   computed: {
@@ -61,12 +77,12 @@ export default {
   methods: {
     toRent(item) {
       this.$bus.$emit('OPEN_RENT', item);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .hat-item {
     width: 285px;
@@ -90,7 +106,7 @@ export default {
         height: 54px;
       }
       div {
-        >span {
+        > span {
           display: inline-block;
           width: 130px;
           text-overflow: ellipsis;
@@ -147,7 +163,7 @@ export default {
       top: 0;
       left: 0;
       z-index: 1;
-      background-image: url("../../assets/img/no_he@2x.png");
+      background-image: url('../../assets/img/no_he@2x.png');
       background-repeat: no-repeat;
       background-size: auto 100px;
       background-position: center center;

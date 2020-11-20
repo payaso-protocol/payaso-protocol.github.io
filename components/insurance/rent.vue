@@ -3,7 +3,7 @@
   <PDialog title="Borrow a helmet" @close="closeRent">
     <div class="rent-container">
       <div class="amount-box">
-        <label>Amount</label>
+        <label>{{ $t('Dialog.Amount') }}</label>
         <PInput
           type="number"
           :maxValue="surplus"
@@ -19,15 +19,34 @@
             {{ toRounding(precision.times(data.remain, data._strikePrice), 2) }}
           </span>
           <!-- 可用余额 -->
-          <span class="balance"> Balance: {{ balance }} </span>
+          <span class="balance">
+            {{ $t('Dialog.Balance') }}: {{ balance }}
+          </span>
         </div>
       </div>
       <!-- 租赁费用 -->
       <div class="rent-price">
-        <label>Rents</label>
+        <label>{{ $t('Table.Rents') }}</label>
         <span
           >{{
-            data.settleToken === 'USDT' || data.settleToken === 'USDC' ? toRounding(precision.times(precision.divide(precision.divide(data.price, 1000000000000), data._strikePrice), amount), 4) : toRounding(precision.times(precision.divide(data.price, data._strikePrice), amount), 4)
+            data.settleToken === 'USDT' || data.settleToken === 'USDC'
+              ? toRounding(
+                  precision.times(
+                    precision.divide(
+                      precision.divide(data.price, 1000000000000),
+                      data._strikePrice
+                    ),
+                    amount
+                  ),
+                  4
+                )
+              : toRounding(
+                  precision.times(
+                    precision.divide(data.price, data._strikePrice),
+                    amount
+                  ),
+                  4
+                )
           }}
           {{ data.settleToken }}</span
         >
@@ -48,7 +67,9 @@
           Be sure to activate your Safety Helmet to protect your assets if
           prices have fallen
         </p>
-        <button @click="rentSubmit" :disabled="!cansubmit">Confirmation</button>
+        <button @click="rentSubmit" :disabled="!cansubmit">
+          {{ $t('Dialog.Confirmation') }}
+        </button>
       </div>
     </template>
   </PDialog>
@@ -246,6 +267,7 @@ export default {
     background: $main-color;
     color: $text-t;
     cursor: pointer;
+    min-width: 80px;
     &:hover {
       background: $main-hover;
     }

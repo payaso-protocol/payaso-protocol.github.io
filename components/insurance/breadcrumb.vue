@@ -1,12 +1,14 @@
 <template>
   <div class="insurance-option">
     <div class="tabs" v-if="!current">
-      <span class="active">Helmet Market</span>
+      <span class="active">{{ $t('Content.HelmetMarket') }}</span>
     </div>
     <div v-else class="route">
-      <nuxt-link to="/">Helmet Market</nuxt-link>
+      <nuxt-link to="/">{{ $t('Content.HelmetMarket') }}</nuxt-link>
       <img v-if="current" class="icon" src="~/assets/img/icon/right2.png" />
-      <span v-if="current" class="current">{{ current }} Helmet</span>
+      <span v-if="current" class="current"
+        >{{ current }} {{ $t('Dialog.Helmet') }}</span
+      >
     </div>
     <!-- <div class="search-box">
             <input type="text" placeholder="搜索智能合约"/>
@@ -15,7 +17,7 @@
     <div class="spacing"></div>
     <a class="supply-btn have-icon-btn" @click="openSupply">
       <img src="~/assets/img/icon/chengbao@2x.png" />
-      <span>Supply</span>
+      <span>{{ $t('Content.Supply') }}</span>
     </a>
     <WallectSelect
       v-if="showWallectSelect"
@@ -30,16 +32,16 @@
   </div>
 </template>
 <script>
-import WallectSelect from "~/components/common/wallet-select.vue";
-import Supply from "./supply/index.vue";
+import WallectSelect from '~/components/common/wallet-select.vue';
+import Supply from './supply/index.vue';
 
 export default {
-  name: "insurance-option",
+  name: 'insurance-option',
   components: {
     WallectSelect,
     Supply,
   },
-  props: ["current"],
+  props: ['current'],
   data() {
     return {
       showWallectSelect: false,
@@ -77,7 +79,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .insurance-option {
     height: 60px;
@@ -133,7 +135,7 @@ export default {
         border-radius: 3px;
         border: 1px solid $border;
         background: none;
-        background: url("../../assets/img/icon/search.png") 12px center
+        background: url('../../assets/img/icon/search.png') 12px center
           no-repeat;
         background-size: auto 16px;
         padding-left: 36px;
@@ -153,7 +155,8 @@ export default {
     }
     .supply-btn {
       background: $warning-color;
-      width: 108px;
+      min-width: 108px;
+      padding: 0 10px;
       height: 32px;
       color: $text-b;
       border-radius: 10px;
@@ -228,7 +231,7 @@ export default {
         border-radius: 3px;
         border: 1px solid $border;
         background: none;
-        background: url("../../assets/img/icon/search.png") 12px center
+        background: url('../../assets/img/icon/search.png') 12px center
           no-repeat;
         background-size: auto 16px;
         padding-left: 36px;

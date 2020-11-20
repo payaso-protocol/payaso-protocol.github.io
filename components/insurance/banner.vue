@@ -83,7 +83,7 @@ export default {
   .insurance-banner {
     display: flex;
     align-items: center;
-    padding: 0 75px 0 16px;
+    padding: 0 0px 0 16px;
     width: 100%;
     height: 180px;
     margin: 0 auto;

@@ -1,7 +1,7 @@
 <template>
   <div class="order-option">
     <div class="type-select-box">
-      <label>Type </label>
+      <label>{{ $t('Table.Type') }}</label>
       <TypeSelect @change="typeChanged"></TypeSelect>
     </div>
     <!-- <div class="coin-tab-box">
@@ -10,27 +10,31 @@
     </div> -->
     <div class="gap"></div>
     <div class="status-box">
-      <label>status</label>
+      <label>{{ $t('Table.Status') }}</label>
       <select class="select" v-model="status">
         <option v-for="item in statusList" :key="item">{{ item }}</option>
       </select>
     </div>
     <div class="period-box">
-      <label>Period</label>
+      <label>{{ $t('Status.Period') }}</label>
       <select class="select" v-model="period">
         <option v-for="item in dataList" :key="item">{{ item }}</option>
       </select>
-      <button class="search-btn-h5 search-btn" @click="toSearch">Search</button>
+      <button class="search-btn-h5 search-btn" @click="toSearch">
+        {{ $t('Status.Search') }}
+      </button>
     </div>
-    <button class="search-btn search-btn-pc" @click="toSearch">Search</button>
+    <button class="search-btn search-btn-pc" @click="toSearch">
+      {{ $t('Status.Search') }}
+    </button>
   </div>
 </template>
 <script>
-import TypeSelect from "~/components/common/type-select.vue";
-import CoinTab from "~/components/common/coin-tab.vue";
+import TypeSelect from '~/components/common/type-select.vue';
+import CoinTab from '~/components/common/coin-tab.vue';
 
 export default {
-  name: "order-option",
+  name: 'order-option',
   components: {
     TypeSelect,
     CoinTab,
@@ -38,32 +42,32 @@ export default {
   props: {
     statusType: {
       type: String,
-      default: "buyStatus",
+      default: 'buyStatus',
     },
   },
   data() {
     return {
-      buyStatus: ["All", "Nonactivated", "Activated", "Closed"],
-      advStatus: ["All", "Unborrowed", "Be borrowed", "Dated"],
-      orderStatus: ["All", "Unactivated", "Activated", "Dated"],
+      buyStatus: ['All', 'Nonactivated', 'Activated', 'Closed'],
+      advStatus: ['All', 'Unborrowed', 'Be borrowed', 'Dated'],
+      orderStatus: ['All', 'Unactivated', 'Activated', 'Dated'],
       dataList: [
-        "All",
-        "Within 1 day",
-        "Within 3 days",
-        "Within 7 days",
-        "Within 31 days",
+        'All',
+        'Within 1 day',
+        'Within 3 days',
+        'Within 7 days',
+        'Within 31 days',
       ],
 
-      type: "WETH",
-      coin: "All",
-      status: "All",
-      period: "All",
+      type: 'WETH',
+      coin: 'All',
+      status: 'All',
+      period: 'All',
       dataObj: {
         All: 0,
-        "Within 1 day": 1,
-        "Within 3 days": 3,
-        "Within 7 days": 7,
-        "Within 31 days": 31,
+        'Within 1 day': 1,
+        'Within 3 days': 3,
+        'Within 7 days': 7,
+        'Within 31 days': 31,
       },
     };
   },
@@ -81,7 +85,7 @@ export default {
         status: this.status,
         period: this.dataObj[this.period] * 24 * 60 * 60 * 1000,
       };
-      this.$emit("search", data);
+      this.$emit('search', data);
     },
     typeChanged(type) {
       this.type = type;
@@ -93,7 +97,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .order-option {
     align-items: center;

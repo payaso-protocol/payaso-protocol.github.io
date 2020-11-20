@@ -1,6 +1,6 @@
-import bus from '~/assets/js/bus.js';
-import WalletConnect from '@walletconnect/client';
-import QRCodeModal from '@walletconnect/qrcode-modal';
+import bus from "~/assets/js/bus.js";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
 
 export const mateMaskInfo = (address) => {
   let obj = {
@@ -11,17 +11,17 @@ export const mateMaskInfo = (address) => {
   };
 
   try {
-    let current
+    let current;
     const connector = new WalletConnect({
-        bridge: 'https://bridge.walletconnect.org', // Required
-        qrcodeModal: QRCodeModal,
+      bridge: "https://bridge.walletconnect.org", // Required
+      qrcodeModal: QRCodeModal,
     });
     if (address) {
-        current = address;
+      current = address;
     } else if (connector && connector.connected) {
-        current = connector.accounts[0];
+      current = connector.accounts[0];
     } else {
-        current = window.WEB3.currentProvider.selectedAddress;
+      current = window.WEB3.currentProvider.selectedAddress;
     }
     if (!current) {
       // alert(111);
@@ -32,13 +32,13 @@ export const mateMaskInfo = (address) => {
     obj.status = 1;
     return obj;
   } catch (error) {
-    console.log('util=>matemask=>mateMaskInfo', error);
+    console.log("util=>matemask=>mateMaskInfo", error);
     // 打开下载弹框
-    bus.$emit('OPEN_DOWNLOAD');
+    bus.$emit("OPEN_DOWNLOAD");
     return {
       status: -1,
       error,
-      msg: 'MateMask 扩展插件未安装或未启用',
+      msg: "MateMask 扩展插件未安装或未启用",
     };
   }
 };

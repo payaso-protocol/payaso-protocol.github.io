@@ -1,16 +1,17 @@
 {
   "Header": {
     "Market": "Market",
-    "MySafetyHelmet": "My Safety Helmet",
+    "MySafetyHelmet": "My Helmet",
     "MySupply": "My Supply",
     "LPMining": "LP Mining",
-    "GuideBook": "Guide Book"
+    "GuideBook": "Guidebook"
   },
   "Assets": {
     "BorrowingReward": "Borrowing reward",
     "Circulation": "Circulation",
     "ValidBorrowing": "Valid borrowing",
-    "ConnectWallet": "Connect to a wallet"
+    "ConnectWallet": "Connect to a wallet",
+    "My": "My"
   },
   "Banner": {
     "HelmetVarieties": "Helmet Varieties",
@@ -20,15 +21,17 @@
   "Dialog": {
     "Type": "Type",
     "PrivateOrder": "Private Order",
+    "YES": "YES",
+    "NO": "NO",
     "DueDate": "Due Date",
     "ExecutivePrice": "Executive Price",
     "UniswapIndex": "Uniswap Index",
     "Quantity": "Quantity",
     "Helmet": "Helmet",
-    "Expected DPR": "Expected DPR",
+    "ExpectedDPR": "Expected DPR",
     "Collateral": "Collateral",
     "Balance": "Balance",
-    "Time": "{ time } when the lease expires, supplier can exchange { collateral } { und } for { qty } { col }",
+    "Time": "{time} when the lease expires, supplier can exchange {collateral} {und} for {qty} {col}",
     "BalanceShortfall": "Balance Shortfall",
     "Publish": "Publish",
     "Cancel": "Cancel",
@@ -51,7 +54,9 @@
     "StatusText2": "Please confirm the transaction in the wallet",
     "StatusText3": "Transaction submitted",
     "StatusText4": "Rent {vol} {type} hats, the execution price is {price} {coin}",
-    "StatusText5": "The rental advertisement is published successfully, you can check it on"
+    "StatusText5": "The rental advertisement is published successfully, you can check it on",
+    "DestroyHelmet": "Destroy the helmet",
+    "DestoryHelmetText": "You will not be able to reactivate helmet after it’s destroyed, are you sure you want to destroy it?"
   },
   "Content": {
     "HelmetMarket": "Helmet Market",
@@ -61,9 +66,10 @@
     "TypeHelmet": "{type} Helmet",
     "NoData": "no data",
     "Collateral": "Collateral",
-    "Helmet Supply": "Helmet Supply",
+    "HelmetSupply": "Helmet Supply",
     "MintTitle": "Uniswap LP token Deposite Mint",
     "Report": "payaso smart contract has been audited by KNOWNSEC. Check Audit Report",
+    "Here": "Here",
     "LptType": "Select Your Mining Pool",
     "Select": "Select",
     "ReportTitle": "Rent Safety Helmet, Protect Your Assets Prices",
@@ -130,10 +136,12 @@
     "Tip1": "Be sure to activate your Safety Helmet to protect your assets if prices have fallen",
     "Tip2": "You currently hold a Safety Helmet that is about to expire, please activate or return it in a timely manner. The smart contract will return it automatically when it expires!",
     "Tip3": "PAYASO smart contracts were audited by KNOWNSEC. However, security audits don't eliminate risks completely. Please don' t supply your life savings or assets you can' t afford to lose.",
+    "Tip4": "Prohibit sharing orders with other suppliers",
     "HoverTip1": "If it is not activated beyond the expiration date, the default is to abort the activation helmet, so if you want to activate the helmet, do so before the expiration date.",
     "HoverTip2": "This is after the helmet activation action, pay 1 ETH per activation to get an activation reward of 500 USDT.",
     "HoverTip3": "Borrowing a Safety Helmet requires an immediate payment.",
     "HoverTip4": "Until the time you can pledge the underlying of the Safety Helmet for price protection.",
-    "HoverTip5": "This is the cost of the insurance claim that the policyholder receives for each bond pledged after the execution of the release operation."
+    "HoverTip5": "This is the cost of the insurance claim that the policyholder receives for each bond pledged after the execution of the release operation.",
+    "BuyTip": "You currently hold a Safety Helmet that is about to expire, please activate or return it in a timely manner. The smart contract will return it automatically when it expires!"
   }
 }

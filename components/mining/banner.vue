@@ -1,10 +1,11 @@
 <template>
   <div class="mining-banner">
-    <h1>Uniswap LP token Deposite Mint</h1>
+    <h1>{{ $t('Content.MintTitle') }}</h1>
     <p>
       <!-- Deposite ETH-USDT LP Token to mint PAYA -->
       <!-- <a>Read more about PAYA mining </a> -->
-      payaso smart contract has been audited by KNOWNSEC. Check Audit Report <a href="/security" target="_blank">Here</a>
+      {{ $t('Content.Report') }}
+      <a href="/security" target="_blank">{{ $t('Content.Here') }}</a>
     </p>
   </div>
 </template>

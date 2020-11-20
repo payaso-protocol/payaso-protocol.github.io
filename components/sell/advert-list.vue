@@ -7,31 +7,31 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Type</th>
+            <th>{{ $t('Table.Type') }}</th>
             <th>
               <Tooltip
-                name="Executive Price"
+                :name="$t('Table.ExecutivePrice')"
                 width="300px"
-                hint="This is the cost of the insurance claim that the policyholder receives for each bond pledged after the execution of the release operation. "
+                :hint="$t('Tips.HoverTip5')"
               ></Tooltip>
             </th>
-            <th>Rest/Total</th>
-            <th>Total Collateral</th>
+            <th>{{ $t('Table.Rent') }}/{{ $t('Table.Total') }}</th>
+            <th>{{ $t('Table.TotalCollateral') }}</th>
             <th>
               <Tooltip
-                name="Total Rents"
+                :name="$t('Table.TotalRents')"
                 width="300px"
-                hint="Borrowing a Safety Helmet requires an immediate payment."
+                :hint="$t('Tips.HoverTip3')"
               ></Tooltip>
             </th>
             <th>
               <Tooltip
-                name="Due Date"
+                :name="$t('Table.DueDate')"
                 width="300px"
-                hint="Until the time you can pledge the underlying of the Safety Helmet for price protection. "
+                :hint="$t('Tips.HoverTip4')"
               ></Tooltip>
             </th>
-            <th>Status</th>
+            <th>{{ $t('Table.Status') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -58,7 +58,17 @@
             <td>{{ addCommom(item.volume, 4) }} {{ item._collateral }}</td>
             <!-- Total Rents -->
             <td>
-              {{ item._collateral === 'USDT' || item._collateral === 'USDC' ? addCommom(precision.times(precision.divide(item.price, 1000000000000), item.volume), 4) : addCommom(precision.times(item.price, item.volume), 4) }}
+              {{
+                item._collateral === 'USDT' || item._collateral === 'USDC'
+                  ? addCommom(
+                      precision.times(
+                        precision.divide(item.price, 1000000000000),
+                        item.volume
+                      ),
+                      4
+                    )
+                  : addCommom(precision.times(item.price, item.volume), 4)
+              }}
               {{ item._collateral }}
             </td>
             <!-- Due Date -->
@@ -81,7 +91,7 @@
                   alt=""
                   v-if="currentCancelId === index"
                 />
-                Cancel
+                {{ $t('Dialog.Cancel') }}
               </button>
             </td>
           </tr>
@@ -101,14 +111,14 @@
         </div>
         <div class="tabs-item-box-text">
           <p>
-            <span>Executive Price</span>
+            <span>{{ $t('Table.ExecutivePrice') }}</span>
             <span>
               {{ autoRounding(precision.divide(1, item._strikePrice)) }}
               {{ item._collateral }}
             </span>
           </p>
           <p>
-            <span>Rest/Total</span>
+            <span>{{ $t('Table.Rent') }}/{{ $t('Table.Total') }}</span>
             <span>
               {{
                 addCommom(precision.times(item.remain, item._strikePrice), 4)
@@ -122,20 +132,30 @@
         </div>
         <div class="tabs-item-box-text">
           <p>
-            <span>Total Collateral</span>
+            <span>{{ $t('Table.TotalCollateral') }}l</span>
             <span>{{ addCommom(item.vol, 4) }} {{ item._collateral }} </span>
           </p>
           <p>
-            <span>Total Rents</span>
+            <span>{{ $t('Table.TotalRents') }}</span>
             <span>
-              {{ item._collateral === 'USDT' || item._collateral === 'USDC' ? addCommom(precision.times(precision.divide(item.price, 1000000000000), item.volume), 4) : addCommom(precision.times(item.price, item.volume), 4) }}
+              {{
+                item._collateral === 'USDT' || item._collateral === 'USDC'
+                  ? addCommom(
+                      precision.times(
+                        precision.divide(item.price, 1000000000000),
+                        item.volume
+                      ),
+                      4
+                    )
+                  : addCommom(precision.times(item.price, item.volume), 4)
+              }}
               {{ item._collateral }}
             </span>
           </p>
         </div>
         <div class="tabs-item-box-text">
           <p>
-            <span>Due Date</span>
+            <span>{{ $t('Table.DueDate') }}</span>
             <span>
               {{
                 moment(parseInt(item._expiry)).format('MMMM Do YYYY, HH:mm:ss')
@@ -156,7 +176,7 @@
               alt=""
               v-if="currentCancelId === index"
             />
-            Cancel
+            {{ $t('Dialog.Cancel') }}
           </button>
         </div>
       </div>

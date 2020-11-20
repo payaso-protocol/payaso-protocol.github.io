@@ -1,13 +1,13 @@
 <template>
   <div class="settlement">
-    <h3 class="title">Funds to be withdrawn</h3>
+    <h3 class="title">{{ $t('Table.FundsWithdrawn') }}</h3>
     <table class="table">
       <thead>
         <tr>
-          <th>Type</th>
-          <th>Underlying</th>
-          <th>Collaborate</th>
-          <th>Status</th>
+          <th>{{ $t('Table.Type') }}</th>
+          <th>{{ $t('Table.Underlying') }}</th>
+          <th>{{ $t('Table.Collaborate') }}</th>
+          <th>{{ $t('Table.Status') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +35,8 @@
               <img
                 src="~/assets/img/loading.gif"
                 v-if="currentClaimId === index"
-              />Claim
+              />
+              {{ $t('Table.Claim') }}
             </button>
           </td>
         </tr>
@@ -164,7 +165,8 @@ export default {
         _underlying,
         number,
         volume,
-        id, und;
+        id,
+        und;
       for (let i = 0; i < list.length; i++) {
         item = list[i];
         _collateral = newGetSymbol(item.longInfo._collateral, window.chainID);
@@ -202,7 +204,7 @@ export default {
               } else {
                 und = fromWei(settle.und, _collateral);
               }
-              
+
               result.push({
                 creator: item.seller,
                 _collateral,

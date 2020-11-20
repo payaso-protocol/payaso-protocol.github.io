@@ -6,7 +6,7 @@
         <span>{{ addCommom(myPaya, 2) }} PAYA</span>
         <img src="~/assets/img/icon/icon_minor_select@2x.png" alt="" />
         <div class="hint-box">
-          <p class="hint-title">My PAYA</p>
+          <p class="hint-title">{{ $t('Assets.My') }} PAYA</p>
           <div class="hint-settle">
             <p class="assets-total">
               <span></span>
@@ -18,7 +18,7 @@
                 <span>Borrowing reward</span
                 ><span>{{ addCommom(payaSettle, 2) }}</span>
               </p>
-              <a @click="toClaim(1)">Claim</a>
+              <a @click="toClaim(1)">{{ $t('Table.Claim') }}</a>
             </div>
             <!-- <div class="assets-claim"> -->
             <!-- <p><span>钱包余额</span><span>1,000</span></p> -->
@@ -36,7 +36,7 @@
           </div>
           <div class="hint-content">
             <p>
-              <span>Circulation</span
+              <span>{{ $t('Assets.Circulation') }}</span
               ><span>{{
                 addCommom(
                   precision.plus(
@@ -48,7 +48,7 @@
               }}</span>
             </p>
             <p>
-              <span>Valid borrowing</span
+              <span>{{ $t('Assets.ValidBorrowing') }}</span
               ><span>{{ addCommom(frequency, 2) }}</span>
             </p>
           </div>

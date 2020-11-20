@@ -1,6 +1,6 @@
 <template>
   <div class="coin-collateral">
-    <label>Collateral</label>
+    <label>{{ $t('Content.Collateral') }}</label>
     <!-- <ul>
             <li :class="item === current ? 'active' : ''" 
                 v-for="item in coinList" 
@@ -12,16 +12,16 @@
   </div>
 </template>
 <script>
-import coinTab from "~/components/common/coin-tab.vue";
+import coinTab from '~/components/common/coin-tab.vue';
 
 export default {
-  name: "coin-collateral",
+  name: 'coin-collateral',
   components: {
     coinTab,
   },
   data() {
     return {
-      current: "All",
+      current: 'All',
     };
   },
   computed: {
@@ -33,16 +33,16 @@ export default {
     selectCoin(item) {
       this.current = item;
       this.$bus.$emit('HAT_LIST_LOADING', true);
-      this.$store.dispatch("getHatList", {
+      this.$store.dispatch('getHatList', {
         und: this.$route.params.id.toUpperCase(),
-        col: item === "All" ? "" : item,
+        col: item === 'All' ? '' : item,
       });
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
 }
 @media screen and (max-width: 750px) {

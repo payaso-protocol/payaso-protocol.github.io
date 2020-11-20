@@ -4,13 +4,17 @@
       <img src="~/assets/img/logo_1.png" />
     </a>
     <div class="nav-list">
-      <nuxt-link to="/" :class="routeObj.name === 'product-id' ? 'active' : ''"
-        >Market</nuxt-link
+      <nuxt-link
+        to="/"
+        :class="routeObj.name === 'product-id' ? 'active' : ''"
+        >{{ $t('Header.Market') }}</nuxt-link
       >
-      <nuxt-link to="/buy">My Helmet</nuxt-link>
-      <nuxt-link to="/sell">My Supply</nuxt-link>
-      <nuxt-link to="/mining">LP Mining</nuxt-link>
-      <a href="http://www.payaso.io/guides" target="_blank">Guidebook</a>
+      <nuxt-link to="/buy">{{ $t('Header.MySafetyHelmet') }}</nuxt-link>
+      <nuxt-link to="/sell">{{ $t('Header.MySupply') }}</nuxt-link>
+      <nuxt-link to="/mining">{{ $t('Header.LPMining') }}</nuxt-link>
+      <a href="http://www.payaso.io/guides" target="_blank">{{
+        $t('Header.GuideBook')
+      }}</a>
     </div>
     <Assets v-if="userInfo.data.isLogin"></Assets>
     <!-- 分割线 -->
@@ -19,7 +23,7 @@
       v-if="!userInfo.data.isLogin"
       class="connect-wallet-btn"
       @click="openWallectSelect"
-      >Connect to a wallet</a
+      >{{ $t('Assets.ConnectWallet') }}</a
     >
     <div v-else class="wallet-address" @click="openCurrentAccount">
       <span>{{ accountText }}</span>
@@ -29,6 +33,7 @@
       v-if="showWallectSelect"
       @close="closeWallectSelect"
     ></WallectSelect>
+    <Langauage></Langauage>
     <div class="more" @click="handleShowMask"></div>
 
     <CurrentAccount
@@ -48,6 +53,7 @@ import WallectSelect from './wallet-select';
 import CurrentAccount from '~/components/account/current-account.vue';
 import ChangeAccount from '~/components/account/change-account.vue';
 import Assets from '~/components/common/assets.vue';
+import Langauage from '~/components/common/langauage.vue';
 export default {
   name: 'p-header',
   components: {
@@ -55,6 +61,7 @@ export default {
     CurrentAccount,
     ChangeAccount,
     Assets,
+    Langauage,
   },
   data() {
     return {
@@ -74,7 +81,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$t('header.Market'));
+    console.log(this.$i18n.locale);
   },
   watch: {
     userInfo: {

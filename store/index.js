@@ -28,8 +28,22 @@ import { accDiv, add, mul } from "~/assets/utils/calculate.js";
 import { toRounding } from "~/assets/js/util.js";
 
 export const state = () => ({
-  locales: ["en_US", "zh_CN"],
+  locales: ["en_US", "zh_CN", "po_TU"],
   locale: "en_US",
+  localeList: [
+    {
+      key: "en_US",
+      name: "English",
+    },
+    {
+      key: "po_TU",
+      name: "Português",
+    },
+    {
+      key: "zh_CN",
+      name: "简体中文",
+    },
+  ],
   // typeList: ["WETH", "UNI", "WBTC", "CRV", "OTHERS"],
   typeList: ["WETH", "WBTC", "OTHERS"],
   coinList: ["USDT", "USDC", "DAI"],
@@ -192,7 +206,6 @@ export const actions = {
   //     store.commit('SET_LANG', req.locale);
   //   }
   // },
-
   setLanguage({ commit }, data) {
     commit("SET_LANG", data);
   },

@@ -1,9 +1,6 @@
 <template>
   <div class="private-order">
-    <Tooltip
-      name="Private Order"
-      hint="Prohibit sharing orders with other suppliers"
-    >
+    <Tooltip :name="$t('Dialog.PrivateOrder')" :hint="$t('Tips.Tip4')">
     </Tooltip>
 
     <ul class="coin-radio-list">

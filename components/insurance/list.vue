@@ -7,8 +7,11 @@
           <span>{{ item }}</span>
         </div>
         <p>
-          {{ (totalInfo && totalInfo[item] && totalInfo[item].count) || 0 }}
-          Helmets in Supply
+          {{
+            $t('Content.HelmetsinSupply', {
+              num: (totalInfo && totalInfo[item] && totalInfo[item].count) || 0,
+            })
+          }}
         </p>
       </div>
       <div class="value-wrap">
@@ -44,9 +47,9 @@
         </div>
       </div>
       <div class="borrow-btn">
-        <nuxt-link :to="{ path: `/product/${item.toLowerCase()}` }"
-          >Borrow</nuxt-link
-        >
+        <nuxt-link :to="{ path: `/product/${item.toLowerCase()}` }">{{
+          $t('Content.Borrow')
+        }}</nuxt-link>
       </div>
     </li>
   </ul>

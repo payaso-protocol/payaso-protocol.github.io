@@ -1,7 +1,7 @@
 <template>
   <PDialog
     @close="closeSupply"
-    title="Supply"
+    :title="$t('Content.Supply')"
     :cansubmit="cansubmit"
     :rightBtnText="rightBtnText"
     @confirm="submitSupply"
@@ -10,7 +10,7 @@
       <!-- <span class="close"></span> -->
       <!-- <h3 class="title">Supply</h3> -->
       <div class="select-type">
-        <label>Type</label>
+        <label>{{ $t('Dialog.Type') }}</label>
         <TypeSelect @change="colChanged"></TypeSelect>
       </div>
 
@@ -23,12 +23,12 @@
       </div>
       <div class="control-block">
         <div class="control-item">
-          <label>Due Date</label>
+          <label>{{ $t('Dialog.DueDate') }}</label>
           <DueDate @change="dueDateChanged"></DueDate>
         </div>
         <div class="control-item">
           <div class="index-price-box">
-            <label>Executive price</label>
+            <label>{{ $t('Dialog.ExecutivePrice') }}</label>
             <p class="index-price">Uniswap Index: {{ indexPx }}</p>
           </div>
           <PInput
@@ -47,7 +47,7 @@
       </div>
       <div class="control-block">
         <div class="control-item">
-          <label>Quantity</label>
+          <label>{{ $t('Dialog.Quantity') }}</label>
           <PInput
             type="number"
             v-model="qty"
@@ -57,7 +57,7 @@
           ></PInput>
         </div>
         <div class="control-item">
-          <label>Expected DPR</label>
+          <label>{{ $t('Dialog.ExpectedDPR') }}</label>
           <PInput
             type="number"
             v-model="dpr"
@@ -65,23 +65,29 @@
             maxValue="10000"
             right="%"
           ></PInput>
-          <p class="rent">Rent ≈ {{ rent }}</p>
+          <p class="rent">{{ $t('Dialog.Rent') }} ≈ {{ rent }}</p>
         </div>
       </div>
       <!-- 抵押 -->
       <div class="collateral">
-        <label>Collateral</label>
+        <label>{{ $t('Dialog.Collateral') }}</label>
         <span>{{ collateral }} {{ und }}</span>
       </div>
       <!-- 余额 -->
       <div class="balance">
-        <label>Balance</label>
+        <label>{{ $t('Dialog.Balance') }}</label>
         <span>{{ balance }} {{ und }}</span>
       </div>
       <div class="tips">
-        {{ moment(dueDate).format('YYYY-MMM Do HH:mm') }} when the lease
-        expires, supplier can exchange {{ collateral }} {{ und }} for {{ qty }}
-        {{ col }}
+        {{
+          $t('Dialog.Time', {
+            time: moment(dueDate).format('YYYY-MMM Do HH:mm'),
+            collateral: collateral,
+            und: und,
+            qty: qty,
+            col: col,
+          })
+        }}
       </div>
     </div>
   </PDialog>
