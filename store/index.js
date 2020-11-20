@@ -30,7 +30,8 @@ import { toRounding } from "~/assets/js/util.js";
 export const state = () => ({
   locales: ["en_US", "zh_CN"],
   locale: "en_US",
-  typeList: ["WETH", "UNI", "WBTC", "CRV", "OTHERS"],
+  // typeList: ["WETH", "UNI", "WBTC", "CRV", "OTHERS"],
+  typeList: ["WETH", "WBTC", "OTHERS"],
   coinList: ["USDT", "USDC", "DAI"],
   typeFixObj: {
     WETH: 0,

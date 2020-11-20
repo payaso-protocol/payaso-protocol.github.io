@@ -44,19 +44,22 @@
         </div>
       </div>
       <div class="borrow-btn">
-        <nuxt-link :to="{ path: `/product/${item.toLowerCase()}` }">Borrow</nuxt-link>
+        <nuxt-link :to="{ path: `/product/${item.toLowerCase()}` }"
+          >Borrow</nuxt-link
+        >
       </div>
     </li>
   </ul>
 </template>
 <script>
-import { autoRounding } from "~/assets/js/util.js";
+import { autoRounding } from '~/assets/js/util.js';
 
 export default {
-  name: "insurance-list",
+  name: 'insurance-list',
   data() {
     return {
-      productList: ["WETH", "WBTC", "UNI", "CRV"],
+      // productList: ["WETH", "WBTC", "UNI", "CRV"],
+      productList: ['WETH', 'WBTC'],
       autoRounding: autoRounding,
     };
   },
@@ -68,7 +71,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .insurance-list {
     width: 1200px;

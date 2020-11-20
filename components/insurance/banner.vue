@@ -9,12 +9,12 @@
       <li>
         <!-- 保险交易过的资金量 -->
         <label>Total Helmets Borrowed Volume</label>
-        <p>{{ fixD(totalHelmetsBorrowedVolume, 0) }}</p>
+        <p>{{ fixD(totalHelmetsBorrowedVolume, 0) }} Helmets</p>
       </li>
       <li>
         <!-- 24小时Long token 铸造量 -->
         <label>24h Long Token Created Volume</label>
-        <p>{{ fixD(longTokenCreatedVolume, 0) }}</p>
+        <p>{{ fixD(longTokenCreatedVolume, 0) }} $</p>
       </li>
     </ul>
   </div>
@@ -55,11 +55,11 @@ export default {
     height: 100%;
     label {
       font-size: 16px;
-      color: #7D7D7D;
+      color: #7d7d7d;
     }
     p {
       font-size: 26px;
-      color: #DBDBDB;
+      color: #dbdbdb;
       padding-top: 12px;
     }
   }
