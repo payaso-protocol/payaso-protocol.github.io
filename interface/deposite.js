@@ -447,3 +447,19 @@ export const getBalance = async (type, currcy) => {
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };
+export const getLastTime = async (type, currcy) => {
+  const charID = window.chainID;
+  let adress = type;
+  if (type.indexOf("0x") === -1) {
+    adress = getContract(type, charID);
+  }
+  const deposite = await Deposite(adress);
+  return deposite.methods
+    .lastTimeRewardApplicable()
+    .call()
+    .then((res) => {
+      return res;
+      // let tocurrcy = currcy || type;
+      // return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
+    });
+};

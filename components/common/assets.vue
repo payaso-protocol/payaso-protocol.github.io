@@ -15,7 +15,7 @@
             <div class="assets-claim">
               <!-- <p><span>钱包余额</span><span>1,000</span></p> -->
               <p>
-                <span>Borrowing reward</span
+                <span>{{ $t('Assets.BorrowingReward') }}</span
                 ><span>{{ addCommom(payaSettle, 2) }}</span>
               </p>
               <a @click="toClaim(1)">{{ $t('Table.Claim') }}</a>

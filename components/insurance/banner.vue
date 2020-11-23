@@ -3,17 +3,17 @@
     <ul>
       <li>
         <!-- 已经成交的保险品种的种类 -->
-        <label>Helmet Varieties</label>
+        <label>{{ $t('Banner.HelmetVarieties') }}</label>
         <p>{{ helmetVarieties }}</p>
       </li>
       <li>
         <!-- 保险交易过的资金量 -->
-        <label>Total Helmets Borrowed Volume</label>
+        <label>{{ $t('Banner.TotalHelmetsBorrowedVolume') }}</label>
         <p>{{ fixD(totalHelmetsBorrowedVolume, 0) }} Helmets</p>
       </li>
       <li>
         <!-- 24小时Long token 铸造量 -->
-        <label>24h Long Token Created Volume</label>
+        <label>{{ $t('Banner.LongToken') }}</label>
         <p>{{ fixD(longTokenCreatedVolume, 0) }} $</p>
       </li>
     </ul>

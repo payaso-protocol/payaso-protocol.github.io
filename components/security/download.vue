@@ -1,20 +1,18 @@
 <template>
   <div class="security-download">
-    <div class="download-title">Security</div>
+    <div class="download-title">{{ $t('Content.Security') }}</div>
     <p class="download-text">
-      PAYASO smart contracts were audited by KNOWNSEC. However, security audits
-      don't eliminate risks completely. Please don' t supply your life savings
-      or assets you can' t afford to lose.
+      {{ $t('Tips.Tip3') }}
     </p>
     <div class="download-link">
       <a href="/doc/en_US.pdf" target="_blank">
-        Download the PAYASO Smart Contract Audit Report.pdf
+        {{ $t('Content.PDF') }}
       </a>
       <a
         href="https://etherscan.io/address/0xe172500462DCD407f2E42590c4ed21B926c2CC60"
         target="_blank"
       >
-        View the Contract Address
+        {{ $t('Content.ViewContractAdress') }}
       </a>
     </div>
   </div>
@@ -25,7 +23,7 @@ export default {};
 </script>
 
 <style lang='scss' scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .download-title {
     height: 60px;

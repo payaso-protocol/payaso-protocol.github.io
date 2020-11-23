@@ -39,10 +39,10 @@ export const state = () => ({
       key: "po_TU",
       name: "Português",
     },
-    // {
-    //   key: "zh_CN",
-    //   name: "简体中文",
-    // },
+    {
+      key: "zh_CN",
+      name: "简体中文",
+    },
   ],
   // typeList: ["WETH", "UNI", "WBTC", "CRV", "OTHERS"],
   typeList: ["WETH", "WBTC", "OTHERS"],
@@ -290,12 +290,12 @@ export const actions = {
       let h24 = 24 * 60 * 60;
       let _col;
       for (let i = 0; i < data.length; i++) {
-        if (last - data[i].blockNumber < h24) {
-          _col = newGetSymbol(data[i].returnValues._collateral, window.chainID);
-          longTokenCreatedVolume += Number(
-            fromWei(data[i].returnValues.vol, _col)
-          );
-        }
+        // if (last - data[i].blockNumber < h24) {
+        _col = newGetSymbol(data[i].returnValues._collateral, window.chainID);
+        longTokenCreatedVolume += Number(
+          fromWei(data[i].returnValues.vol, _col)
+        );
+        // }
       }
 
       commit("SET_LONG_TOKEN_CREATED_VOLUME", longTokenCreatedVolume);

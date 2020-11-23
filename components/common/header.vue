@@ -200,7 +200,7 @@ export default {
     margin: 0 20px 0 16px;
   }
 }
-@media screen and (min-width: 1500px) {
+@media screen and (min-width: 1400px) {
   .header-container {
     padding: 0px 60px;
     justify-content: space-around;

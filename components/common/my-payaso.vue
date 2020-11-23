@@ -1,40 +1,42 @@
 <template>
   <div class="my-payaso" v-if="showPayaso">
     <Header></Header>
-    <div class="payaso-title">My PAYA</div>
+    <div class="payaso-title">{{ $t('Assets.My') }} PAYA</div>
     <div class="payaso-settle">
       <div class="assets">
         <p>
-          <span>PayaAmount</span><span>{{ addCommom(myPaya, 2) }}</span>
+          <span>Paya{{ $t('Dialog.Amount') }}</span
+          ><span>{{ addCommom(myPaya, 2) }}</span>
         </p>
         <div class="assets-claim">
           <!-- <p><span>钱包余额</span><span>1,000</span></p> -->
           <p>
-            <span>Borrowing reward</span
+            <span>{{ $t('Assets.BorrowingReward') }}</span
             ><span>{{ addCommom(payaSettle, 2) }}</span>
           </p>
-          <a @click="toClaim(1)">Claim</a>
+          <a @click="toClaim(1)">{{ $t('Table.Claim') }}</a>
         </div>
       </div>
     </div>
     <div class="payaso-assets">
       <p>
-        <span>Circulation</span
+        <span>{{ $t('Assets.Circulation') }}</span
         ><span>{{ addCommom(precision.minus(totalPaya, mined), 2) }}</span>
       </p>
       <p>
-        <span>Valid borrowing</span><span>{{ addCommom(frequency, 2) }}</span>
+        <span>{{ $t('Assets.ValidBorrowing') }}</span
+        ><span>{{ addCommom(frequency, 2) }}</span>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import Header from "~/components/common/header.vue";
-import { getPAYA } from "~/interface/deposite.js";
-import { claim } from "~/interface/order.js";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
-import precision from "~/assets/js/precision.js";
+import Header from '~/components/common/header.vue';
+import { getPAYA } from '~/interface/deposite.js';
+import { claim } from '~/interface/order.js';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import precision from '~/assets/js/precision.js';
 export default {
   data() {
     return {
@@ -78,13 +80,13 @@ export default {
   mounted() {
     // totalSupply();
     this.getAssets();
-    this.$bus.$on("REFRESH_ASSETS", (data) => {
+    this.$bus.$on('REFRESH_ASSETS', (data) => {
       this.getAssets();
     });
   },
   watch: {
     assets: {
-      handler: "assetsWatch",
+      handler: 'assetsWatch',
       immediate: true,
     },
   },
@@ -96,11 +98,11 @@ export default {
     },
     async getAssets() {
       setTimeout(() => {
-        this.$store.dispatch("getValidBorrowing");
-        this.$store.dispatch("getTotalPaya");
-        this.$store.dispatch("getTotalMined");
-        this.$store.dispatch("getMyPayaso");
-        this.$store.dispatch("getPayaSettle");
+        this.$store.dispatch('getValidBorrowing');
+        this.$store.dispatch('getTotalPaya');
+        this.$store.dispatch('getTotalMined');
+        this.$store.dispatch('getMyPayaso');
+        this.$store.dispatch('getPayaSettle');
         // this.$store.dispatch("getmyUNI");
         // this.$store.dispatch("getmyPAYA");
       }, 1000);
@@ -112,14 +114,14 @@ export default {
       if (key == 2) {
         let res = await getPAYA();
       }
-      this.$store.dispatch("setPayasoDialog", false);
+      this.$store.dispatch('setPayasoDialog', false);
     },
   },
 };
 </script>
 
 <style lang='scss' soped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 .my-payaso {
   width: 100%;
   overflow: hidden;

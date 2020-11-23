@@ -16,7 +16,7 @@
     "Banner": {
         "HelmetVarieties": "Tipos de Capacete de Segurança",
         "TotalHelmetsBorrowedVolume": "Volume total de capacetes emprestados",
-        "24hLongToken": "24h Long Token Created Volume"
+        "LongToken": "Volume criado Long Token"
     },
     "Dialog": {
         "Type": "Tipo",
@@ -77,7 +77,7 @@
         "Select": "Selecione",
         "ReportTitle": "Alugue um Capacete de Segurança, Proteja o Preço dos seus Ativos",
         "Security": "Segurança",
-        "PDF": "Faça download do Relatório de Auditoria de smart contract do PAYASO",
+        "PDF": "Faça download do Relatório de Auditoria de smart contract do PAYASO.pdf",
         "ViewContractAdress": "Ver o Endereço do Contrato"
     },
     "Table": {
@@ -135,7 +135,7 @@
         "Within1day": "Em 1 dia",
         "Within3days": "Em 3 dias",
         "Within7days": "Em 7 dias",
-        "Within31days": "Em 7 dias",
+        "Within31days": "Em 31 dias",
         "Search": "Pesquisar",
         "Waived": "Desistir"
     },

@@ -21,7 +21,7 @@
       v-if="!userInfo.data.isLogin"
       class="connect-wallet-btn"
       @click="openWallectSelect"
-      >Connect to a wallet</a
+      >{{ $t('Assets.ConnectWallet') }}</a
     >
     <div v-else class="wallet-address">
       <span>{{ accountText }}</span>
@@ -35,23 +35,23 @@
 </template>
 
 <script>
-import WallectSelect from "./wallet-select";
+import WallectSelect from './wallet-select';
 
 export default {
-  name: "p-mask",
+  name: 'p-mask',
   components: {
     WallectSelect,
   },
   data() {
     return {
       MaskFlag: false,
-      accountText: "",
+      accountText: '',
       showWallectSelect: false,
     };
   },
   watch: {
     userInfo: {
-      handler: "userInfoWatch",
+      handler: 'userInfoWatch',
       immediate: true,
     },
   },
@@ -68,46 +68,46 @@ export default {
     renderList() {
       return [
         {
-          url: "/",
+          url: '/',
           link: false,
-          text: "Market",
+          text: this.$t('Header.Market'),
         },
         {
-          url: "/buy",
+          url: '/buy',
           link: false,
-          text: "My Safety Helmet",
+          text: this.$t('Header.MySafetyHelmet'),
         },
         {
-          url: "/sell",
+          url: '/sell',
           link: false,
-          text: "My Supply",
+          text: this.$t('Header.MySupply'),
         },
         {
-          url: "/mining",
+          url: '/mining',
           link: false,
-          text: "LP Mining",
+          text: this.$t('Header.LPMining'),
         },
         {
-          type: "PAYASO",
-          link: false,
-          text: "My PAYASO",
-        },
-        {
-          url: "http://www.payaso.io/guides",
+          url: 'http://www.payaso.io/guides',
           link: true,
-          text: "Guide Book",
+          text: this.$t('Header.GuideBook'),
+        },
+        {
+          type: 'PAYASO',
+          link: false,
+          text: this.$t('Assets.My') + ' ' + 'PAYA',
         },
       ];
     },
     langList() {
       return [
-        // {
-        //   text: "简体中文",
-        //  lang:'zh_CN'
-        // },
         {
-          lang: "en_US",
-          text: "English",
+          lang: 'en_US',
+          text: 'English',
+        },
+        {
+          text: 'Português',
+          lang: 'po_TU',
         },
       ];
     },
@@ -116,25 +116,25 @@ export default {
     userInfoWatch(newValue) {
       if (newValue.data && newValue.data.account) {
         let account = newValue.data.account;
-        this.accountText = account.substr(0, 6) + "..." + account.substr(-5);
+        this.accountText = account.substr(0, 6) + '...' + account.substr(-5);
       }
     },
     openWallectSelect() {
       this.showWallectSelect = true;
     },
     closeMask() {
-      this.$store.dispatch("setMaskDialog", false);
+      this.$store.dispatch('setMaskDialog', false);
     },
     toPath(options) {
       if (options.url) {
-        this.$store.dispatch("setPayasoDialog", false);
-        this.$store.dispatch("setMaskDialog", false);
+        this.$store.dispatch('setPayasoDialog', false);
+        this.$store.dispatch('setMaskDialog', false);
         this.$router.push(options.url);
       } else {
         if (options.type) {
-          this.$store.dispatch("setPayasoDialog", true);
+          this.$store.dispatch('setPayasoDialog', true);
         } else {
-          this.$store.dispatch("setMaskDialog", false);
+          this.$store.dispatch('setMaskDialog', false);
         }
       }
     },
@@ -169,7 +169,7 @@ export default {
       display: block;
       width: 24px;
       height: 24px;
-      background-image: url("../../assets/img/icon/guanbi.png");
+      background-image: url('../../assets/img/icon/guanbi.png');
       background-repeat: no-repeat;
       background-size: cover;
       cursor: pointer;

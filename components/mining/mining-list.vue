@@ -17,7 +17,9 @@
         <!-- <p class="list-item-locked">
           {{ $t('Table.Locked', { type: item.name }) }}:{{ item.lpt }}
         </p> -->
-        <p class="list-item-time">Last time: 2020/11/20 19:09:20</p>
+        <p class="list-item-time">
+          {{ moment(item.lastTime * 1).format('MMM Do HH:mm') }}
+        </p>
       </div>
       <div class="mining-list-right">
         <div class="mined">
@@ -107,9 +109,11 @@ import {
   getLPTOKEN,
   CangetPAYA,
   getPAYA,
+  getLastTime,
 } from '~/interface/deposite';
 import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 import { getAddress, getContract } from '~/assets/utils/address-pool.js';
+import moment from 'moment';
 import Protect from './protect';
 export default {
   name: 'mining-list',
@@ -117,11 +121,40 @@ export default {
   data() {
     return {
       miningList: [
-        { name: 'ETH-DAI', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
-        { name: 'ETH-USDT', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
-        { name: 'ETH-USDC', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
-        { name: 'ETH-WBTC', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
+        {
+          name: 'ETH-DAI',
+          lpt: 0,
+          protected: 0,
+          lptoken: 0,
+          paya: 0,
+          lastTime: 0,
+        },
+        {
+          name: 'ETH-USDT',
+          lpt: 0,
+          protected: 0,
+          lptoken: 0,
+          paya: 0,
+          lastTime: 0,
+        },
+        {
+          name: 'ETH-USDC',
+          lpt: 0,
+          protected: 0,
+          lptoken: 0,
+          paya: 0,
+          lastTime: 0,
+        },
+        {
+          name: 'ETH-WBTC',
+          lpt: 0,
+          protected: 0,
+          lptoken: 0,
+          paya: 0,
+          lastTime: 0,
+        },
       ],
+      moment: moment,
       allLPT: '',
       TotalValueLocked: 0,
       claimloading: false,
@@ -186,6 +219,9 @@ export default {
         let PoolAdress = getContract(type, charID);
         let LptAdress = getContract(typeLPT, charID);
         if (PoolAdress && LptAdress) {
+          // 获取时间
+          let time = await getLastTime(type);
+          this.miningList[i].lastTime = time;
           // 获取待领取paya
           let paya = await CangetPAYA(type);
           this.miningList[i].paya = addCommom(paya, 8);

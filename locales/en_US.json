@@ -16,7 +16,7 @@
   "Banner": {
     "HelmetVarieties": "Helmet Varieties",
     "TotalHelmetsBorrowedVolume": "Total Helmets Borrowed Volume",
-    "24hLongToken": "24h Long Token Created Volume"
+    "LongToken": "Long Token Created Volume"
   },
   "Dialog": {
     "Type": "Type",
@@ -135,7 +135,7 @@
     "Within1day": "Within 1 day",
     "Within3days": "Within 3 days",
     "Within7days": "Within 7 days",
-    "Within31days": "Within 7 days",
+    "Within31days": "Within 31 days",
     "Search": "Search",
     "Waived": "Waived"
   },
