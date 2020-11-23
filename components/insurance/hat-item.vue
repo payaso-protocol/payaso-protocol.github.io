@@ -31,7 +31,7 @@
         </span>
       </li>
       <li class="supply">
-        <label>#Helmet Supply: </label>
+        <label>#{{ $t('Content.HelmetSupply') }}: </label>
         <span
           >{{ toRounding(precision.times(data.remain, data._strikePrice), 2) }}
           /
@@ -193,6 +193,7 @@ export default {
       }
       span {
         color: $text-t;
+        text-align: right;
       }
     }
   }

@@ -39,10 +39,10 @@ export const state = () => ({
       key: "po_TU",
       name: "Português",
     },
-    {
-      key: "zh_CN",
-      name: "简体中文",
-    },
+    // {
+    //   key: "zh_CN",
+    //   name: "简体中文",
+    // },
   ],
   // typeList: ["WETH", "UNI", "WBTC", "CRV", "OTHERS"],
   typeList: ["WETH", "WBTC", "OTHERS"],

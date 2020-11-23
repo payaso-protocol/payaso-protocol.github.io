@@ -159,7 +159,6 @@ export default {
     async toClaim() {
       this.loading = true;
       let type = this.current.replace('-', '_');
-      console.log(type);
       let res = await getPAYA(type);
     },
     async getAllData() {
@@ -177,7 +176,6 @@ export default {
         (WETHCOIN * DOUBLEPOOL) / ETH_COIN,
         2
       );
-      console.log(1, DOUBLEPOOL, ETH_COIN, WETHCOIN);
     },
     toDeposite() {
       this.$bus.$emit('OPEN_DEPOSITE', (data) => {

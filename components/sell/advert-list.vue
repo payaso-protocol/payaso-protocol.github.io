@@ -351,14 +351,14 @@ export default {
 
         askRes = await asks(resultItem.askID, 'sync', resultItem._collateral);
         if (askRes === '0') {
-          resultItem['status'] = 'Be borrowed';
+          resultItem['status'] = this.$t('Status.Beborrowed');
           resultItem['sort'] = 1;
         } else {
-          resultItem['status'] = 'Unborrowed';
+          resultItem['status'] = this.$t('Status.Unborrowed');
           resultItem['sort'] = 2;
         }
         if (parseInt(resultItem._expiry) < currentTime) {
-          resultItem['status'] = 'Dated';
+          resultItem['status'] = this.$t('Status.Dated');
           resultItem['sort'] = 0;
         }
         // resultItem['remain'] = precision.times(askRes, 1);

@@ -80,9 +80,6 @@ export default {
       return this.$route;
     },
   },
-  mounted() {
-    console.log(this.$i18n.locale);
-  },
   watch: {
     userInfo: {
       handler: 'userInfoWatch',
@@ -132,7 +129,7 @@ export default {
 }
 @media screen and (min-width: 750px) {
   .header-container {
-    min-width: 1200px;
+    min-width: 1280px;
     padding: 0px 30px;
     .logo {
       img {
@@ -142,9 +139,10 @@ export default {
     .nav-list {
       flex: 1;
       display: flex;
+      // justify-content: space-around;
       a {
         display: inline-block;
-        margin-left: 40px;
+        // margin-left: 40px;
         height: 60px;
         line-height: 60px;
         position: relative;
@@ -202,12 +200,25 @@ export default {
     margin: 0 20px 0 16px;
   }
 }
-@media screen and (min-width: 1290px) {
+@media screen and (min-width: 1500px) {
   .header-container {
     padding: 0px 60px;
+    justify-content: space-around;
     .nav-list {
       a {
         margin-left: 50px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 750px) and (max-width: 1500px) {
+  .header-container {
+    padding: 0px 30px;
+    .nav-list {
+      justify-content: space-around;
+      a {
+        // margin-left: 50px;
         font-size: 16px;
       }
     }

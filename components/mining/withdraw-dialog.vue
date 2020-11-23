@@ -1,9 +1,10 @@
 <template>
   <PDialog
-    title="Withdraw"
+    :title="$t('Table.Withdraw')"
     @close="closeWithdraw"
     :noCancel="true"
     @confirm="submitWithdraw"
+    :rightBtnText="$t('Table.Confirm')"
   >
     <div class="withdrawInput">
       <PInput
@@ -15,7 +16,8 @@
       ></PInput>
     </div>
     <p class="total-token">
-      <span>{{ available }} Available</span><a @click="all">ALL</a>
+      <span>{{ available }} {{ $t('Table.Available') }}</span
+      ><a @click="all">{{ $t('Table.ALL') }}</a>
     </p>
     <div class="checkPer">
       <span
@@ -39,7 +41,7 @@
         v-else
         @click="withdrawCheck"
       />
-      <p>infinite Approval</p>
+      <p>{{ $t('Table.InfiniteApproval') }}</p>
     </div>
   </PDialog>
 </template>

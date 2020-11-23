@@ -101,7 +101,7 @@
                   class="loading"
                   v-if="pendingObj[item.bidID]"
                 />
-                <span>Activate</span>
+                <span>{{ $t('Status.Activated') }}</span>
               </button>
               <button
                 @click="openDestroyDialog(item)"
@@ -113,7 +113,7 @@
                   class="loading"
                   v-if="destroyPendingObj[item.bidID]"
                 />
-                <span>Destroy</span>
+                <span>Waived</span>
               </button>
             </td>
             <td v-else></td>
@@ -179,7 +179,7 @@
               class="loading"
               v-if="pendingObj[item.bidID]"
             />
-            <span>Activate</span>
+            <span>{{ $t('Status.Activated') }}</span>
           </button>
           <button
             @click="openDestroyDialog(item)"
@@ -192,7 +192,7 @@
               class="loading"
               v-if="destroyPendingObj[item.bidID]"
             />
-            <span>Destroy</span>
+            <span>Waived</span>
           </button>
         </div>
       </div>
@@ -292,7 +292,7 @@ export default {
   methods: {
     statusFilter(status) {
       switch (status) {
-        case 'Activated':
+        case this.$t('Status.Activated'):
           return true;
           break;
         default:
@@ -377,10 +377,10 @@ export default {
           count: item.sellInfo.longInfo.count,
         };
         if (parseInt(resultItem._expiry) < current) {
-          resultItem['status'] = 'Closed'; // Dated 已过期
+          resultItem['status'] = this.$t('Status.Closed'); // Dated 已过期
           resultItem['sort'] = 1;
         } else {
-          resultItem['status'] = 'Nonactivated';
+          resultItem['status'] = this.$t('Status.Nonactivated');
           resultItem['sort'] = 3;
         }
         let res = await getExercise(resultItem.buyer);
@@ -388,7 +388,7 @@ export default {
           return bitem.returnValues.bidID;
         });
         if (bidIDArr.includes(resultItem.bidID)) {
-          resultItem['status'] = 'Activated';
+          resultItem['status'] = this.$t('Status.Activated');
           resultItem['sort'] = 2;
         }
         let waiveRes = await getWaive(resultItem.buyer);
@@ -396,7 +396,7 @@ export default {
           return witem.returnValues.bidID;
         });
         if (waiveBidIDArr.includes(resultItem.bidID)) {
-          resultItem['status'] = 'Waived';
+          resultItem['status'] = this.$t('Status.Waived');
           resultItem['sort'] = 0;
         }
         if (precision.times(resultItem.vol, resultItem._strikePrice) != 0) {

@@ -120,6 +120,7 @@ export const toDeposite = async (type, data, callBack) => {
           }
           setTimeout(() => {
             bus.$emit("REFRESH_ASSETS");
+            bus.$emit("REFRESH_MINING");
           }, 1000);
         }
       })
@@ -206,6 +207,7 @@ export const toWithdraw = async (type, data, callBack) => {
           }
           setTimeout(() => {
             bus.$emit("REFRESH_ASSETS");
+            bus.$emit("REFRESH_MINING");
           }, 1000);
         }
       })
@@ -294,7 +296,7 @@ export const getPAYA = async (type) => {
         });
       })
       .on("confirmation", function(confirmationNumber, receipt) {
-        bus.$emit("CLOSE_LOADING");
+        bus.$emit("CLAIM_LOADING");
         if (confirmationNumber === 0) {
           if (window.statusDialog) {
             ``;
@@ -316,13 +318,13 @@ export const getPAYA = async (type) => {
             });
           }
           setTimeout(() => {
-            bus.$emit("REFRESH_DATA");
             bus.$emit("REFRESH_ASSETS");
+            bus.$emit("REFRESH_MINING");
           }, 1000);
         }
       })
       .on("error", function(error, receipt) {
-        bus.$emit("CLOSE_LOADING");
+        bus.$emit("CLAIM_LOADING");
         bus.$emit("CLOSE_STATUS_DIALOG");
         if (error && error.message) {
           Message({

@@ -20,6 +20,7 @@
   },
   "Dialog": {
     "Type": "类型",
+    "ContractAdress": "智能合约地址",
     "PrivateOrder": "私有保单",
     "YES": "是",
     "NO": "否",
@@ -56,7 +57,9 @@
     "StatusText4": "Rent {vol} {type} hats, the execution price is {price} {coin}",
     "StatusText5": "The rental advertisement is published successfully, you can check it on",
     "DestroyHelmet": "Destroy the helmet",
-    "DestoryHelmetText": "You will not be able to reactivate helmet after it’s destroyed, are you sure you want to destroy it?"
+    "DestoryHelmetText": "You will not be able to reactivate helmet after it’s destroyed, are you sure you want to destroy it?",
+    "ActivateHelmet": "I`d like to activate the helmet",
+    "InsufficientBalance": "Insufficient {type} Balance"
   },
   "Content": {
     "HelmetMarket": "矿工帽市场",
@@ -114,7 +117,9 @@
     "ALL": "ALL",
     "GetLP": "To Get LP token",
     "InfiniteApproval": "Infinite Approval",
-    "Confrim": "Confrim"
+    "Confirm": "Confirm",
+    "RewardsAvailable": "Rewards Available",
+    "ClaimRewards": "Claim Rewards"
   },
   "Status": {
     "All": "All",
@@ -122,15 +127,17 @@
     "Closed": "Closed",
     "Period": "到期时间",
     "Unborrowed": "Unborrowed",
-    "Beborrowed": "Beborrowed",
+    "Beborrowed": "Be borrowed",
     "Unactivated": "Unactivated",
     "Activated": "Activated",
+    "Activate": "Ativar",
     "Dated": "Dated",
     "Within1day": "Within 1 day",
     "Within3days": "Within 3 days",
     "Within7days": "Within 7 days",
     "Within31days": "Within 7 days",
-    "Search": "搜索"
+    "Search": "搜索",
+    "Waived": "Waived"
   },
   "Tips": {
     "Tip1": "Be sure to activate your Safety Helmet to protect your assets if prices have fallen",

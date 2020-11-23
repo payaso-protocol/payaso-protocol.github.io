@@ -195,7 +195,7 @@ export default {
   methods: {
     statusFilter(status) {
       switch (status) {
-        case 'Activated':
+        case this.$t('Status.Activated'):
           return true;
           break;
         default:
@@ -271,10 +271,10 @@ export default {
         };
 
         if (resultItem._expiry < currentTime) {
-          resultItem['status'] = 'Dated';
+          resultItem['status'] = this.$t('Status.Dated');
           resultItem['sort'] = 0;
         } else {
-          resultItem['status'] = 'Unactivated';
+          resultItem['status'] = this.$t('Status.Unactivated');
           resultItem['sort'] = 2;
         }
 
@@ -283,7 +283,7 @@ export default {
           return eItem.returnValues.bidID;
         });
         if (bidIDArr.includes(resultItem.bidID)) {
-          resultItem['status'] = 'Activated';
+          resultItem['status'] = this.$t('Status.Activated');
           resultItem['sort'] = 1;
         }
 

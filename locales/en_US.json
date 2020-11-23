@@ -20,6 +20,7 @@
   },
   "Dialog": {
     "Type": "Type",
+    "ContractAdress": "Smart Contract Address",
     "PrivateOrder": "Private Order",
     "YES": "YES",
     "NO": "NO",
@@ -39,7 +40,7 @@
     "BorrowHelmet": "Borrow a helmet",
     "Amount": "Amount",
     "PleaseQuantity": "Please enter the quantity",
-    "YouCanBorrow": "You can corrow",
+    "YouCanBorrow": "You can borrow",
     "Rents": "Rents",
     "IMPORTANTDueDate": "Due Date ( IMPORTANT! )",
     "Confirmation": "Confirmation",
@@ -56,12 +57,14 @@
     "StatusText4": "Rent {vol} {type} hats, the execution price is {price} {coin}",
     "StatusText5": "The rental advertisement is published successfully, you can check it on",
     "DestroyHelmet": "Destroy the helmet",
-    "DestoryHelmetText": "You will not be able to reactivate helmet after it’s destroyed, are you sure you want to destroy it?"
+    "DestoryHelmetText": "You will not be able to reactivate helmet after it’s destroyed, are you sure you want to destroy it?",
+    "ActivateHelmet": "I`d like to activate the helmet",
+    "InsufficientBalance": "Insufficient {type} Balance"
   },
   "Content": {
     "HelmetMarket": "Helmet Market",
     "Supply": "Supply",
-    "HelmetsinSupply": "`{num} Helmets in Supply`",
+    "HelmetsinSupply": "{num} Helmets in Supply",
     "Borrow": "Borrow",
     "TypeHelmet": "{type} Helmet",
     "NoData": "no data",
@@ -114,7 +117,9 @@
     "ALL": "ALL",
     "GetLP": "To Get LP token",
     "InfiniteApproval": "Infinite Approval",
-    "Confrim": "Confrim"
+    "Confirm": "Confirm",
+    "RewardsAvailable": "Rewards Available",
+    "ClaimRewards": "Claim Rewards"
   },
   "Status": {
     "All": "All",
@@ -122,15 +127,17 @@
     "Closed": "Closed",
     "Period": "Period",
     "Unborrowed": "Unborrowed",
-    "Beborrowed": "Beborrowed",
+    "Beborrowed": "Be borrowed",
     "Unactivated": "Unactivated",
     "Activated": "Activated",
+    "Activate": "Activate",
     "Dated": "Dated",
     "Within1day": "Within 1 day",
     "Within3days": "Within 3 days",
     "Within7days": "Within 7 days",
     "Within31days": "Within 7 days",
-    "Search": "Search"
+    "Search": "Search",
+    "Waived": "Waived"
   },
   "Tips": {
     "Tip1": "Be sure to activate your Safety Helmet to protect your assets if prices have fallen",

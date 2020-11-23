@@ -34,7 +34,7 @@ export default {
     },
     rightBtnText: {
       type: String,
-      default: 'Confrim',
+      default: 'Confirm',
     },
     cansubmit: {
       type: Boolean,

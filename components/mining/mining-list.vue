@@ -5,109 +5,229 @@
       v-for="(item, index) in miningList"
       :key="index"
     >
-      <div class="list-item-title">
-        <img :src="require(`~/assets/img/icon/${item.name}@2x.png`)" alt="" />
-        <span>{{ item.name }}</span>
+      <div class="mining-list-left">
+        <div class="list-item-title">
+          <span>{{ item.name }}</span>
+          <p>{{ item.name }} Lp token</p>
+        </div>
+        <div class="list-item-content">
+          <p>{{ $t('Table.RewardsAvailable') }}：</p>
+          <span>{{ item.lpt }}</span>
+        </div>
+        <!-- <p class="list-item-locked">
+          {{ $t('Table.Locked', { type: item.name }) }}:{{ item.lpt }}
+        </p> -->
+        <p class="list-item-time">Last time: 2020/11/20 19:09:20</p>
       </div>
-      <!-- <div class="list-item-content">
-        <p>
-          <span>Total value locked</span><span>{{ item.lpt }} </span>
-        </p>
-        <p>
-          <span>{{ item.name }} be protected</span
-          ><span>{{ item.protected }} ETH</span>
-        </p>
-      </div> -->
-      <div class="list-item-btn">
-        <nuxt-link
-          :to="{
-            name: 'mining-id',
-            params: {
-              id: item.name.toLowerCase(),
-              list: miningList,
-            },
-          }"
-        >
-          Select
-        </nuxt-link>
+      <div class="mining-list-right">
+        <div class="mined">
+          <div class="mining-list-stake">
+            <div class="list-item-title">
+              <span>{{ $t('Table.Minted') }}</span>
+            </div>
+            <div class="list-item-content">
+              <p>PAYA</p>
+              <span>{{ item.paya }}</span>
+            </div>
+            <div class="list-item-btn">
+              <button
+                class="red"
+                @click="toDeposite(item, index)"
+                :class="StakeIndex == index && depositeLoading ? 'loading' : ''"
+              >
+                <img
+                  src="~/assets/img/loading.gif"
+                  v-if="StakeIndex == index && depositeLoading"
+                />
+                Stake Tokens
+              </button>
+              <button
+                class="line"
+                :class="claimloading && claimIndex == index ? 'loading' : ''"
+                @click="toClaim(item, index)"
+              >
+                <img
+                  src="~/assets/img/loading.gif"
+                  v-if="claimloading && claimIndex == index"
+                />
+                {{ $t('Table.Claim') }}
+              </button>
+            </div>
+          </div>
+          <i class="cut_line"></i>
+          <div class="mining-list-unstake">
+            <div class="list-item-title">
+              <span>{{ $t('Table.CurrentlyStaked') }}</span>
+            </div>
+            <div class="list-item-content">
+              <p>{{ item.name }} LP tokens</p>
+              <span>{{ item.lptoken }}</span>
+            </div>
+            <div class="list-item-btn">
+              <button
+                class="red"
+                @click="toWithdraw(item, index)"
+                :class="
+                  withdrawLoading && UnStakeIndex == index ? 'loading' : ''
+                "
+              >
+                <img
+                  src="~/assets/img/loading.gif"
+                  v-if="withdrawLoading && UnStakeIndex == index"
+                />
+                Unstake Tokens
+              </button>
+              <button
+                class="line"
+                :class="
+                  unclaimloading && unclaimIndex == index ? 'loading' : ''
+                "
+              >
+                <img
+                  src="~/assets/img/loading.gif"
+                  v-if="unclaimloading && unclaimIndex == index"
+                />
+                Claim&Unstake
+              </button>
+            </div>
+          </div>
+        </div>
+        <Protect>
+          {{ $t('Table.Protected', { num: item.protected }) }}
+        </Protect>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { totalSupply, balanceOf } from '~/interface/deposite';
+import {
+  totalSupply,
+  balanceOf,
+  getLPTOKEN,
+  CangetPAYA,
+  getPAYA,
+} from '~/interface/deposite';
 import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 import { getAddress, getContract } from '~/assets/utils/address-pool.js';
+import Protect from './protect';
 export default {
   name: 'mining-list',
+  components: { Protect },
   data() {
     return {
       miningList: [
-        { name: 'ETH-DAI', lpt: 0, protected: 0 },
-        { name: 'ETH-USDT', lpt: 0, protected: 0 },
-        { name: 'ETH-USDC', lpt: 0, protected: 0 },
-        { name: 'ETH-WBTC', lpt: 0, protected: 0 },
+        { name: 'ETH-DAI', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
+        { name: 'ETH-USDT', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
+        { name: 'ETH-USDC', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
+        { name: 'ETH-WBTC', lpt: 0, protected: 0, lptoken: 0, paya: 0 },
       ],
       allLPT: '',
       TotalValueLocked: 0,
+      claimloading: false,
+      unclaimloading: false,
+      depositeLoading: false,
+      withdrawLoading: false,
+      current: '',
+      curStake: '',
+      curUnStake: '',
+      claimIndex: '',
+      unclaimIndex: '',
+      StakeIndex: '',
+      UnStakeIndex: '',
     };
+  },
+  watch: {
+    miningList: {
+      handler: 'miningListWatch',
+      immediate: true,
+    },
   },
   mounted() {
     setTimeout(() => {
       this.getAllData();
     }, 1000);
+    this.$bus.$on('DEPOSITE_LOADING', (data) => {
+      let current = this.curStake.replace('-', '_');
+      if (data.type == current && data.status) {
+        this.depositeLoading = true;
+      } else {
+        this.depositeLoading = false;
+        this.StakeIndex = '';
+      }
+    });
+    this.$bus.$on('WITHDRAW_LOADING', (data) => {
+      let current = this.curUnStake.replace('-', '_');
+      if (data.type == current && data.status) {
+        this.withdrawLoading = true;
+      } else {
+        this.withdrawLoading = false;
+        this.UnStakeIndex = '';
+      }
+    });
+    this.$bus.$on('CLAIM_LOADING', (data) => {
+      this.claimloading = false;
+    });
+    this.$bus.$on('REFRESH_MINING', (data) => {
+      this.getAllData();
+    });
   },
   methods: {
+    miningListWatch(newValue) {
+      if (newValue) {
+        this.miningList = newValue;
+      }
+    },
     async getAllData() {
-      const charID = window.chainID;
-
-      //LPT 总量
-      let DOUBLEPOOL1 = await totalSupply('ETH_DAI');
-      let DOUBLEPOOL2 = await totalSupply('ETH_USDT');
-      let DOUBLEPOOL3 = await totalSupply('ETH_USDC');
-      let DOUBLEPOOL4 = await totalSupply('ETH_WBTC');
-      console.log(DOUBLEPOOL1, DOUBLEPOOL2);
-      //ETH-DAI质押总量
-      let ETH_DAI = await totalSupply('ETH_DAI_LPT');
-      this.miningList[0].lpt = addCommom(ETH_DAI, 2);
-      // ETH_DAI_LPT 包含的WETH
-      let DAIAdress = getContract('ETH_DAI_LPT', charID);
-      let WETHDAI = await balanceOf('WETH', DAIAdress);
-      this.miningList[0].protected = addCommom(
-        (WETHDAI * DOUBLEPOOL1) / ETH_DAI,
-        2
-      );
-      //ETH_USDT质押总量
-      let ETH_USDT = await totalSupply('ETH_USDT_LPT');
-      this.miningList[1].lpt = addCommom(ETH_USDT, 2);
-      // ETH_DAI_LPT 包含的WETH
-      let USDTAdress = getContract('ETH_USDT_LPT', charID);
-      let WETHUSDT = await balanceOf('WETH', USDTAdress);
-      this.miningList[1].protected = addCommom(
-        (WETHUSDT * DOUBLEPOOL2) / ETH_USDT,
-        2
-      );
-      //ETH_USDC质押总量
-      let ETH_USDC = await totalSupply('ETH_USDC_LPT');
-      this.miningList[2].lpt = addCommom(ETH_USDC, 2);
-      // ETH_USDC_LPT 包含的WETH
-      let USDCAdress = getContract('ETH_USDC_LPT', charID);
-      let WETHUSDC = await balanceOf('WETH', USDCAdress);
-      this.miningList[2].protected = addCommom(
-        (WETHUSDC * DOUBLEPOOL3) / ETH_USDC,
-        2
-      );
-      //ETH-DAI质押总量
-      let ETH_WBTC = await totalSupply('ETH_WBTC_LPT');
-      this.miningList[3].lpt = addCommom(ETH_WBTC, 2);
-      // ETH_WBTC_LPT 包含的WETH
-      let WBTCAdress = getContract('ETH_WBTC_LPT', charID);
-      let WETHWBTC = await balanceOf('WETH', WBTCAdress);
-      this.miningList[3].protected = addCommom(
-        (WETHWBTC * DOUBLEPOOL4) / ETH_WBTC,
-        2
-      );
+      for (let i = 0; i < 4; i++) {
+        const charID = window.chainID;
+        let type = this.miningList[i].name.replace('-', '_');
+        let typeLPT = type + '_LPT';
+        let PoolAdress = getContract(type, charID);
+        let LptAdress = getContract(typeLPT, charID);
+        if (PoolAdress && LptAdress) {
+          // 获取待领取paya
+          let paya = await CangetPAYA(type);
+          this.miningList[i].paya = addCommom(paya, 8);
+          // 获取Lp-Tokens
+          let lpTokens = await getLPTOKEN(type);
+          this.miningList[i].lptoken = addCommom(lpTokens, 8);
+          //获取当前池子的总量
+          let DOUBLEPOOL = await totalSupply(type);
+          //获取当前LPT的总量
+          let ETH_COIN = await totalSupply(typeLPT);
+          this.miningList[i].lpt = addCommom(ETH_COIN, 2);
+          // 计算当前保护的WETH
+          let WETHCOIN = await balanceOf('WETH', LptAdress);
+          this.miningList[i].protected = addCommom(
+            (WETHCOIN * DOUBLEPOOL) / ETH_COIN,
+            2
+          );
+        } else {
+          this.miningList[i].paya = 0;
+          this.miningList[i].lptoken = 0;
+          this.miningList[i].lpt = 0;
+          this.miningList[i].protected = 0;
+        }
+      }
+    },
+    // 结算Paya
+    async toClaim(item, index) {
+      this.claimloading = true;
+      this.claimIndex = index;
+      this.current = item.name;
+      let type = item.name.replace('-', '_');
+      let res = await getPAYA(type);
+    },
+    toDeposite(item, index) {
+      this.curStake = item.name;
+      this.StakeIndex = index;
+      this.$bus.$emit('OPEN_DEPOSITE', { current: item.name });
+    },
+    toWithdraw(item, index) {
+      this.curUnStake = item.name;
+      this.UnStakeIndex = index;
+      this.$bus.$emit('OPEN_WITHDRAW', { current: item.name });
     },
   },
 };
@@ -115,70 +235,149 @@ export default {
 
 <style lang='scss' soped>
 @import '~/assets/css/base.scss';
-
+.loading {
+  pointer-events: none;
+  img {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+  }
+}
 @media screen and (min-width: 750px) {
+  .cut_line {
+    margin: 40px 0 0 0;
+    width: 1px;
+    border-left: 1px dashed #2f2f2f;
+    display: block;
+  }
   .mining-list {
+    width: 1100px;
+    margin: 44px auto 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     .mining-list-item {
-      min-width: 280px;
-      // height: 244px;
-      width: 23.5%;
-      background: #232323;
-      border-radius: 4px;
-      padding: 20px 16px;
+      width: 100%;
+      display: flex;
+      background: $bg-f;
+      height: 280px;
+      margin-bottom: 10px;
+    }
+    .mining-list-left {
+      width: 360px;
+      background-image: url('../../assets/img/miningbg.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding: 40px 0;
       .list-item-title {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        img {
-          width: 48px;
-          height: 48px;
-          margin-right: 8px;
-        }
+        text-align: center;
         span {
-          margin-top: 20px;
-          color: $text-t;
+          font-size: 24px;
+          font-weight: 500;
+          color: $text-m;
+          line-height: 33px;
+        }
+        p {
+          margin-top: 10px;
         }
       }
       .list-item-content {
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
+        margin-top: 20px;
+        text-align: center;
         p {
-          display: flex;
-          flex-direction: column;
-          span:nth-of-type(1) {
-            font-size: 14px;
-            color: $text-g;
+          font-size: 14px;
+          font-weight: 400;
+          color: #be3a3b;
+          line-height: 20px;
+        }
+        span {
+          font-size: 40px;
+          font-weight: 500;
+          color: $text-t;
+          line-height: 60px;
+        }
+      }
+      .list-item-locked {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: #acacac;
+      }
+      .list-item-time {
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: #acacac;
+      }
+    }
+    .mining-list-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      .mined {
+        text-align: center;
+        display: flex;
+        padding: 40px 0 0 0;
+        > div {
+          flex: 1;
+          padding: 0 50px;
+        }
+        .list-item-title {
+          font-size: 18px;
+          color: $text-t;
+          line-height: 20px;
+        }
+        .list-item-content {
+          margin-top: 25px;
+          p {
+            font-size: 12px;
+            color: #acacac;
+            line-height: 12px;
           }
-          span:nth-of-type(2) {
+          span {
+            display: block;
             margin-top: 8px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: $text-t;
           }
         }
-        p:nth-of-type(1) {
-          width: 110px;
-        }
-        p:nth-of-type(2) {
-          width: 137px;
-          text-align: right;
-        }
-      }
-      .list-item-btn {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        a {
-          padding: 7px 99px;
-          background: $main-color;
-          border-radius: 5px;
-          font-weight: 500;
-          color: #ffffff;
-          &:hover {
-            background: $main-hover;
+        .list-item-btn {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .red {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            height: 36px;
+            background: $main-color;
+            border-radius: 5px;
+            color: #fff;
+            margin-top: 20px;
+            padding: 0 15px;
+            &:hover {
+              background: $main-hover;
+            }
+          }
+          .line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            height: 36px;
+            border-radius: 5px;
+            border: 1px solid $main-color;
+            color: $main-color;
+            background: transparent;
+            margin-top: 20px;
+            padding: 0 15px;
+            &:hover {
+              border-color: $main-hover;
+              color: $main-hover;
+            }
           }
         }
       }
@@ -188,65 +387,129 @@ export default {
 @media screen and (max-width: 750px) {
   .mining-list {
     padding-top: 10px;
-    margin: 0px 14px;
     box-shadow: 0px -1px 0px 0px #1d1d1d;
     .mining-list-item {
       margin-top: 10px;
-      // min-width: 290px;
-      // height: 244px;
       width: 100%;
       background: #232323;
       border-radius: 4px;
-      padding: 20px 16px;
+    }
+    .mining-list-left {
+      padding-top: 20px;
+      width: 100%;
+      height: 268px;
+      background-image: url('../../assets/img/miningbg_h5.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      text-align: center;
       .list-item-title {
-        display: flex;
-        align-items: center;
-        img {
-          width: 48px;
-          height: 48px;
-          margin-right: 8px;
-        }
         span {
-          color: $text-t;
+          font-size: 24px;
+          font-weight: 500;
+          color: #ffffff;
+        }
+        p {
+          margin-top: 8px;
+          font-size: 16px;
+          color: #dbdbdb;
+          line-height: 22px;
         }
       }
       .list-item-content {
         margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
         p {
-          display: flex;
-          flex-direction: column;
-          span:nth-of-type(1) {
-            font-size: 14px;
-            color: $text-g;
-          }
-          span:nth-of-type(2) {
-            margin-top: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            color: $text-t;
-          }
+          font-size: 14px;
+          color: #be3a3b;
+          line-height: 20px;
         }
-        p:nth-of-type(2) {
-          text-align: right;
+        span {
+          margin-top: 8px;
+          font-size: 40px;
+          font-weight: 500;
+          color: #dbdbdb;
         }
       }
-      .list-item-btn {
-        margin-top: 30px;
+      .list-item-locked {
+        margin-top: 20px;
+        margin-bottom: 12px;
+      }
+      p {
+        font-size: 12px;
+        font-weight: 400;
+        color: #acacac;
+      }
+    }
+    .mining-list-right {
+      display: flex;
+      flex-direction: column;
+      .cut_line {
+        width: 1px;
+        border-left: 1px dashed #2f2f2f;
+        display: block;
+      }
+      .mined {
         display: flex;
-        justify-content: center;
-        a {
-          width: 100%;
-          height: 36px;
-          background: $main-color;
-          border-radius: 5px;
-          font-weight: 500;
-          color: #ffffff;
+        margin-top: 27px;
+        > div {
+          flex: 1;
           text-align: center;
-          line-height: 36px;
-          &:hover {
-            background: $main-hover;
+          .list-item-title {
+            span {
+              font-size: 16px;
+              color: #dbdbdb;
+              line-height: 20px;
+            }
+          }
+          .list-item-content {
+            margin-top: 20px;
+            p {
+              font-size: 12px;
+              color: #acacac;
+            }
+            span {
+              display: block;
+              margin-top: 8px;
+              font-size: 18px;
+              font-weight: bold;
+              color: #dbdbdb;
+            }
+          }
+          .list-item-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .red {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-width: 120px;
+              height: 36px;
+              background: $main-color;
+              border-radius: 5px;
+              color: #fff;
+              margin-top: 20px;
+              padding: 0 15px;
+              &:hover {
+                background: $main-hover;
+              }
+            }
+            .line {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-width: 120px;
+              height: 36px;
+              border-radius: 5px;
+              border: 1px solid $main-color;
+              color: $main-color;
+              background: transparent;
+              margin-top: 20px;
+              padding: 0 15px;
+              &:hover {
+                border-color: $main-hover;
+                color: $main-hover;
+              }
+            }
           }
         }
       }

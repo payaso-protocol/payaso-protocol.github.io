@@ -99,6 +99,7 @@ export default {
       position: absolute;
       top: 35px;
       margin-top: 8px;
+      z-index: 9;
       ul {
         background: #ffffff;
         border-radius: 10px;

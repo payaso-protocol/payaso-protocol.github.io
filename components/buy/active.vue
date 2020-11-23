@@ -1,6 +1,6 @@
 <template>
   <PDialog
-    title="I`d like to activate the helmet"
+    :title="$t('Dialog.ActivateHelmet')"
     @close="closeDialog"
     :rightBtnText="rightBtnText"
     :cansubmit="cansubmit"
@@ -17,28 +17,28 @@
   </PDialog>
 </template>
 <script>
-import PDialog from "~/components/common/p-dialog.vue";
-import precision from "~/assets/js/precision.js";
-import { getBalance, onExercise } from "~/interface/order.js";
-import { fixD, addCommom, autoRounding, toRounding } from "~/assets/js/util.js";
+import PDialog from '~/components/common/p-dialog.vue';
+import precision from '~/assets/js/precision.js';
+import { getBalance, onExercise } from '~/interface/order.js';
+import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 
 export default {
-  name: "active",
+  name: 'active',
   components: {
     PDialog,
   },
-  props: ["data"],
+  props: ['data'],
   data() {
     return {
       precision: precision,
-      rightBtnText: "",
+      rightBtnText: '',
       toRounding: toRounding,
       cansubmit: false,
     };
   },
   watch: {
     data: {
-      handler: "dataWatch",
+      handler: 'dataWatch',
       immediate: true,
     },
   },
@@ -49,13 +49,15 @@ export default {
       if (
         Number(balance) < Number(precision.times(data.vol, data._strikePrice))
       ) {
-        this.rightBtnText = `Insufficient ${data._underlying} Balance`;
+        this.rightBtnText = this.$t('Dilaog.InsufficientBalance', {
+          type: data._underlying,
+        });
       } else {
-        this.rightBtnText = "Activate";
+        this.rightBtnText = this.$t('Status.Activate');
       }
     },
     closeDialog() {
-      this.$emit("close");
+      this.$emit('close');
     },
     async dataWatch(data) {
       const balance = await getBalance(data._underlying);
@@ -63,10 +65,12 @@ export default {
       if (
         Number(balance) < Number(precision.times(data.vol, data._strikePrice))
       ) {
-        this.rightBtnText = `Insufficient ${data._underlying} Balance`;
+        this.rightBtnText = this.$t('Dilaog.InsufficientBalance', {
+          type: data._underlying,
+        });
         this.cansubmit = false;
       } else {
-        this.rightBtnText = "Activate";
+        this.rightBtnText = this.$t('Status.Activate');
         this.cansubmit = true;
       }
     },
@@ -88,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (max-width: 750px) {
   .active-content {
     padding: 40px 0 20px;

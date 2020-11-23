@@ -1,6 +1,6 @@
 <!-- 租赁弹框 -->
 <template>
-  <PDialog title="Borrow a helmet" @close="closeRent">
+  <PDialog :title="$t('Dialog.BorrowHelmet')" @close="closeRent">
     <div class="rent-container">
       <div class="amount-box">
         <label>{{ $t('Dialog.Amount') }}</label>
@@ -15,7 +15,7 @@
         <div class="info">
           <!-- 矿工帽剩余量 -->
           <span class="surplus">
-            You can borrow:
+            {{ $t('Dialog.YouCanBorrow') }}:
             {{ toRounding(precision.times(data.remain, data._strikePrice), 2) }}
           </span>
           <!-- 可用余额 -->
@@ -54,9 +54,9 @@
       <!-- 保险到期时间 -->
       <div class="expiry">
         <Tooltip
-          name="Due Date ( IMPORTANT! )"
+          :name="$t('Dialog.IMPORTANTDueDate')"
           width="200px"
-          hint="If it is not activated beyond the expiration date, the default is to abort the activation helmet, so if you want to activate the helmet, do so before the expiration date."
+          :hint="$t('Tips.HoverTip1')"
         ></Tooltip>
         <span>{{ moment(parseInt(data._expiry)).format('MMM Do HH:mm') }}</span>
       </div>
@@ -64,8 +64,7 @@
     <template v-slot:footer>
       <div class="btn-box">
         <p class="tips">
-          Be sure to activate your Safety Helmet to protect your assets if
-          prices have fallen
+          {{ $t('Tips.Tip1') }}
         </p>
         <button @click="rentSubmit" :disabled="!cansubmit">
           {{ $t('Dialog.Confirmation') }}
@@ -267,7 +266,7 @@ export default {
     background: $main-color;
     color: $text-t;
     cursor: pointer;
-    min-width: 80px;
+    // min-width: 80px;
     &:hover {
       background: $main-hover;
     }

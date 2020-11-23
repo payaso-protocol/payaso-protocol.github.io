@@ -18,7 +18,7 @@
 
       <PrivateRadio @change="praChanged"></PrivateRadio>
       <div class="contract-address" v-if="col == 'OTHERS'">
-        <label>Smart Contract Address</label>
+        <label>{{ $t('Dialog.ContractAdress') }}</label>
         <input v-model="address" class="address_input" />
       </div>
       <div class="control-block">
@@ -29,7 +29,9 @@
         <div class="control-item">
           <div class="index-price-box">
             <label>{{ $t('Dialog.ExecutivePrice') }}</label>
-            <p class="index-price">Uniswap Index: {{ indexPx }}</p>
+            <p class="index-price">
+              {{ $t('Dialog.UniswapIndex') }}: {{ indexPx }}
+            </p>
           </div>
           <PInput
             v-if="col == 'OTHERS'"

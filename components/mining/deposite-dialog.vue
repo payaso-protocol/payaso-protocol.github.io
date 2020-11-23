@@ -1,9 +1,10 @@
 <template>
   <PDialog
-    title="Deposite"
+    :title="$t('Table.Deposite')"
     @close="closeDeposite"
     :noCancel="true"
     @confirm="submitDeposite"
+    :rightBtnText="$t('Table.Confirm')"
   >
     <div class="depositeInput">
       <PInput
@@ -16,7 +17,7 @@
     </div>
     <p class="total-token">
       <span>{{ current }} LP token：{{ lptBalance }}</span
-      ><a @click="addAll">ALL</a>
+      ><a @click="addAll">{{ $t('Table.ALL') }}</a>
     </p>
     <a
       v-if="current"
@@ -25,7 +26,7 @@
         current.split('-')[1]
       )}`"
       target="_blank"
-      >To Get LP token</a
+      >{{ $t('Table.GetLP') }}</a
     >
     <div class="check">
       <img
@@ -40,21 +41,21 @@
         v-else
         @click="depositeCheck"
       />
-      <p>Infinite Approval</p>
+      <p>{{ $t('Table.InfiniteApproval') }}</p>
     </div>
   </PDialog>
 </template>
 
 <script>
-import PDialog from "~/components/common/p-dialog.vue";
-import PInput from "~/components/common/p-input.vue";
-import { toDeposite, getMined, getLPTOKEN } from "~/interface/deposite";
-import { getBalance } from "~/interface/deposite.js";
-import { fixD, addCommom } from "~/assets/js/util.js";
-import { getAddress } from "~/assets/utils/address-pool.js";
+import PDialog from '~/components/common/p-dialog.vue';
+import PInput from '~/components/common/p-input.vue';
+import { toDeposite, getMined, getLPTOKEN } from '~/interface/deposite';
+import { getBalance } from '~/interface/deposite.js';
+import { fixD, addCommom } from '~/assets/js/util.js';
+import { getAddress } from '~/assets/utils/address-pool.js';
 
 export default {
-  props: ["current"],
+  props: ['current'],
   components: {
     PDialog,
     PInput,
@@ -62,14 +63,14 @@ export default {
   data() {
     return {
       checked: false,
-      DepositeNum: "",
+      DepositeNum: '',
       getAddress: getAddress,
       lptBalance: 0,
     };
   },
   watch: {
     current: {
-      handler: "currentWatch",
+      handler: 'currentWatch',
       immediate: true,
     },
   },
@@ -82,21 +83,21 @@ export default {
     depositeCheck() {
       this.checked = !this.checked;
       if (this.checked) {
-        window.localStorage.setItem("globalDeosite", true);
+        window.localStorage.setItem('globalDeosite', true);
       }
     },
     closeDeposite() {
-      this.$emit("close");
+      this.$emit('close');
     },
     submitDeposite() {
-      let type = this.current.replace("-", "_");
+      let type = this.current.replace('-', '_');
       toDeposite(type, { amount: this.DepositeNum }, (status) => {});
     },
     // 获取余额
     getBalance() {
-      let coin = this.current.replace("-", "_") + "_LPT";
+      let coin = this.current.replace('-', '_') + '_LPT';
       getBalance(coin).then((res) => {
-        this.lptBalance = fixD(res, 20);
+        this.lptBalance = addCommom(res, 20);
       });
     },
     currentWatch(newValue) {
@@ -112,7 +113,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .depositeInput {
     margin-top: 44px;

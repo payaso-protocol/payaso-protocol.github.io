@@ -47,21 +47,35 @@ export default {
   },
   data() {
     return {
-      buyStatus: ['All', 'Nonactivated', 'Activated', 'Closed'],
-      advStatus: ['All', 'Unborrowed', 'Be borrowed', 'Dated'],
-      orderStatus: ['All', 'Unactivated', 'Activated', 'Dated'],
-      dataList: [
-        'All',
-        'Within 1 day',
-        'Within 3 days',
-        'Within 7 days',
-        'Within 31 days',
+      buyStatus: [
+        this.$t('Status.All'),
+        this.$t('Status.Nonactivated'),
+        this.$t('Status.Activated'),
+        this.$t('Status.Closed'),
       ],
-
+      advStatus: [
+        this.$t('Status.All'),
+        this.$t('Status.Unborrowed'),
+        this.$t('Status.Beborrowed'),
+        this.$t('Status.Dated'),
+      ],
+      orderStatus: [
+        this.$t('Status.All'),
+        this.$t('Status.Unactivated'),
+        this.$t('Status.Activated'),
+        this.$t('Status.Dated'),
+      ],
+      dataList: [
+        this.$t('Status.All'),
+        this.$t('Status.Within1day'),
+        this.$t('Status.Within3days'),
+        this.$t('Status.Within7days'),
+        this.$t('Status.Within31days'),
+      ],
       type: 'WETH',
-      coin: 'All',
-      status: 'All',
-      period: 'All',
+      coin: this.$t('Status.All'),
+      status: this.$t('Status.All'),
+      period: this.$t('Status.All'),
       dataObj: {
         All: 0,
         'Within 1 day': 1,
