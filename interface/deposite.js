@@ -414,7 +414,6 @@ const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
   const awc = await allowance(token_exp, contract_str);
-
   if (parseInt(awc) > parseInt(num)) {
     // console.log("额度充足", parseInt(awc));
     return;
@@ -428,7 +427,11 @@ const approve2 = async (
   num,
   callback = (status) => {}
 ) => {
-  // const WEB3 = await web3();
+  const awc = await allowance(token_exp, contract_str);
+  if (parseInt(awc) > parseInt(num)) {
+    // console.log("额度充足", parseInt(awc));
+    return;
+  }
   const charID = await getID();
   const result = await token_exp.methods
     .approve(getContract(contract_str, charID), num)

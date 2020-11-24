@@ -28,7 +28,7 @@
       target="_blank"
       >{{ $t('Table.GetLP') }}</a
     >
-    <div class="check">
+    <div class="check" v-if="!hiddenGlobal">
       <img
         src="~/assets/img/icon/checked1.png"
         alt=""
@@ -66,6 +66,7 @@ export default {
       DepositeNum: '',
       getAddress: getAddress,
       lptBalance: 0,
+      hiddenGlobal: false,
     };
   },
   watch: {
@@ -75,17 +76,26 @@ export default {
     },
   },
   mounted() {
-    let flag = window.localStorage.globalDeosite == 'true' ? true : false;
-    this.checked = flag || false;
+    this.hiddenGlobal =
+      window.localStorage.globalStake == 'true' ? true : false;
+    this.$bus.$on('STAKE_APPROVE', (data) => {
+      this.checked = data.checked;
+    });
     this.getBalance();
   },
   methods: {
     depositeCheck() {
       this.checked = !this.checked;
       if (this.checked) {
-        window.localStorage.setItem('globalDeosite', true);
+        this.$bus.$emit('STAKE_APPROVE', {
+          checked: true,
+        });
+        window.localStorage.setItem('globalStake', true);
       } else {
-        window.localStorage.setItem('globalDeosite', false);
+        this.$bus.$emit('STAKE_APPROVE', {
+          checked: false,
+        });
+        window.localStorage.setItem('globalStake', false);
       }
     },
     closeDeposite() {
@@ -101,6 +111,9 @@ export default {
       getBalance(coin).then((res) => {
         this.lptBalance = addCommom(res, 20);
       });
+      if (this.checked == true) {
+        window.localStorage.setItem('globalStake', true);
+      }
     },
     currentWatch(newValue) {
       if (newValue) {

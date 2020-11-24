@@ -28,7 +28,7 @@
         >{{ item }}%</span
       >
     </div>
-    <div class="check">
+    <div class="check" v-if="!hiddenGlobal">
       <img
         src="~/assets/img/icon/checked1.png"
         alt=""
@@ -49,7 +49,13 @@
 <script>
 import PDialog from '~/components/common/p-dialog.vue';
 import PInput from '~/components/common/p-input.vue';
-import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
+import {
+  fixD,
+  addCommom,
+  autoRounding,
+  toRounding,
+  allowance,
+} from '~/assets/js/util.js';
 import { toWithdraw, WithdrawAvailable } from '~/interface/deposite';
 export default {
   props: ['current'],
@@ -64,11 +70,16 @@ export default {
       perList: [25, 50, 75, 100],
       curPer: 0,
       available: 0,
+      hiddenGlobal: false,
     };
   },
   mounted() {
-    let flag = window.localStorage.globalWithdraw == 'true' ? true : false;
-    this.checked = flag || false;
+    this.hiddenGlobal =
+      window.localStorage.globalStake == 'true' ? true : false;
+    this.$bus.$on('STAKE_APPROVE', (data) => {
+      this.checked = data.checked;
+      console.log(data);
+    });
     this.abailable();
   },
   methods: {
@@ -89,9 +100,15 @@ export default {
     withdrawCheck() {
       this.checked = !this.checked;
       if (this.checked) {
-        window.localStorage.setItem('globalWithdraw', true);
+        this.$bus.$emit('STAKE_APPROVE', {
+          checked: true,
+        });
+        window.localStorage.setItem('globalStake', true);
       } else {
-        window.localStorage.setItem('globalWithdraw', false);
+        this.$bus.$emit('STAKE_APPROVE', {
+          checked: false,
+        });
+        window.localStorage.setItem('globalStake', false);
       }
     },
     closeWithdraw() {
@@ -100,6 +117,9 @@ export default {
     submitWithdraw() {
       let type = this.current.replace('-', '_');
       toWithdraw(type, { amount: this.WithdrawNum }, (status) => {});
+      if (this.checked == true) {
+        window.localStorage.setItem('globalStake', true);
+      }
     },
   },
 };
