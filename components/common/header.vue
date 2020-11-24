@@ -200,7 +200,7 @@ export default {
     margin: 0 20px 0 16px;
   }
 }
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1600px) {
   .header-container {
     padding: 0px 60px;
     justify-content: space-around;
@@ -212,7 +212,7 @@ export default {
     }
   }
 }
-@media screen and (min-width: 750px) and (max-width: 1500px) {
+@media screen and (min-width: 750px) and (max-width: 1600px) {
   .header-container {
     padding: 0px 30px;
     .nav-list {

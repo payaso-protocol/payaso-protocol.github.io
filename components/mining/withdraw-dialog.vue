@@ -67,6 +67,8 @@ export default {
     };
   },
   mounted() {
+    let flag = window.localStorage.globalWithdraw == 'true' ? true : false;
+    this.checked = flag || false;
     this.abailable();
   },
   methods: {
@@ -88,6 +90,8 @@ export default {
       this.checked = !this.checked;
       if (this.checked) {
         window.localStorage.setItem('globalWithdraw', true);
+      } else {
+        window.localStorage.setItem('globalWithdraw', false);
       }
     },
     closeWithdraw() {

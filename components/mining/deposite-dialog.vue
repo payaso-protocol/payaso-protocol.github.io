@@ -75,15 +75,17 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {
-      this.getBalance();
-    }, 1000);
+    let flag = window.localStorage.globalDeosite == 'true' ? true : false;
+    this.checked = flag || false;
+    this.getBalance();
   },
   methods: {
     depositeCheck() {
       this.checked = !this.checked;
       if (this.checked) {
         window.localStorage.setItem('globalDeosite', true);
+      } else {
+        window.localStorage.setItem('globalDeosite', false);
       }
     },
     closeDeposite() {

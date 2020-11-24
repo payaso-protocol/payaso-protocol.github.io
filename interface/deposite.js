@@ -59,6 +59,7 @@ export const toDeposite = async (type, data, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
+  let flag = window.localStorage.globalDeosite == "true" ? true : false;
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -73,7 +74,7 @@ export const toDeposite = async (type, data, callBack) => {
   });
   try {
     const Contract = await expERC20(adressLPT);
-    await oneKeyArrpove(Contract, type, amount, (res) => {
+    await oneKeyArrpove(Contract, type, amount, flag, (res) => {
       if (res === "failed") {
         bus.$emit("DEPOSITE_LOADING", {
           type: type,
@@ -146,6 +147,8 @@ export const toWithdraw = async (type, data, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
+  let flag = window.localStorage.globalWithdraw == "true" ? true : false;
+
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -160,7 +163,7 @@ export const toWithdraw = async (type, data, callBack) => {
   });
   try {
     const Contract = await expERC20(adressLPT);
-    await oneKeyArrpove(Contract, type, amount, (res) => {
+    await oneKeyArrpove(Contract, type, amount, flag, (res) => {
       if (res === "failed") {
         bus.$emit("WITHDRAW_LOADING", {
           type: type,
@@ -368,20 +371,6 @@ export const getLPTOKEN = async (type) => {
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };
-export const getMined = async (type) => {
-  const charID = window.chainID;
-  let adress = type;
-  if (type.indexOf("0x") === -1) {
-    adress = getContract(type, charID);
-  }
-  const deposite = await Deposite(adress);
-  const list = await deposite.getPastEvents("RewardPaid", {
-    address:
-      "0x0000000000000000000000000603cd787f45d1b830ced5acaeecdab661b267ca",
-  });
-  console.log(list, "############################");
-  return list;
-};
 const allowance = async (token_exp, contract_str) => {
   // const WEB3 = await web3();
   const charID = await getID();
@@ -395,6 +384,22 @@ const allowance = async (token_exp, contract_str) => {
   return window.WEB3.utils.fromWei(result, getWei());
 };
 
+// 一键授权
+const oneKeyArrpove = async (token_exp, contract_str, num, flag, callback) => {
+  // 校验参数
+  if (!token_exp || !contract_str) return;
+  // 判断授权额度是否充足
+  console.log(flag);
+  if (flag) {
+    const awc = await allowance(token_exp, contract_str);
+    if (parseInt(awc) > parseInt(num)) {
+      // console.log("额度充足", parseInt(awc));
+      return;
+    }
+  }
+  // 无限授权
+  const res = await approve(token_exp, contract_str, callback);
+};
 const approve = async (token_exp, contract_str, callback = (status) => {}) => {
   // const WEB3 = await web3();
   const charID = await getID();
@@ -413,22 +418,10 @@ const approve = async (token_exp, contract_str, callback = (status) => {}) => {
     .on("error", (err, receipt) => {
       callback("failed");
     });
+  console.log(result, "result");
   return result;
 };
 
-// 一键授权
-const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
-  // 校验参数
-  if (!token_exp || !contract_str) return;
-  // 判断授权额度是否充足
-  const awc = await allowance(token_exp, contract_str);
-  if (parseInt(awc) > parseInt(num)) {
-    // console.log("额度充足", parseInt(awc));
-    return;
-  }
-  // 无限授权
-  const res = await approve(token_exp, contract_str, callback);
-};
 export const getBalance = async (type, currcy) => {
   // const WEB3 = await web3();
   // const charID = await getID();
@@ -442,7 +435,6 @@ export const getBalance = async (type, currcy) => {
     .balanceOf(window.WEB3.currentProvider.selectedAddress)
     .call()
     .then((res) => {
-      // console.log(res)
       let tocurrcy = currcy || type;
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
@@ -459,7 +451,5 @@ export const getLastTime = async (type, currcy) => {
     .call()
     .then((res) => {
       return res;
-      // let tocurrcy = currcy || type;
-      // return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };

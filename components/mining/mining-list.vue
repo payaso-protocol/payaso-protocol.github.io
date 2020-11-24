@@ -12,13 +12,27 @@
         </div>
         <div class="list-item-content">
           <p>{{ $t('Table.RewardsAvailable') }}：</p>
-          <span>{{ item.lpt }}</span>
+          <img
+            class="dataloading"
+            src="~/assets/img/loading.gif"
+            v-if="item.lpt == 'noData'"
+          />
+          <span v-else>{{ item.lpt }}</span>
         </div>
         <!-- <p class="list-item-locked">
           {{ $t('Table.Locked', { type: item.name }) }}:{{ item.lpt }}
         </p> -->
         <p class="list-item-time">
-          {{ moment(item.lastTime * 1).format('MMM Do HH:mm') }}
+          <img
+            class="dataloading"
+            src="~/assets/img/loading.gif"
+            v-if="item.lastTime == 'noData'"
+          />
+          <template v-else>
+            {{ $t('Dialog.LastTime') }}：{{
+              moment(item.lastTime * 1).format('MMM Do HH:mm')
+            }}
+          </template>
         </p>
       </div>
       <div class="mining-list-right">
@@ -29,7 +43,12 @@
             </div>
             <div class="list-item-content">
               <p>PAYA</p>
-              <span>{{ item.paya }}</span>
+              <img
+                class="dataloading"
+                src="~/assets/img/loading.gif"
+                v-if="item.paya == 'noData'"
+              />
+              <span v-else>{{ item.paya }}</span>
             </div>
             <div class="list-item-btn">
               <button
@@ -41,7 +60,7 @@
                   src="~/assets/img/loading.gif"
                   v-if="StakeIndex == index && depositeLoading"
                 />
-                Stake Tokens
+                {{ $t('Table.StakeTokens') }}
               </button>
               <button
                 class="line"
@@ -52,7 +71,7 @@
                   src="~/assets/img/loading.gif"
                   v-if="claimloading && claimIndex == index"
                 />
-                {{ $t('Table.Claim') }}
+                {{ $t('Table.ClaimRewards') }}
               </button>
             </div>
           </div>
@@ -63,7 +82,12 @@
             </div>
             <div class="list-item-content">
               <p>{{ item.name }} LP tokens</p>
-              <span>{{ item.lptoken }}</span>
+              <img
+                class="dataloading"
+                src="~/assets/img/loading.gif"
+                v-if="item.lptoken == 'noData'"
+              />
+              <span v-else>{{ item.lptoken }}</span>
             </div>
             <div class="list-item-btn">
               <button
@@ -77,7 +101,7 @@
                   src="~/assets/img/loading.gif"
                   v-if="withdrawLoading && UnStakeIndex == index"
                 />
-                Unstake Tokens
+                {{ $t('Table.UnstakeTokens') }}
               </button>
               <button
                 class="line"
@@ -89,13 +113,20 @@
                   src="~/assets/img/loading.gif"
                   v-if="unclaimloading && unclaimIndex == index"
                 />
-                Claim&Unstake
+                {{ $t('Table.ClaimUnstake') }}
               </button>
             </div>
           </div>
         </div>
         <Protect>
-          {{ $t('Table.Protected', { num: item.protected }) }}
+          <img
+            class="dataloading"
+            src="~/assets/img/loading.gif"
+            v-if="item.protected == 'noData'"
+          />
+          <template v-else>
+            {{ $t('Table.Protected', { num: item.protected }) }}
+          </template>
         </Protect>
       </div>
     </div>
@@ -123,35 +154,35 @@ export default {
       miningList: [
         {
           name: 'ETH-DAI',
-          lpt: 0,
-          protected: 0,
-          lptoken: 0,
-          paya: 0,
-          lastTime: 0,
+          lpt: 'noData',
+          protected: 'noData',
+          lptoken: 'noData',
+          paya: 'noData',
+          lastTime: 'noData',
         },
         {
           name: 'ETH-USDT',
-          lpt: 0,
-          protected: 0,
-          lptoken: 0,
-          paya: 0,
-          lastTime: 0,
+          lpt: 'noData',
+          protected: 'noData',
+          lptoken: 'noData',
+          paya: 'noData',
+          lastTime: 'noData',
         },
         {
           name: 'ETH-USDC',
-          lpt: 0,
-          protected: 0,
-          lptoken: 0,
-          paya: 0,
-          lastTime: 0,
+          lpt: 'noData',
+          protected: 'noData',
+          lptoken: 'noData',
+          paya: 'noData',
+          lastTime: 'noData',
         },
         {
           name: 'ETH-WBTC',
-          lpt: 0,
-          protected: 0,
-          lptoken: 0,
-          paya: 0,
-          lastTime: 0,
+          lpt: 'noData',
+          protected: 'noData',
+          lptoken: 'noData',
+          paya: 'noData',
+          lastTime: 'noData',
         },
       ],
       moment: moment,
@@ -244,6 +275,7 @@ export default {
           this.miningList[i].lptoken = 0;
           this.miningList[i].lpt = 0;
           this.miningList[i].protected = 0;
+          this.miningList[i].lastTime = 0;
         }
       }
     },
@@ -278,6 +310,10 @@ export default {
     height: 24px;
     margin-right: 4px;
   }
+}
+.dataloading {
+  width: 24px !important;
+  height: 24px !important;
 }
 @media screen and (min-width: 750px) {
   .cut_line {
@@ -357,7 +393,7 @@ export default {
         padding: 40px 0 0 0;
         > div {
           flex: 1;
-          padding: 0 50px;
+          padding: 0 30px;
         }
         .list-item-title {
           font-size: 18px;
@@ -382,7 +418,7 @@ export default {
         .list-item-btn {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-evenly;
           .red {
             display: flex;
             align-items: center;
@@ -423,21 +459,22 @@ export default {
 @media screen and (max-width: 750px) {
   .mining-list {
     padding-top: 10px;
-    box-shadow: 0px -1px 0px 0px #1d1d1d;
     .mining-list-item {
       margin-top: 10px;
+      padding-top: 20px;
       width: 100%;
-      background: #232323;
+      background: #1c1c1c;
       border-radius: 4px;
     }
     .mining-list-left {
       padding-top: 20px;
-      width: 100%;
+      margin: 0 16px;
       height: 268px;
       background-image: url('../../assets/img/miningbg_h5.png');
       background-repeat: no-repeat;
       background-size: cover;
       text-align: center;
+      border-radius: 3px;
       .list-item-title {
         span {
           font-size: 24px;

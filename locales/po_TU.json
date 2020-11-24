@@ -58,8 +58,9 @@
         "StatusText5": "O anúncio de aluguel foi publicado com sucesso, você pode conferi-lo em",
         "DestroyHelmet": "Destrua o Capacete de Segurança",
         "DestoryHelmetText": "Você não será capaz de reativar o capacete depois que ele for destruído, deseja prosseguir?",
-        "ActivateHelmet": "I`d like to activate the helmet",
-        "InsufficientBalance": "Insufficient {type} Balance"
+        "ActivateHelmet": "Eu gostaria de ativar o capacete",
+        "InsufficientBalance": "Saldo de {type} insuficiente",
+        "LastTime": "Última Vez"
     },
     "Content": {
         "HelmetMarket": "Mercado do Capacete de Segurança",
@@ -119,7 +120,10 @@
         "InfiniteApproval": "Aprovação global.infinite",
         "Confirm": "Confirmar",
         "RewardsAvailable": "Recompensas Disponíveis",
-        "ClaimRewards": "Recompensas de reivindicação"
+        "StakeTokens": "Tokens de aposta",
+        "ClaimRewards": "Reivindicar prêmios",
+        "UnstakeTokens": "Destravar tokens",
+        "ClaimUnstake": "Reivindicar destravar"
     },
     "Status": {
         "All": "All",

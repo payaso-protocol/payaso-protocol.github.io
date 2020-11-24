@@ -22,8 +22,7 @@ export default {
 @import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .mining-protect {
-    margin: 20px auto 0;
-    width: 620px;
+    margin: 20px 50px 0;
     height: 50px;
     background: #191919;
     border-radius: 5px;
