@@ -59,7 +59,7 @@ export const toDeposite = async (type, data, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
-  let flag = window.localStorage.globalDeosite == "true" ? true : false;
+  let flag = window.localStorage.globalStake == "true" ? true : false;
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -159,7 +159,7 @@ export const toWithdraw = async (type, data, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
-  let flag = window.localStorage.globalWithdraw == "true" ? true : false;
+  let flag = window.localStorage.globalStake == "true" ? true : false;
 
   amount = toWei(amount);
   let adress = type;
