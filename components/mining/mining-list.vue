@@ -30,7 +30,9 @@
           />
           <template v-else>
             {{ $t('Dialog.LastTime') }}：{{
-              moment(item.lastTime * 1).format('MMM Do HH:mm')
+              item.lastTime == 0
+                ? '- -'
+                : moment(item.lastTime * 1000).format('YYYY/MM/DD HH:mm:ss')
             }}
           </template>
         </p>
@@ -94,24 +96,23 @@
                 class="red"
                 @click="toWithdraw(item, index)"
                 :class="
-                  withdrawLoading && UnStakeIndex == index ? 'loading' : ''
+                  withdrawLoading && unStakeIndex == index ? 'loading' : ''
                 "
               >
                 <img
                   src="~/assets/img/loading.gif"
-                  v-if="withdrawLoading && UnStakeIndex == index"
+                  v-if="withdrawLoading && unStakeIndex == index"
                 />
                 {{ $t('Table.UnstakeTokens') }}
               </button>
               <button
                 class="line"
-                :class="
-                  unclaimloading && unclaimIndex == index ? 'loading' : ''
-                "
+                @click="toExit(item, index)"
+                :class="unclaimloading && exitIndex == index ? 'loading' : ''"
               >
                 <img
                   src="~/assets/img/loading.gif"
-                  v-if="unclaimloading && unclaimIndex == index"
+                  v-if="unclaimloading && exitIndex == index"
                 />
                 {{ $t('Table.ClaimUnstake') }}
               </button>
@@ -140,6 +141,7 @@ import {
   getLPTOKEN,
   CangetPAYA,
   getPAYA,
+  exitStake,
   getLastTime,
 } from '~/interface/deposite';
 import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
@@ -186,19 +188,18 @@ export default {
         },
       ],
       moment: moment,
-      allLPT: '',
-      TotalValueLocked: 0,
-      claimloading: false,
-      unclaimloading: false,
-      depositeLoading: false,
-      withdrawLoading: false,
-      current: '',
-      curStake: '',
-      curUnStake: '',
-      claimIndex: '',
-      unclaimIndex: '',
-      StakeIndex: '',
-      UnStakeIndex: '',
+      claimloading: false, //结算loading
+      unclaimloading: false, //推出loading
+      depositeLoading: false, //结质押loading
+      withdrawLoading: false, //赎回loading
+      current: '', //当前结算LPT币种
+      exitCoin: '', //当前退出LPT币种
+      curStake: '', //当前质押LPT币种
+      curUnStake: '', //当前赎回LPT币种
+      claimIndex: '', //当前结算key
+      exitIndex: '', //当前退出key
+      StakeIndex: '', //当前质押key
+      unStakeIndex: '', //当前赎回key
     };
   },
   watch: {
@@ -226,11 +227,14 @@ export default {
         this.withdrawLoading = true;
       } else {
         this.withdrawLoading = false;
-        this.UnStakeIndex = '';
+        this.unStakeIndex = '';
       }
     });
     this.$bus.$on('CLAIM_LOADING', (data) => {
       this.claimloading = false;
+    });
+    this.$bus.$on('EXIT_LOADING', (data) => {
+      this.unclaimloading = false;
     });
     this.$bus.$on('REFRESH_MINING', (data) => {
       this.getAllData();
@@ -287,15 +291,25 @@ export default {
       let type = item.name.replace('-', '_');
       let res = await getPAYA(type);
     },
+    // 抵押
     toDeposite(item, index) {
       this.curStake = item.name;
       this.StakeIndex = index;
       this.$bus.$emit('OPEN_DEPOSITE', { current: item.name });
     },
+    // 赎回
     toWithdraw(item, index) {
       this.curUnStake = item.name;
-      this.UnStakeIndex = index;
+      this.unStakeIndex = index;
       this.$bus.$emit('OPEN_WITHDRAW', { current: item.name });
+    },
+    // 退出
+    async toExit(item, index) {
+      this.unclaimloading = true;
+      this.exitIndex = index;
+      this.exitCoin = item.name;
+      let type = item.name.replace('-', '_');
+      let res = await exitStake(type);
     },
   },
 };

@@ -434,7 +434,6 @@ export const bids = async (bidID, type = "default", token = "default") => {
 export const getMySellLog = async (callback) => {};
 
 export const getBalance = async (type, currcy) => {
-  console.log(currcy, "$$$$$$$$$$$$$$$$$$$$$");
   // const WEB3 = await web3();
   // const charID = await getID();
   const charID = window.chainID;
@@ -655,7 +654,6 @@ const approve = async (token_exp, contract_str, callback = (status) => {}) => {
 // 一键授权
 const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   // 校验参数
-  console.log(token_exp, contract_str, num);
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
   const awc = await allowance(token_exp, contract_str);

@@ -12,7 +12,7 @@
 export default {
   methods: {
     toBorrowed() {
-      this.$router.push('/');
+      this.$router.push({ path: '/product/weth' });
     },
   },
 };

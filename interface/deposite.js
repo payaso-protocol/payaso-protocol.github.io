@@ -74,14 +74,26 @@ export const toDeposite = async (type, data, callBack) => {
   });
   try {
     const Contract = await expERC20(adressLPT);
-    await oneKeyArrpove(Contract, type, amount, flag, (res) => {
-      if (res === "failed") {
-        bus.$emit("DEPOSITE_LOADING", {
-          type: type,
-          status: false,
-        });
-      }
-    });
+    if (flag) {
+      await oneKeyArrpove(Contract, type, amount, (res) => {
+        if (res === "failed") {
+          bus.$emit("DEPOSITE_LOADING", {
+            type: type,
+            status: false,
+          });
+        }
+      });
+    } else {
+      await approve2(Contract, type, amount, (res) => {
+        if (res === "failed") {
+          bus.$emit("DEPOSITE_LOADING", {
+            type: type,
+            status: false,
+          });
+        }
+      });
+    }
+
     const deposite = await Deposite(adress);
     result = deposite.methods
       .stake(amount)
@@ -105,8 +117,8 @@ export const toDeposite = async (type, data, callBack) => {
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
               type: "success",
-              title: "Successfully rented",
-              conTit: "<div>Hat activated successfully</div>",
+              title: "Successfully stake",
+              conTit: "<div>Stake activated successfully</div>",
               conText: `<a href="https://${
                 netObj[Number(window.chainID)]
               }etherscan.io/tx/${
@@ -115,7 +127,7 @@ export const toDeposite = async (type, data, callBack) => {
             });
           } else {
             Message({
-              message: "Hat activated successfully",
+              message: "Stake activated successfully",
               type: "success",
             });
           }
@@ -163,14 +175,26 @@ export const toWithdraw = async (type, data, callBack) => {
   });
   try {
     const Contract = await expERC20(adressLPT);
-    await oneKeyArrpove(Contract, type, amount, flag, (res) => {
-      if (res === "failed") {
-        bus.$emit("WITHDRAW_LOADING", {
-          type: type,
-          status: false,
-        });
-      }
-    });
+    if (flag) {
+      await oneKeyArrpove(Contract, type, amount, (res) => {
+        if (res === "failed") {
+          bus.$emit("WITHDRAW_LOADING", {
+            type: type,
+            status: false,
+          });
+        }
+      });
+    } else {
+      await approve2(Contract, type, amount, (res) => {
+        if (res === "failed") {
+          bus.$emit("DEPOSITE_LOADING", {
+            type: type,
+            status: false,
+          });
+        }
+      });
+    }
+
     const deposite = await Deposite(adress);
     result = deposite.methods
       .withdraw(amount)
@@ -194,8 +218,8 @@ export const toWithdraw = async (type, data, callBack) => {
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
               type: "success",
-              title: "Successfully rented",
-              conTit: "<div>Hat activated successfully</div>",
+              title: "Successfully unstake",
+              conTit: "<div>Unstake activated successfully</div>",
               conText: `<a href="https://${
                 netObj[Number(window.chainID)]
               }etherscan.io/tx/${
@@ -204,7 +228,7 @@ export const toWithdraw = async (type, data, callBack) => {
             });
           } else {
             Message({
-              message: "Hat activated successfully",
+              message: "Unstake activated successfully",
               type: "success",
             });
           }
@@ -306,8 +330,8 @@ export const getPAYA = async (type) => {
             bus.$emit("CLOSE_STATUS_DIALOG");
             bus.$emit("OPEN_STATUS_DIALOG", {
               type: "success",
-              title: "Successfully rented",
-              conTit: "<div>Hat activated successfully</div>",
+              title: "Successfully claim",
+              conTit: "<div>Claim activated successfully</div>",
               conText: `<a href="https://${
                 netObj[Number(window.chainID)]
               }etherscan.io/tx/${
@@ -316,7 +340,7 @@ export const getPAYA = async (type) => {
             });
           } else {
             Message({
-              message: "Hat activated successfully",
+              message: "Claim activated successfully",
               type: "success",
             });
           }
@@ -385,20 +409,40 @@ const allowance = async (token_exp, contract_str) => {
 };
 
 // 一键授权
-const oneKeyArrpove = async (token_exp, contract_str, num, flag, callback) => {
+const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   // 校验参数
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
-  console.log(flag);
-  if (flag) {
-    const awc = await allowance(token_exp, contract_str);
-    if (parseInt(awc) > parseInt(num)) {
-      // console.log("额度充足", parseInt(awc));
-      return;
-    }
+  const awc = await allowance(token_exp, contract_str);
+
+  if (parseInt(awc) > parseInt(num)) {
+    // console.log("额度充足", parseInt(awc));
+    return;
   }
   // 无限授权
   const res = await approve(token_exp, contract_str, callback);
+};
+const approve2 = async (
+  token_exp,
+  contract_str,
+  num,
+  callback = (status) => {}
+) => {
+  // const WEB3 = await web3();
+  const charID = await getID();
+  const result = await token_exp.methods
+    .approve(getContract(contract_str, charID), num)
+    .send({ from: window.WEB3.currentProvider.selectedAddress })
+    .on("transactionHash", (hash) => {
+      callback("approve");
+    })
+    .on("confirmation", (_, receipt) => {
+      callback("success");
+    })
+    .on("error", (err, receipt) => {
+      callback("failed");
+    });
+  return result;
 };
 const approve = async (token_exp, contract_str, callback = (status) => {}) => {
   // const WEB3 = await web3();
@@ -418,7 +462,6 @@ const approve = async (token_exp, contract_str, callback = (status) => {}) => {
     .on("error", (err, receipt) => {
       callback("failed");
     });
-  console.log(result, "result");
   return result;
 };
 
@@ -452,4 +495,68 @@ export const getLastTime = async (type, currcy) => {
     .then((res) => {
       return res;
     });
+};
+export const exitStake = async (type) => {
+  const charID = window.chainID;
+  let adress = type;
+  if (type.indexOf("0x") === -1) {
+    adress = getContract(type, charID);
+  }
+  const deposite = await Deposite(adress);
+  let result;
+  try {
+    deposite.methods
+      .exit()
+      .send({ from: window.WEB3.currentProvider.selectedAddress })
+      .on("transactionHash", function(hash) {
+        bus.$emit("CLOSE_STATUS_DIALOG");
+        bus.$emit("OPEN_STATUS_DIALOG", {
+          type: "submit",
+          conText: `<a href="https://${
+            netObj[Number(window.chainID)]
+          }etherscan.io/tx/${hash}" target="_blank">View on Etherscan</a>`,
+        });
+      })
+      .on("confirmation", function(confirmationNumber, receipt) {
+        bus.$emit("EXIT_LOADING");
+        if (confirmationNumber === 0) {
+          if (window.statusDialog) {
+            ``;
+            bus.$emit("CLOSE_STATUS_DIALOG");
+            bus.$emit("OPEN_STATUS_DIALOG", {
+              type: "success",
+              title: "Successfully Claim&Unstake",
+              conTit: "<div>Claim&Unstake activated successfully</div>",
+              conText: `<a href="https://${
+                netObj[Number(window.chainID)]
+              }etherscan.io/tx/${
+                receipt.transactionHash
+              }" target="_blank">View on Etherscan</a>`,
+            });
+          } else {
+            Message({
+              message: "Claim&Unstake activated successfully",
+              type: "success",
+            });
+          }
+          setTimeout(() => {
+            bus.$emit("REFRESH_ASSETS");
+            bus.$emit("REFRESH_MINING");
+          }, 1000);
+        }
+      })
+      .on("error", function(error, receipt) {
+        bus.$emit("EXIT_LOADING");
+        bus.$emit("CLOSE_STATUS_DIALOG");
+        if (error && error.message) {
+          Message({
+            message: error && error.message,
+            type: "error",
+          });
+        }
+      });
+  } catch (error) {
+    console.log(error);
+  }
+  return result;
 };

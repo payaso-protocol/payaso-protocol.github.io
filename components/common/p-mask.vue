@@ -13,8 +13,8 @@
       </li>
     </ul>
     <ul class="navList">
-      <li v-for="item in this.langList" :key="item.lang">
-        <span @click="toPath(item)">{{ item.text }}</span>
+      <li v-for="item in this.localeList" :key="item.key">
+        <span @click="switchLang(item.key)">{{ item.name }}</span>
       </li>
     </ul>
     <a
@@ -47,6 +47,8 @@ export default {
       MaskFlag: false,
       accountText: '',
       showWallectSelect: false,
+      lang: '',
+      langName: '',
     };
   },
   watch: {
@@ -54,6 +56,19 @@ export default {
       handler: 'userInfoWatch',
       immediate: true,
     },
+    lang(newVol) {
+      this.switchLang(newVol);
+      this.langName = this.localeList.filter(
+        (item) => item.key == newVol
+      )[0].name;
+    },
+    locale: {
+      handler: 'watchLocale',
+      immediate: true,
+    },
+  },
+  mounted() {
+    this.lang = window.localStorage.getItem('lang') || this.locale;
   },
   computed: {
     showMask() {
@@ -64,6 +79,15 @@ export default {
     },
     routeObj() {
       return this.$route;
+    },
+    locales() {
+      return this.$store.state.locales;
+    },
+    locale() {
+      return this.$store.state.locale;
+    },
+    localeList() {
+      return this.$store.state.localeList;
     },
     renderList() {
       return [
@@ -99,20 +123,18 @@ export default {
         },
       ];
     },
-    langList() {
-      return [
-        {
-          lang: 'en_US',
-          text: 'English',
-        },
-        {
-          text: 'Português',
-          lang: 'po_TU',
-        },
-      ];
-    },
   },
   methods: {
+    watchLocale(newVol) {
+      this.lang = newVol;
+    },
+    switchLang(lang) {
+      this.lang = lang;
+      window.localStorage.setItem('lang', this.lang);
+      this.$store.dispatch('setLanguage', this.lang);
+      this.$i18n.locale = this.lang;
+      this.$store.dispatch('setMaskDialog', false);
+    },
     userInfoWatch(newValue) {
       if (newValue.data && newValue.data.account) {
         let account = newValue.data.account;
