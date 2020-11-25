@@ -143,6 +143,7 @@ import {
   getPAYA,
   exitStake,
   getLastTime,
+  approveStatus,
 } from '~/interface/deposite';
 import { fixD, addCommom, autoRounding, toRounding } from '~/assets/js/util.js';
 import { getAddress, getContract } from '~/assets/utils/address-pool.js';
@@ -211,6 +212,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getAllData();
+      this.getAllowance();
     }, 1000);
     this.$bus.$on('DEPOSITE_LOADING', (data) => {
       let current = this.curStake.replace('-', '_');
@@ -238,6 +240,7 @@ export default {
     });
     this.$bus.$on('REFRESH_MINING', (data) => {
       this.getAllData();
+      this.getAllowance();
     });
   },
   methods: {
@@ -310,6 +313,18 @@ export default {
       this.exitCoin = item.name;
       let type = item.name.replace('-', '_');
       let res = await exitStake(type);
+    },
+    // 获取授权状态
+    async getAllowance() {
+      let approveList = {};
+      for (let i = 0; i < 4; i++) {
+        let type = this.miningList[i].name.replace('-', '_');
+        let res = await approveStatus(type);
+        let value = res.length > 30 ? true : false;
+        const key = this.miningList[i].name;
+        approveList[key] = value;
+      }
+      this.$store.commit('SET_APPROVE_LIST', approveList);
     },
   },
 };

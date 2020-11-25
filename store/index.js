@@ -100,6 +100,12 @@ export const state = () => ({
   helmetVarieties: 0, // 已经成交的保险品种的种类
   totalHelmetsBorrowedVolume: 0, // 保险交易过的资金量  （保单数量累加， vol 用抵押物处理）
   longTokenCreatedVolume: 0, // 24小时Long token 铸造量
+  approveList: {
+    "ETH-DAI": false,
+    "ETH-USDC": false,
+    "ETH-USDT": false,
+    "ETH-WBTC": false,
+  },
 });
 
 export const mutations = {
@@ -197,6 +203,9 @@ export const mutations = {
   SET_LONG_TOKEN_CREATED_VOLUME(state, data) {
     // 24小时Long token 铸造量
     state.longTokenCreatedVolume = data;
+  },
+  SET_APPROVE_LIST(state, data) {
+    state.approveList = data;
   },
 };
 

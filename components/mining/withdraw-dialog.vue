@@ -74,15 +74,14 @@ export default {
     };
   },
   mounted() {
-    this.hiddenGlobal =
-      window.localStorage.globalStake == 'true' ? true : false;
-    this.$bus.$on('STAKE_APPROVE', (data) => {
-      this.checked = data.checked;
-      console.log(data);
-    });
+    this.filterApporve();
     this.abailable();
   },
   methods: {
+    filterApporve() {
+      let list = this.$store.state.approveList;
+      this.hiddenGlobal = list[this.current];
+    },
     all() {
       this.WithdrawNum = this.available;
     },
@@ -99,27 +98,14 @@ export default {
     },
     withdrawCheck() {
       this.checked = !this.checked;
-      if (this.checked) {
-        this.$bus.$emit('STAKE_APPROVE', {
-          checked: true,
-        });
-        window.localStorage.setItem('globalStake', true);
-      } else {
-        this.$bus.$emit('STAKE_APPROVE', {
-          checked: false,
-        });
-        window.localStorage.setItem('globalStake', false);
-      }
     },
     closeWithdraw() {
       this.$emit('close');
     },
     submitWithdraw() {
+      let flag = this.hiddenGlobal || this.checked;
       let type = this.current.replace('-', '_');
-      toWithdraw(type, { amount: this.WithdrawNum }, (status) => {});
-      if (this.checked == true) {
-        window.localStorage.setItem('globalStake', true);
-      }
+      toWithdraw(type, { amount: this.WithdrawNum }, flag, (status) => {});
     },
   },
 };

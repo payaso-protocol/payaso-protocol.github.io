@@ -55,11 +55,10 @@ export const balanceOf = async (type, currcy) => {
       return window.WEB3.utils.fromWei(res, getWei(tocurrcy));
     });
 };
-export const toDeposite = async (type, data, callBack) => {
+export const toDeposite = async (type, data, flag, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
-  let flag = window.localStorage.globalStake == "true" ? true : false;
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -155,11 +154,10 @@ export const toDeposite = async (type, data, callBack) => {
   }
   return result;
 };
-export const toWithdraw = async (type, data, callBack) => {
+export const toWithdraw = async (type, data, flag, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
-  let flag = window.localStorage.globalStake == "true" ? true : false;
 
   amount = toWei(amount);
   let adress = type;
@@ -396,8 +394,6 @@ export const getLPTOKEN = async (type) => {
     });
 };
 const allowance = async (token_exp, contract_str) => {
-  // const WEB3 = await web3();
-  const charID = await getID();
   const result = await token_exp.methods
     .allowance(
       window.WEB3.currentProvider.selectedAddress,
@@ -562,4 +558,20 @@ export const exitStake = async (type) => {
     console.log(error);
   }
   return result;
+};
+export const approveStatus = async (type) => {
+  const charID = window.chainID;
+  let adress = type;
+  let adressLPT = type;
+  if (type.indexOf("0x") === -1) {
+    adress = getContract(type, charID);
+    adressLPT = getContract(type + "_LPT", charID);
+  }
+  const Contract = await expERC20(adressLPT);
+  if (adress && adressLPT) {
+    const awc = await allowance(Contract, type);
+    return awc;
+  } else {
+    return 0;
+  }
 };

@@ -76,34 +76,24 @@ export default {
     },
   },
   mounted() {
-    this.hiddenGlobal =
-      window.localStorage.globalStake == 'true' ? true : false;
-    this.$bus.$on('STAKE_APPROVE', (data) => {
-      this.checked = data.checked;
-    });
+    this.filterApporve();
     this.getBalance();
   },
   methods: {
+    filterApporve() {
+      let list = this.$store.state.approveList;
+      this.hiddenGlobal = list[this.current];
+    },
     depositeCheck() {
       this.checked = !this.checked;
-      if (this.checked) {
-        this.$bus.$emit('STAKE_APPROVE', {
-          checked: true,
-        });
-        window.localStorage.setItem('globalStake', true);
-      } else {
-        this.$bus.$emit('STAKE_APPROVE', {
-          checked: false,
-        });
-        window.localStorage.setItem('globalStake', false);
-      }
     },
     closeDeposite() {
       this.$emit('close');
     },
     submitDeposite() {
+      let flag = this.hiddenGlobal || this.checked;
       let type = this.current.replace('-', '_');
-      toDeposite(type, { amount: this.DepositeNum }, (status) => {});
+      toDeposite(type, { amount: this.DepositeNum }, flag, (status) => {});
     },
     // 获取余额
     getBalance() {
@@ -111,9 +101,6 @@ export default {
       getBalance(coin).then((res) => {
         this.lptBalance = addCommom(res, 20);
       });
-      if (this.checked == true) {
-        window.localStorage.setItem('globalStake', true);
-      }
     },
     currentWatch(newValue) {
       if (newValue) {
