@@ -66,6 +66,9 @@ export const toDeposite = async (type, data, flag, callBack) => {
     adress = getContract(type, charID);
     adressLPT = getContract(type + "_LPT", charID);
   }
+  if (!adress || !adressLPT) {
+    return;
+  }
   let result;
   bus.$emit("DEPOSITE_LOADING", {
     type: type,
@@ -165,6 +168,9 @@ export const toWithdraw = async (type, data, flag, callBack) => {
     adress = getContract(type, charID);
     adressLPT = getContract(type + "_LPT", charID);
   }
+  if (!adress || !adressLPT) {
+    return;
+  }
   let result;
   bus.$emit("WITHDRAW_LOADING", {
     type: type,
@@ -258,6 +264,9 @@ export const WithdrawAvailable = async (type) => {
   let adress = type;
   if (type.indexOf("0x") === -1) {
     adress = getContract(type, charID);
+  }
+  if (!adress) {
+    return 0;
   }
   const contract = await expERC20(adress);
   return contract.methods
@@ -408,10 +417,14 @@ const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   // 校验参数
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
+
   const awc = await allowance(token_exp, contract_str);
+  console.log(awc, num, "这是无限授权过的");
+
   if (parseInt(awc) >= parseInt(num)) {
     return;
   }
+
   // 无限授权
   const res = await approve(token_exp, contract_str, callback);
 };
@@ -422,6 +435,7 @@ const approve2 = async (
   callback = (status) => {}
 ) => {
   const awc = await allowance(token_exp, contract_str);
+  console.log(awc, num, "这是没有无限授权过的");
   if (awc >= num) {
     return;
   }
@@ -469,6 +483,9 @@ export const getBalance = async (type, currcy) => {
   let adress = type;
   if (type.indexOf("0x") === -1) {
     adress = getContract(type, charID);
+  }
+  if (!adress) {
+    return 0;
   }
   const deposite = await Deposite(adress);
   return deposite.methods

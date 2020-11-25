@@ -7,7 +7,9 @@
       <p class="sub-title">Please select a wallet to connect to this dapp</p>
       <ul>
         <li
-          :class="(item === 'MetaMask' || item === 'WalletConnect') ? 'on' : 'off'"
+          :class="
+            item === 'MetaMask' || item === 'WalletConnect' ? 'on' : 'off'
+          "
           v-for="item in walletList"
           :key="item"
           @click="selectWallet(item)"
@@ -22,76 +24,82 @@
 <script>
 // import WalletConnect from "@walletconnect/client";
 // import QRCodeModal from "@walletconnect/qrcode-modal";
-import { mateMaskInfo } from "~/assets/utils/matemask.js";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Web3 from "web3";
+import { mateMaskInfo } from '~/assets/utils/matemask.js';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Web3 from 'web3';
 
 export default {
-  name: "wallet-select",
+  name: 'wallet-select',
   data() {
     return {
       walletList: [
-        "MetaMask",
-        "WalletConnect",
-        "Fortmatic",
-        "Ledger",
-        "Trezor",
-        "Authereum",
-        "Dapper",
-        "WalletLink",
-        "Portis",
-        "Torus",
-        "Squarelink",
-        "opera",
-        "Unilogn",
+        'MetaMask',
+        'WalletConnect',
+        'Fortmatic',
+        'Ledger',
+        'Trezor',
+        'Authereum',
+        'Dapper',
+        'WalletLink',
+        'Portis',
+        'Torus',
+        'Squarelink',
+        'opera',
+        'Unilogn',
       ],
-       web3: {},
-       coinbase: ''
+      web3: {},
+      coinbase: '',
     };
   },
   methods: {
     // 链接钱包
     selectWallet(item) {
-      this.$store.dispatch("setWalletType", item);
-      if (item === "MetaMask") {
+      this.$store.dispatch('setWalletType', item);
+      if (item === 'MetaMask') {
         try {
           window.ethereum
-            .request({ method: "eth_requestAccounts" })
+            .request({ method: 'eth_requestAccounts' })
             .then(async (account) => {
               window.localStorage.setItem('currentType', 'MetaMask');
-              console.log("account####", account);
+              // console.log("account####", account);
               // setTimeout(() => {
               //     window.location.reload()
               // }, 500)
               let userInfo = await mateMaskInfo(account[0], 'MetaMask');
-              console.log("selectWallet###userInfo###", userInfo);
-              this.$store.dispatch("setUserInfo", userInfo);
-              this.$bus.$emit("REFRESH_ALL_DATA");
+              // console.log("selectWallet###userInfo###", userInfo);
+              this.$store.dispatch('setUserInfo', userInfo);
+              this.$bus.$emit('REFRESH_ALL_DATA');
               this.closeDialog();
             });
         } catch (error) {
-          console.log("MateMask 扩展插件未安装或未启用##", error);
+          console.log('MateMask 扩展插件未安装或未启用##', error);
         }
       } else if (item === 'WalletConnect') {
         this.connectWallet();
       }
     },
     closeDialog() {
-      this.$emit("close");
+      this.$emit('close');
     },
     async connectWallet() {
       const walletConnectProvider = new WalletConnectProvider({
-        infuraId: "3cd774e14cf34ff78167908f8377051c" // Required
+        infuraId: '3cd774e14cf34ff78167908f8377051c', // Required
         // qrcode: true
       });
+      console.log(walletConnectProvider, 'provider#################');
       await walletConnectProvider.enable();
       const web3 = new Web3(walletConnectProvider);
-      const coinbase = walletConnectProvider.wc.accounts[0];
+      let coinbase = walletConnectProvider.wc.accounts[0];
+      coinbase = coinbase.toLowerCase();
+      console.log(coinbase, 'coinbase###################################');
+
       window.WEB3 = web3;
       let userInfo = await mateMaskInfo(coinbase, 'WalletConnect');
-      this.$store.dispatch("setUserInfo", userInfo);
+      console.log(userInfo, 'userInfo######################################');
+
+      this.$store.dispatch('setUserInfo', userInfo);
       window.localStorage.setItem('currentType', 'WalletConnect');
-      this.$bus.$emit("REFRESH_ALL_DATA");
+      this.$bus.$emit('REFRESH_ALL_DATA');
       this.closeDialog();
       // this.coinbase = await this.web3.eth.getAccounts()[0];
     },
@@ -99,7 +107,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~/assets/css/base.scss";
+@import '~/assets/css/base.scss';
 @media screen and (min-width: 750px) {
   .wallet-select-mask {
     .wallet-select-block {
@@ -209,7 +217,7 @@ export default {
       display: block;
       width: 20px;
       height: 20px;
-      background: url("../../assets/img/icon/guanbi.png") center center
+      background: url('../../assets/img/icon/guanbi.png') center center
         no-repeat;
       background-size: 100% 100%;
       position: absolute;

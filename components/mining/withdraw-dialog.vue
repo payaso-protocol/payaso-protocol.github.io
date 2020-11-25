@@ -105,12 +105,7 @@ export default {
     submitWithdraw() {
       let flag = this.hiddenGlobal || this.checked;
       let type = this.current.replace('-', '_');
-      toWithdraw(
-        type,
-        { amount: Number(this.WithdrawNum) },
-        flag,
-        (status) => {}
-      );
+      toWithdraw(type, { amount: this.WithdrawNum }, flag, (status) => {});
     },
   },
 };
