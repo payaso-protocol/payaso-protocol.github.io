@@ -11,8 +11,7 @@ import {
   TradeType,
 } from "@uniswap/sdk";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import precision from '~/assets/js/precision.js';
-
+import precision from "~/assets/js/precision.js";
 
 const selectNetwork = (charID) => {
   switch (charID) {
@@ -43,16 +42,6 @@ export const getContract = (name, charID = 3) => {
   let contract = addressList[`${network}_CONTRACT_${name}`];
   if (contract) {
     return contract;
-  } else {
-    return null;
-  }
-};
-// 获取LPT合约
-export const getDeposite = (name, charID = 3) => {
-  const network = selectNetwork(charID);
-  let deposite = addressList[`${network}_DEPOSITE_${name}`];
-  if (deposite) {
-    return deposite;
   } else {
     return null;
   }
@@ -104,13 +93,14 @@ export const getWei = (token) => {
 export const getWeiWithFix = (fix) => {
   switch (fix) {
     case 30:
-      return 'tether'; // 30
+      return "tether"; // 30
     default:
-      return 'ether'; // 18
+      return "ether"; // 18
   }
-}
+};
 
-export const getStrikePriceFix = (und, col) => { // 币种，抵押物, 结算物 
+export const getStrikePriceFix = (und, col) => {
+  // 币种，抵押物, 结算物
   let colFix = getWei_2(col);
   let undFix = getWei_2(und);
   if (colFix === undFix) {
@@ -118,17 +108,17 @@ export const getStrikePriceFix = (und, col) => { // 币种，抵押物, 结算�
   } else {
     return 18 + colFix - undFix;
   }
-}
+};
 
 // 处理行权价格
 export const dealWithStrikePrice = (px, coin) => {
   let coinFix = getWei_2(coin);
   if (coinFix !== 18) {
-    return precision.divide(px, Math.pow(10, 30-coinFix));
+    return precision.divide(px, Math.pow(10, 30 - coinFix));
   } else {
     return px;
   }
-}
+};
 
 // getWei和getWei_2不知何为， 后面更换注释
 export const getWei_2 = (token) => {

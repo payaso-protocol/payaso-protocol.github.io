@@ -93,7 +93,12 @@ export default {
     submitDeposite() {
       let flag = this.hiddenGlobal || this.checked;
       let type = this.current.replace('-', '_');
-      toDeposite(type, { amount: this.DepositeNum }, flag, (status) => {});
+      toDeposite(
+        type,
+        { amount: Number(this.DepositeNum) },
+        flag,
+        (status) => {}
+      );
     },
     // 获取余额
     getBalance() {

@@ -2,7 +2,6 @@ import { Factory, Order, expERC20, Deposite } from "./index";
 import {
   getAddress,
   getContract,
-  getDeposite,
   getWei,
   getID,
 } from "~/assets/utils/address-pool.js";
@@ -59,6 +58,7 @@ export const toDeposite = async (type, data, flag, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
+  let num = data.amount;
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -83,7 +83,7 @@ export const toDeposite = async (type, data, flag, callBack) => {
         }
       });
     } else {
-      await approve2(Contract, type, amount, (res) => {
+      await approve2(Contract, type, num, (res) => {
         if (res === "failed") {
           bus.$emit("DEPOSITE_LOADING", {
             type: type,
@@ -158,7 +158,6 @@ export const toWithdraw = async (type, data, flag, callBack) => {
   const charID = window.chainID;
   const address = window.CURRENTADDRESS;
   let amount = data.amount;
-
   amount = toWei(amount);
   let adress = type;
   let adressLPT = type;
@@ -183,7 +182,7 @@ export const toWithdraw = async (type, data, flag, callBack) => {
         }
       });
     } else {
-      await approve2(Contract, type, amount, (res) => {
+      await approve2(Contract, type, num, (res) => {
         if (res === "failed") {
           bus.$emit("DEPOSITE_LOADING", {
             type: type,
@@ -410,8 +409,7 @@ const oneKeyArrpove = async (token_exp, contract_str, num, callback) => {
   if (!token_exp || !contract_str) return;
   // 判断授权额度是否充足
   const awc = await allowance(token_exp, contract_str);
-  if (parseInt(awc) > parseInt(num)) {
-    // console.log("额度充足", parseInt(awc));
+  if (parseInt(awc) >= parseInt(num)) {
     return;
   }
   // 无限授权
@@ -424,10 +422,10 @@ const approve2 = async (
   callback = (status) => {}
 ) => {
   const awc = await allowance(token_exp, contract_str);
-  if (parseInt(awc) > parseInt(num)) {
-    // console.log("额度充足", parseInt(awc));
+  if (awc >= num) {
     return;
   }
+  num = toWei(num);
   const charID = await getID();
   const result = await token_exp.methods
     .approve(getContract(contract_str, charID), num)

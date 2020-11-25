@@ -3,7 +3,6 @@ import { Factory, Order, expERC20 } from "./index";
 import {
   getAddress,
   getContract,
-  getDeposite,
   getWei,
   getID,
   getStrikePriceFix,

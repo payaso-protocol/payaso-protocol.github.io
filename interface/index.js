@@ -4,12 +4,7 @@ import payaso_abi from "~/abi/payaso_abi.json";
 import factory_abi from "~/abi/factory_abi.json";
 import order_abi from "~/abi/order_abi.json";
 import deposite_abi from "~/abi/deposite.json";
-import {
-  getAddress,
-  getContract,
-  getID,
-  getDeposite,
-} from "~/assets/utils/address-pool.js";
+import { getAddress, getContract, getID } from "~/assets/utils/address-pool.js";
 
 export const getCurrentAccount = async () => {
   return web3().then((res) => res.currentProvider.selectedAddress);
@@ -65,10 +60,7 @@ export const Order = async () => {
 export const Deposite = async (adress) => {
   const WEB3 = await web3();
   // const charID = await getID();
-  return await new WEB3.eth.Contract(
-    deposite_abi.abi,
-    adress
-  );
+  return await new WEB3.eth.Contract(deposite_abi.abi, adress);
 };
 export const expERC20 = async (address) => {
   const WEB3 = await web3();
